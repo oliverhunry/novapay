@@ -10,13 +10,22 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // ========================
+// GET BASE URL (Dynamic) - FIXED
+// ========================
+function getBaseUrl(req) {
+    const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+    const host = req.headers['x-forwarded-host'] || req.get('host');
+    return `${protocol}://${host}`;
+}
+
+// ========================
 // MIDDLEWARE
 // ========================
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(session({
-    secret: 'novapay_secret_key_2026',
+    secret: process.env.SESSION_SECRET || 'novapay_secret_key_2026',
     resave: false,
     saveUninitialized: false,
     cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 }
@@ -365,20 +374,6 @@ app.post('/register', async (req, res) => {
         return res.render('register', { error: 'Password must be exactly 8 digits', referral: referral_code || '' });
     }
 
-    app.post('/register', async (req, res) => {
-    const { username, mobile, password, confirm_password, referral_code, agree } = req.body;
-    
-    // Check if user agreed to terms
-    if (!agree) {
-        return res.render('register', { 
-            error: 'You must agree to Terms & Conditions', 
-            referral: referral_code || '' 
-        });
-    }
-    
-    // ... baaki code same
-});
-
     try {
         const existing = await new Promise((resolve, reject) => {
             db.get(`SELECT * FROM users WHERE username = ? OR mobile = ?`, [username, mobile], (err, row) => {
@@ -422,8 +417,6 @@ app.post('/register', async (req, res) => {
     }
 });
 
- 
-
 // Forgot Password
 app.get('/forgot-password', (req, res) => {
     res.render('forgot-password', { error: null, success: null });
@@ -460,13 +453,6 @@ app.post('/forgot-password', async (req, res) => {
     });
 });
 
-// ========================
-// TERMS & CONDITIONS
-// ========================
-app.get('/terms', (req, res) => {
-    res.render('terms');
-});
-
 app.get('/logout', (req, res) => {
     if (req.session.user) {
         logActivity(req.session.user.id, 'logout', 'User logged out', req.ip);
@@ -477,6 +463,7 @@ app.get('/logout', (req, res) => {
 
 app.get('/dashboard', isAuthenticated, (req, res) => {
     const userId = req.session.user.id;
+    const baseUrl = getBaseUrl(req); // 👈 Dynamic URL
 
     db.get(`SELECT * FROM users WHERE id = ?`, [userId], (err, user) => {
         if (err || !user) return res.redirect('/login');
@@ -486,7 +473,6 @@ app.get('/dashboard', isAuthenticated, (req, res) => {
                 db.all(`SELECT * FROM deposit_accounts WHERE status = 'active'`, (err, accounts) => {
                     db.all(`SELECT * FROM plans WHERE status = 'active'`, (err, allPlans) => {
                         
-                        // Today's Earnings = Daily income from all active plans + Bonus + Referral Earnings
                         let todayEarnings = 0;
                         if (userPlans) {
                             userPlans.forEach(plan => {
@@ -494,7 +480,6 @@ app.get('/dashboard', isAuthenticated, (req, res) => {
                             });
                         }
                         
-                        // Add bonus and team earnings to today's earnings
                         todayEarnings += user.bonus_balance || 0;
                         todayEarnings += user.team_earnings || 0;
                         
@@ -511,6 +496,7 @@ app.get('/dashboard', isAuthenticated, (req, res) => {
                                         referralCount: referrals ? referrals.length : 0,
                                         bonuses: bonuses || [],
                                         unreadCount: unread ? unread.unread : 0,
+                                        baseUrl: baseUrl, // 👈 Dynamic URL
                                         success: req.query.success || null,
                                         error: req.query.error || null
                                     });
@@ -586,8 +572,8 @@ app.post('/withdraw', isAuthenticated, (req, res) => {
     const { amount, payment_method, account_holder, account_number } = req.body;
     const userId = req.session.user.id;
 
-    if (!amount || amount < 100) {
-        return res.redirect('/withdraw?error=Minimum withdraw is PKR 100');
+    if (!amount || amount < 1000) {
+        return res.redirect('/withdraw?error=Minimum withdraw is PKR 1000');
     }
 
     db.get(`SELECT balance FROM users WHERE id = ?`, [userId], (err, user) => {
@@ -629,9 +615,6 @@ app.get('/mining', isAuthenticated, (req, res) => {
     });
 });
 
-// ========================
-// MINING - COLLECT DAILY (FIXED)
-// ========================
 app.post('/mining/collect', isAuthenticated, (req, res) => {
     const { plan_id } = req.body;
     const userId = req.session.user.id;
@@ -639,7 +622,6 @@ app.post('/mining/collect', isAuthenticated, (req, res) => {
 
     console.log('📥 Mining collect request:', { plan_id, userId, today });
 
-    // First get the user plan
     db.get(`SELECT * FROM user_plans WHERE id = ? AND user_id = ? AND status = 'active'`, [plan_id, userId], (err, plan) => {
         if (err) {
             console.log('❌ Error fetching plan:', err);
@@ -653,7 +635,6 @@ app.post('/mining/collect', isAuthenticated, (req, res) => {
 
         console.log('✅ Plan found:', plan);
 
-        // Check if already collected today
         db.get(`SELECT * FROM mining_history WHERE user_plan_id = ? AND collected_date = ?`, [plan_id, today], (err, history) => {
             if (err) {
                 console.log('❌ Error checking history:', err);
@@ -665,7 +646,6 @@ app.post('/mining/collect', isAuthenticated, (req, res) => {
                 return res.json({ success: false, message: 'Already collected today' });
             }
 
-            // Insert mining history
             db.run(`INSERT INTO mining_history (user_id, user_plan_id, amount, collected_date) VALUES (?, ?, ?, ?)`,
                 [userId, plan_id, plan.daily_income, today], function(err) {
                     if (err) {
@@ -673,7 +653,6 @@ app.post('/mining/collect', isAuthenticated, (req, res) => {
                         return res.json({ success: false, message: 'Collection failed: ' + err.message });
                     }
 
-                    // Update user balance
                     db.run(`UPDATE users SET balance = balance + ?, total_earnings = total_earnings + ? WHERE id = ?`,
                         [plan.daily_income, plan.daily_income, userId], function(err) {
                             if (err) {
@@ -681,17 +660,14 @@ app.post('/mining/collect', isAuthenticated, (req, res) => {
                                 return res.json({ success: false, message: 'Balance update failed' });
                             }
 
-                            // Update last_collected
                             db.run(`UPDATE user_plans SET last_collected = ? WHERE id = ?`, [today, plan_id]);
 
-                            // Add notification
                             db.run(`INSERT INTO notifications (user_id, title, message) VALUES (?, ?, ?)`,
                                 [userId, 'Mining Collected', `You collected PKR ${plan.daily_income} from ${plan.plan_name || 'Plan'}`]
                             );
                             
                             logActivity(userId, 'mining_collect', `Collected PKR ${plan.daily_income} from ${plan.plan_name}`, req.ip);
 
-                            // Get updated balance
                             db.get(`SELECT balance FROM users WHERE id = ?`, [userId], (err, user) => {
                                 console.log('✅ Mining collected successfully! New balance:', user ? user.balance : 0);
                                 res.json({ 
@@ -736,7 +712,6 @@ app.get('/notifications', isAuthenticated, (req, res) => {
         if (err || !user) return res.redirect('/login');
         
         db.all(`SELECT * FROM notifications WHERE user_id = ? OR user_id IS NULL ORDER BY created_at DESC`, [userId], (err, notifications) => {
-            // Mark all as read
             db.run(`UPDATE notifications SET is_read = 1 WHERE user_id = ?`, [userId]);
             res.render('notifications', {
                 user: user,
@@ -788,6 +763,7 @@ app.get('/records', isAuthenticated, (req, res) => {
 // ========================
 app.get('/team', isAuthenticated, (req, res) => {
     const userId = req.session.user.id;
+    const baseUrl = getBaseUrl(req); // 👈 Dynamic URL
     
     db.get(`SELECT * FROM users WHERE id = ?`, [userId], (err, user) => {
         if (err || !user) return res.redirect('/login');
@@ -809,6 +785,7 @@ app.get('/team', isAuthenticated, (req, res) => {
                     referralHistory: referralHistory || [],
                     totalTeamDeposit: totalTeamDeposit,
                     activeMembers: activeMembers,
+                    baseUrl: baseUrl, // 👈 Dynamic URL
                     success: req.query.success || null,
                     error: req.query.error || null
                 });
@@ -970,7 +947,6 @@ app.post('/admin/deposit/approve', isAdmin, (req, res) => {
                         [deposit.user_id, 'Deposit Approved', `Your deposit of PKR ${deposit.amount} has been approved.`]
                     );
 
-                    // Get referral commission
                     db.get(`SELECT commission_percentage FROM referral_settings`, (err, settings) => {
                         const commissionPercent = (settings && settings.commission_percentage) || 10;
                         
@@ -1325,5 +1301,5 @@ app.listen(PORT, () => {
     console.log(`\n🚀 NovaPay server running at http://localhost:${PORT}`);
     console.log(`👤 User Panel: http://localhost:${PORT}`);
     console.log(`🔐 Admin Panel: http://localhost:${PORT}/admin/login`);
-    console.log(`📝 Admin Credentials: admin / admin_077\n`);
+    console.log(`📝 Admin Credentials: admin / admin123\n`);
 });

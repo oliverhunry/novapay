@@ -66,6 +66,11 @@
             border-color: #3b82f6;
             box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
         }
+        .form-group input:disabled,
+        .form-group input[readonly] {
+            background: #f1f5f9;
+            cursor: not-allowed;
+        }
         .btn-register {
             width: 100%;
             padding: 12px;
@@ -79,6 +84,10 @@
             transition: 0.3s;
         }
         .btn-register:hover { background: #2563eb; }
+        .btn-register:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+        }
         .flash-error {
             background: #fee2e2;
             color: #991b1b;
@@ -100,6 +109,70 @@
             color: #94a3b8;
             margin-top: 2px;
         }
+        .hint-success {
+            color: #22c55e;
+            font-weight: 600;
+        }
+
+        /* ============================== */
+        /* TERMS CHECKBOX - STYLED */
+        /* ============================== */
+        .terms-group {
+            margin-bottom: 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 6px 0;
+        }
+        .terms-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            min-width: 18px;
+            margin-top: 2px;
+            accent-color: #3b82f6;
+            cursor: pointer;
+        }
+        .terms-group label {
+            font-size: 13px;
+            color: #475569;
+            cursor: pointer;
+            line-height: 1.5;
+        }
+        .terms-group label a {
+            color: #f0b90b;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .terms-group label a:hover {
+            text-decoration: underline;
+        }
+        .terms-group label .highlight {
+            color: #22c55e;
+            font-weight: 600;
+        }
+
+        /* ============================== */
+        /* REFERRAL AUTO-FILL HIGHLIGHT */
+        /* ============================== */
+        .referral-applied {
+            background: #dcfce7;
+            border: 1px solid #86efac;
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-top: 4px;
+            font-size: 12px;
+            color: #166534;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .referral-applied i {
+            color: #22c55e;
+        }
+
+        @media (max-width: 480px) {
+            .register-container { padding: 28px 18px; }
+        }
     </style>
 </head>
 <body>
@@ -111,45 +184,116 @@
             <div class="flash-error"><%= error %></div>
         <% } %>
 
-        <form method="POST" action="/register">
+        <form method="POST" action="/register" id="registerForm">
+            <!-- ============================== -->
+            <!-- USERNAME -->
+            <!-- ============================== -->
             <div class="form-group">
                 <label>Username</label>
                 <input type="text" name="username" placeholder="Choose a username" required>
             </div>
+
+            <!-- ============================== -->
+            <!-- MOBILE NUMBER -->
+            <!-- ============================== -->
             <div class="form-group">
                 <label>Mobile Number</label>
                 <input type="text" name="mobile" placeholder="03XXXXXXXXX" required>
             </div>
+
+            <!-- ============================== -->
+            <!-- PASSWORD -->
+            <!-- ============================== -->
             <div class="form-group">
                 <label>Password (exactly 8 digits)</label>
                 <input type="password" name="password" placeholder="8-digit password" maxlength="8" required>
                 <div class="hint">Password must be exactly 8 characters</div>
             </div>
+
+            <!-- ============================== -->
+            <!-- CONFIRM PASSWORD -->
+            <!-- ============================== -->
             <div class="form-group">
                 <label>Confirm Password</label>
                 <input type="password" name="confirm_password" placeholder="Confirm password" maxlength="8" required>
             </div>
-            <!-- Password field ke baad, submit button se pehle -->
-<div class="form-group">
-    <label>
-        <input type="checkbox" name="agree" required>
-        I agree to the 
-        <a href="/terms" style="color: #f0b90b;">Terms & Conditions</a>
-    </label>
-</div>
 
-<!-- Submit button -->
-<button type="submit">Register</button>
+            <!-- ============================== -->
+            <!-- REFERRAL CODE - AUTO FILL -->
+            <!-- ============================== -->
             <div class="form-group">
-                <label>Referral Code (Optional)</label>
-                <input type="text" name="referral_code" placeholder="Enter referral code" value="<%= typeof referral !== 'undefined' ? referral : '' %>">
+                <label>Referral Code</label>
+                <input type="text" name="referral_code" id="referralCode" 
+                       placeholder="Enter referral code" 
+                       value="<%= typeof referral !== 'undefined' && referral ? referral : '' %>"
+                       <%= typeof referral !== 'undefined' && referral ? 'readonly' : '' %>>
+                
+                <% if (typeof referral !== 'undefined' && referral) { %>
+                    <div class="referral-applied">
+                        <i class="fas fa-check-circle"></i> 
+                        Referral code <strong><%= referral %></strong> applied! You'll get 10% commission.
+                    </div>
+                <% } else { %>
+                    <div class="hint"><i class="fas fa-info-circle"></i> Enter referral code if you have one</div>
+                <% } %>
             </div>
-            <button type="submit" class="btn-register">Create Account</button>
+
+            <!-- ============================== -->
+            <!-- TERMS & CONDITIONS CHECKBOX -->
+            <!-- ============================== -->
+            <div class="terms-group">
+                <input type="checkbox" id="agreeTerms" name="agree" required>
+                <label for="agreeTerms">
+                    I agree to the 
+                    <a href="/terms" target="_blank">Terms & Conditions</a>
+                    and 
+                    <span class="highlight">10% Referral Commission</span> policy.
+                </label>
+            </div>
+
+            <!-- ============================== -->
+            <!-- SUBMIT BUTTON -->
+            <!-- ============================== -->
+            <button type="submit" class="btn-register" id="registerBtn">
+                <i class="fas fa-user-plus"></i> Create Account
+            </button>
         </form>
 
+        <!-- ============================== -->
+        <!-- LINKS -->
+        <!-- ============================== -->
         <div class="links">
             Already have an account? <a href="/login">Sign In</a>
         </div>
     </div>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- ============================== -->
+    <!-- SCRIPTS -->
+    <!-- ============================== -->
+    <script>
+        // Terms checkbox validation
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            const agree = document.getElementById('agreeTerms');
+            if (!agree.checked) {
+                e.preventDefault();
+                alert('Please agree to the Terms & Conditions to register.');
+                agree.focus();
+            }
+        });
+
+        // Auto-disable button if terms not checked
+        document.getElementById('agreeTerms').addEventListener('change', function() {
+            const btn = document.getElementById('registerBtn');
+            btn.disabled = !this.checked;
+        });
+
+        // Initially disable button
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('registerBtn').disabled = true;
+        });
+    </script>
 </body>
 </html>

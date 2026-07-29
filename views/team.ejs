@@ -13,6 +13,7 @@
         .header .logo { font-size: 20px; font-weight: 800; color: #0f172a; }
         .header .logo span { color: #3b82f6; }
         .header a { color: #3b82f6; text-decoration: none; font-size: 14px; }
+        
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
         .stat-card { background: #f8fafc; border: 1px solid #eef2f6; border-radius: 12px; padding: 14px; text-align: center; }
         .stat-card .number { font-size: 22px; font-weight: 700; color: #0f172a; }
@@ -21,25 +22,141 @@
         .stat-card .number.purple { color: #8b5cf6; }
         .stat-card .number.gold { color: #f59e0b; }
         .stat-card .label { font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
+        
         .section-title { font-size: 14px; font-weight: 600; color: #0f172a; margin: 16px 0 10px; }
         .section-title small { font-size: 10px; font-weight: 400; color: #94a3b8; display: block; }
+        
         .team-member { background: #f8fafc; border: 1px solid #eef2f6; border-radius: 10px; padding: 10px 14px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
         .team-member .info .name { font-weight: 600; font-size: 13px; color: #0f172a; }
         .team-member .info .date { font-size: 10px; color: #94a3b8; }
         .team-member .badge { background: #22c55e; color: white; font-size: 9px; padding: 2px 10px; border-radius: 12px; }
         .team-member .badge.inactive { background: #94a3b8; }
+        
         .commission-item { background: #f8fafc; border: 1px solid #eef2f6; border-radius: 10px; padding: 10px 14px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
         .commission-item .info .text { font-size: 13px; color: #0f172a; }
         .commission-item .info .date { font-size: 10px; color: #94a3b8; }
         .commission-item .amount { font-weight: 700; color: #22c55e; }
+        
         .no-data { text-align: center; padding: 30px 20px; color: #94a3b8; }
         .no-data i { font-size: 40px; display: block; margin-bottom: 10px; }
-        .referral-link-box { background: #f8fafc; border: 1px solid #eef2f6; border-radius: 10px; padding: 12px; margin-bottom: 16px; }
-        .referral-link-box .label { font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
-        .referral-link-box .link { color: #3b82f6; word-break: break-all; font-size: 12px; margin-top: 4px; }
+        
+        /* ============================== */
+        /* REFERRAL BOX - HIGHLIGHTED */
+        /* ============================== */
+        .referral-link-box {
+            background: linear-gradient(135deg, #f8fafc, #eff6ff);
+            border: 2px solid #3b82f6;
+            border-radius: 12px;
+            padding: 16px 18px;
+            margin-bottom: 16px;
+            position: relative;
+        }
+        .referral-link-box .label {
+            font-size: 11px;
+            color: #3b82f6;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+        .referral-link-box .link {
+            color: #1d4ed8;
+            word-break: break-all;
+            font-size: 13px;
+            margin-top: 4px;
+            font-weight: 600;
+        }
+        .referral-link-box .commission-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 4px 16px;
+            border-radius: 20px;
+            margin-top: 6px;
+        }
+        .referral-link-box .commission-badge i {
+            margin-right: 4px;
+        }
+        .referral-link-box .btn-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .referral-link-box .btn-group .btn {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 6px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .referral-link-box .btn-group .btn:hover {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+            transform: scale(1.02);
+        }
+        .referral-link-box .btn-group .btn i {
+            font-size: 14px;
+        }
+        .referral-link-box .btn-group .btn.share-btn {
+            background: #25D366;
+            color: white;
+            border-color: #25D366;
+        }
+        .referral-link-box .btn-group .btn.share-btn:hover {
+            background: #1da851;
+            border-color: #1da851;
+        }
+        .referral-link-box .btn-group .btn.copy-btn {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        .referral-link-box .btn-group .btn.copy-btn:hover {
+            background: #2563eb;
+            border-color: #2563eb;
+        }
+        
         .flash-message { padding: 10px 14px; border-radius: 10px; margin-bottom: 12px; font-size: 13px; }
         .flash-success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
         .flash-error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+        
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #0f172a;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 9999;
+            animation: slideUp 0.4s ease;
+        }
+        .toast.show { display: block; }
+        .toast i { margin-right: 8px; }
+        .toast.success i { color: #22c55e; }
+        @keyframes slideUp {
+            0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        @media (max-width: 480px) {
+            .referral-link-box .btn-group .btn { font-size: 11px; padding: 5px 12px; }
+        }
     </style>
 </head>
 <body>
@@ -50,6 +167,12 @@
         <a href="/dashboard"><i class="fas fa-arrow-left"></i> Back</a>
     </div>
 
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Link copied!</span>
+    </div>
+
     <% if (typeof success !== 'undefined' && success) { %>
         <div class="flash-message flash-success"><%= success %></div>
     <% } %>
@@ -57,6 +180,7 @@
         <div class="flash-message flash-error"><%= error %></div>
     <% } %>
 
+    <!-- Stats Grid -->
     <div class="stats-grid">
         <div class="stat-card">
             <div class="number blue"><%= typeof referrals !== 'undefined' ? referrals.length : 0 %></div>
@@ -76,14 +200,38 @@
         </div>
     </div>
 
+    <!-- ============================== -->
+    <!-- REFERRAL LINK BOX - HIGHLIGHTED -->
+    <!-- ============================== -->
     <div class="referral-link-box">
         <div class="label">🔗 Your Referral Link</div>
-        <div class="link">http://localhost:3000/register?ref=<%= user.referral_code %></div>
-        <div style="margin-top:6px;display:flex;gap:8px;flex-wrap:wrap;">
-            <span style="font-size:12px;color:#64748b;"><i class="fas fa-info-circle"></i> You get 10% commission</span>
+        <div class="link" id="referralLink"><%= baseUrl %>/register?ref=<%= user.referral_code %></div>
+        
+        <div style="margin-top:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <span class="commission-badge">
+                <i class="fas fa-gift"></i> 10% Commission
+            </span>
+            <span style="font-size:12px;color:#64748b;">
+                <i class="fas fa-info-circle"></i> Earn on every deposit
+            </span>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn copy-btn" onclick="copyReferralLink()">
+                <i class="fas fa-copy"></i> Copy Link
+            </button>
+            <button class="btn share-btn" onclick="shareReferralLink()">
+                <i class="fas fa-share-alt"></i> Share
+            </button>
+            <button class="btn" onclick="openWhatsApp()" style="background:#25D366;color:white;border-color:#25D366;">
+                <i class="fab fa-whatsapp"></i> WhatsApp
+            </button>
         </div>
     </div>
 
+    <!-- ============================== -->
+    <!-- REFERRAL HISTORY -->
+    <!-- ============================== -->
     <div class="section-title">
         Referral History
         <small>COMMISSIONS EARNED</small>
@@ -106,6 +254,9 @@
         </div>
     <% } %>
 
+    <!-- ============================== -->
+    <!-- TEAM MEMBERS -->
+    <!-- ============================== -->
     <div class="section-title">
         Team Members
         <small>YOUR REFERRALS</small>
@@ -131,6 +282,76 @@
         </div>
     <% } %>
 </div>
+
+<!-- ============================== -->
+<!-- SCRIPTS -->
+<!-- ============================== -->
+<script>
+    function showToast(message, type) {
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toastMessage');
+        toastMessage.textContent = message;
+        toast.className = 'toast show ' + (type || 'success');
+        setTimeout(function() {
+            toast.classList.remove('show');
+        }, 3000);
+    }
+
+    function copyReferralLink() {
+        const link = document.getElementById('referralLink').textContent;
+        
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(link).then(function() {
+                showToast('✅ Referral link copied!', 'success');
+            }).catch(function() {
+                fallbackCopy(link);
+            });
+        } else {
+            fallbackCopy(link);
+        }
+    }
+
+    function fallbackCopy(text) {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-9999px';
+        textArea.style.top = '-9999px';
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            showToast('✅ Referral link copied!', 'success');
+        } catch (err) {
+            showToast('❌ Failed to copy link', 'error');
+        }
+        document.body.removeChild(textArea);
+    }
+
+    function shareReferralLink() {
+        const link = document.getElementById('referralLink').textContent;
+        
+        if (navigator.share) {
+            navigator.share({
+                title: 'Join NovaPay',
+                text: 'Join NovaPay and start earning! Use my referral link:',
+                url: link
+            }).catch(function(err) {
+                if (err.name !== 'AbortError') {
+                    copyReferralLink();
+                }
+            });
+        } else {
+            copyReferralLink();
+        }
+    }
+
+    function openWhatsApp() {
+        const link = document.getElementById('referralLink').textContent;
+        const message = encodeURIComponent('Join NovaPay and start earning! Use my referral link: ' + link);
+        window.open('https://wa.me/?text=' + message, '_blank');
+    }
+</script>
 
 </body>
 </html>

@@ -58,196 +58,6 @@
         .plan-line {
             background: #f8fafc;
             border: 1px solid #eef2f6;
-            border-radius: 10px;
-            padding: 12px 14px;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: 0.3s;
-        }
-        .plan-line:hover { border-color: #3b82f6; }
-        .plan-line .plan-info .name { font-weight: 700; font-size: 14px; color: #0f172a; }
-        .plan-line .plan-info .name .vip-badge { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; font-size: 8px; padding: 1px 8px; border-radius: 10px; margin-left: 6px; }
-        .plan-line .plan-info .details { font-size: 12px; color: #64748b; margin-top: 2px; }
-        .plan-line .plan-info .details .price { color: #3b82f6; font-weight: 600; }
-        .plan-line .plan-info .details .daily { color: #22c55e; font-weight: 600; }
-        .plan-line .plan-btn { background: #3b82f6; border: none; color: #fff; padding: 4px 16px; border-radius: 16px; font-size: 11px; font-weight: 600; cursor: pointer; transition: 0.3s; }
-        .plan-line .plan-btn:hover { background: #2563eb; transform: scale(1.05); }
-        
-        .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px; }
-        .summary-item { background: #f8fafc; border: 1px solid #eef2f6; border-radius: 10px; padding: 10px 4px; text-align: center; }
-        .summary-item .icon { font-size: 16px; display: block; margin-bottom: 2px; }
-        .summary-item .label { font-size: 8px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.3px; }
-        .summary-item .value { font-size: 12px; font-weight: 700; color: #0f172a; margin-top: 1px; }
-        .summary-item .value.green { color: #22c55e; }
-        .summary-item .value.blue { color: #3b82f6; }
-        .summary-item .value.gold { color: #f59e0b; }
-        .summary-item .value.purple { color: #8b5cf6; }
-        
-        .referral-box { background: #f8fafc; border: 1px solid #eef2f6; border-radius: 12px; padding: 10px 14px; margin-bottom: 10px; }
-        .referral-box .label { font-size: 9px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
-        .referral-box .link { color: #3b82f6; word-break: break-all; font-size: 11px; margin-top: 2px; }
-        .referral-box .stats { margin-top: 6px; display: flex; gap: 12px; font-size: 11px; color: #64748b; }
-        
-        .whatsapp-box { background: #25D366; border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; color: white; text-decoration: none; }
-        .whatsapp-box i { font-size: 28px; }
-        .whatsapp-box .info .title { font-weight: 600; font-size: 14px; }
-        .whatsapp-box .info .sub { font-size: 11px; opacity: 0.9; }
-        .whatsapp-box .btn { margin-left: auto; background: rgba(255,255,255,0.2); color: white; padding: 4px 14px; border-radius: 6px; text-decoration: none; font-weight: 500; font-size: 11px; border: none; cursor: pointer; }
-        .whatsapp-box .btn:hover { background: rgba(255,255,255,0.3); }
-        
-        .flash-message { padding: 10px 14px; border-radius: 10px; margin-bottom: 12px; font-size: 13px; }
-        .flash-success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
-        .flash-error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
-        
-        .sidebar-left { position: fixed; left: -280px; top: 0; width: 270px; height: 100vh; background: #ffffff; box-shadow: 4px 0 30px rgba(0,0,0,0.1); transition: 0.4s ease; padding: 20px 16px; overflow-y: auto; z-index: 1000; border-right: 1px solid #eef2f6; }
-        .sidebar-left.open { left: 0; }
-        .sidebar-left .close-btn { background: none; border: none; font-size: 24px; color: #94a3b8; cursor: pointer; float: right; padding: 4px; }
-        .sidebar-left .sidebar-logo { font-size: 18px; font-weight: 800; color: #0f172a; margin: 30px 0 6px; }
-        .sidebar-left .sidebar-logo span { color: #3b82f6; }
-        .sidebar-left .sidebar-logo small { display: block; font-size: 9px; font-weight: 400; color: #94a3b8; letter-spacing: 2px; }
-        .sidebar-left .sidebar-title { font-size: 13px; font-weight: 600; color: #0f172a; margin: 18px 0 10px; padding-bottom: 6px; border-bottom: 1px solid #eef2f6; }
-        .sidebar-left .sidebar-title small { font-size: 10px; font-weight: 400; color: #94a3b8; display: block; }
-        .sidebar-left .qa-item { display: flex; align-items: center; gap: 14px; padding: 11px 14px; border-radius: 10px; color: #475569; text-decoration: none; transition: 0.3s; margin-bottom: 2px; font-size: 14px; cursor: pointer; border: none; background: none; width: 100%; text-align: left; }
-        .sidebar-left .qa-item:hover { background: #f1f5f9; color: #0f172a; }
-        .sidebar-left .qa-item .icon { font-size: 18px; width: 26px; text-align: center; }
-        .sidebar-left .qa-divider { border-top: 1px solid #eef2f6; margin: 10px 0; }
-        .sidebar-left .badge-count { background: #ef4444; color: white; font-size: 9px; padding: 1px 6px; border-radius: 10px; margin-left: auto; }
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 999; display: none; }
-        .overlay.show { display: block; }
-        
-        @media (max-width: 420px) { .app-container { padding: 12px 10px; border-radius: 16px; } .balance-card .amount { font-size: 26px; } .summary-grid { grid-template-columns: repeat(2, 1fr); } .action-grid { gap: 4px; } .action-btn { padding: 8px 2px; } .action-btn .icon { font-size: 16px; } .action-btn .label { font-size: 8px; } .sidebar-left { width: 230px; left: -240px; } }
-        @media (min-width: 600px) { .app-container { max-width: 560px; padding: 24px 28px; } }
-    </style>
-</head>
-<body>
-
-<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
-
-<div class="sidebar-left" id="leftSidebar">
-    <button class="close-btn" onclick="closeSidebar()">✕</button>
-    <div class="sidebar-logo">NOVA<span>PAY</span><small>✦ INTERNATIONAL</small></div>
-    <div class="sidebar-title">Quick Access<small>SERVICES</small></div>
-    <a href="/dashboard" class="qa-item" onclick="closeSidebar();"><span class="icon">📊</span> Dashboard</a>
-    <a href="/deposit" class="qa-item" onclick="closeSidebar();"><span class="icon">💰</span> Deposit</a>
-    <a href="/mining" class="qa-item" onclick="closeSidebar();"><span class="icon">⛏️</span> Mining</a>
-    <a href="/withdraw" class="qa-item" onclick="closeSidebar();"><span class="icon">💸</span> Withdraw</a>
-    <a href="/team" class="qa-item" onclick="closeSidebar();"><span class="icon">👥</span> Team</a>
-    <a href="/bonus" class="qa-item" onclick="closeSidebar();"><span class="icon">🎁</span> Bonus</a>
-    <a href="/notifications" class="qa-item" onclick="closeSidebar();"><span class="icon">🔔</span> Notifications
-        <% if (typeof unreadCount !== 'undefined' && unreadCount > 0) { %>
-            <span class="badge-count"><%= unreadCount %></span>
-        <% } %>
-    </a>
-    <a href="/records" class="qa-item" onclick="closeSidebar();"><span class="icon">📊</span> Records</a>
-    <a href="/support" class="qa-item" onclick="closeSidebar();"><span class="icon">🛡️</span> Support</a>
-    <div class="qa-divider"></div>
-    <a href="/logout" class="qa-item" style="color:#ef4444;"><span class="icon">🚪</span> Logout</a>
-</div>
-
-<div class="app-container">
-
-    <div class="header">
-        <div style="display:flex;align-items:center;gap:6px;">
-            <button class="menu-btn" onclick="openSidebar()">☰</button>
-            <div class="logo">NOVA<span>PAY</span><small>✦ INTERNATIONAL</small></div>
-        </div>
-        <span class="badge">● LIVE</span>
-    </div>
-
-    <a href="https://whatsapp.com/channel/novapay" target="_blank" class="whatsapp-top">
-        <div style="display:flex;align-items:center;gap:8px;">
-            <i class="fab fa-whatsapp"></i>
-            <span class="text">Join WhatsApp Channel</span>
-        </div>
-        <span class="btn">Follow</span>
-    </a>
-
-    <% if (typeof success !== 'undefined' && success) { %>
-        <div class="flash-message flash-success"><%= success %></div>
-    <% } %>
-    <% if (typeof error !== 'undefined' && error) { %>
-        <div class="flash-message flash-error"><%= error %></div>
-    <% } %>
-
-    <div class="user-info">
-        <div class="name">👋 Welcome, <%= user.username %><small>TRUSTED PLATFORM</small></div>
-        <span class="vip-tag">👑 VIP ELITE</span>
-    </div>
-
-    <div class="today-earnings">
-        <div>
-            <div class="label">📈 Today's Earnings</div>
-            <div class="value">PKR <%= typeof todayEarnings !== 'undefined' ? todayEarnings.toFixed(2) : '0.00' %></div>
-        </div>
-        <div style="font-size:12px;opacity:0.8;">
-            <i class="fas fa-clock"></i> Daily
-        </div>
-    </div>
-
-    <div class="balance-card">
-        <button class="refresh-btn" onclick="refreshBalance()" id="refreshBtn">
-            <i class="fas fa-sync-alt"></i>
-        </button>
-        <div class="label">💰 Available Balance</div>
-        <div class="amount" id="liveBalance">PKR <%= user.balance ? user.balance.toFixed(2) : '0.00' %></div>
-        <div class="sub">Live Balance</div>
-    </div>
-
-    <!-- Action Grid with 5 Buttons (Deposit, Withdraw, Mining, Team, Bonus) -->
-    <div class="action-grid">
-        <a href="/deposit" class="action-btn">
-            <span class="icon">💰</span>
-            <span class="label">Deposit</span>
-        </a>
-        <a href="/withdraw" class="action-btn">
-            <span class="icon">💸</span>
-            <span class="label">Withdraw</span>
-        </a>
-        <a href="/mining" class="action-btn">
-            <span class="icon">⛏️</span>
-            <span class="label">Mining</span>
-        </a>
-        <a href="/team" class="action-btn">
-            <span class="icon">👥</span>
-            <span class="label">Team</span>
-        </a>
-        <a href="/bonus" class="action-btn">
-            <span class="icon">🎁</span>
-            <span class="label">Bonus</span>
-        </a>
-    </div>
-
-    <!-- Active Plans Section -->
-    <div class="section-title">
-        Active Plans
-        <small>YOUR CURRENT INVESTMENTS</small>
-    </div>
-    <% if (typeof userPlans !== 'undefined' && userPlans && userPlans.length > 0) { %>
-        <% userPlans.forEach(function(plan) { %>
-            <div class="active-plan">
-                <div class="plan-info">
-                    <div class="name"><%= plan.plan_name %></div>
-                    <div class="daily">Daily: PKR <%= plan.daily_income %></div>
-                </div>
-                <span class="status-badge"><i class="fas fa-check-circle"></i> Active</span>
-            </div>
-        <% }); %>
-    <% } else { %>
-        <p style="color:#94a3b8;text-align:center;padding:10px;font-size:13px;">No active plans. Purchase a plan to start earning!</p>
-    <% } %>
-
-        <!-- Investment Plans - Bara + Highlight -->
-    <div class="section-title">
-        Investment Plans
-        <small>CHOOSE YOUR PLAN</small>
-    </div>
-    
-    <style>
-        .plan-line {
-            background: #f8fafc;
-            border: 1px solid #eef2f6;
             border-radius: 14px;
             padding: 16px 18px;
             margin-bottom: 12px;
@@ -357,7 +167,280 @@
                 font-size: 13px;
             }
         }
+        
+        .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px; }
+        .summary-item { background: #f8fafc; border: 1px solid #eef2f6; border-radius: 10px; padding: 10px 4px; text-align: center; }
+        .summary-item .icon { font-size: 16px; display: block; margin-bottom: 2px; }
+        .summary-item .label { font-size: 8px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.3px; }
+        .summary-item .value { font-size: 12px; font-weight: 700; color: #0f172a; margin-top: 1px; }
+        .summary-item .value.green { color: #22c55e; }
+        .summary-item .value.blue { color: #3b82f6; }
+        .summary-item .value.gold { color: #f59e0b; }
+        .summary-item .value.purple { color: #8b5cf6; }
+        
+        /* ============================== */
+        /* REFERRAL BOX - MODIFIED */
+        /* ============================== */
+        .referral-box { 
+            background: #f8fafc; 
+            border: 1px solid #eef2f6; 
+            border-radius: 12px; 
+            padding: 14px 16px; 
+            margin-bottom: 10px; 
+        }
+        .referral-box .label { 
+            font-size: 9px; 
+            color: #94a3b8; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px; 
+        }
+        .referral-box .link { 
+            color: #3b82f6; 
+            word-break: break-all; 
+            font-size: 12px; 
+            margin-top: 4px; 
+            font-weight: 600;
+        }
+        .referral-box .stats { 
+            margin-top: 6px; 
+            display: flex; 
+            gap: 12px; 
+            font-size: 11px; 
+            color: #64748b; 
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .referral-box .stats .commission-badge {
+            background: #dcfce7;
+            padding: 2px 12px;
+            border-radius: 12px;
+            color: #166534;
+            font-weight: 600;
+            font-size: 11px;
+        }
+        .referral-box .btn-group {
+            margin-top: 8px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .referral-box .btn-group .btn {
+            padding: 5px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid #eef2f6;
+            background: #f8fafc;
+            color: #475569;
+        }
+        .referral-box .btn-group .btn:hover {
+            transform: scale(1.02);
+        }
+        .referral-box .btn-group .btn.copy-btn:hover {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        .referral-box .btn-group .btn.share-btn:hover {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        .referral-box .btn-group .btn.whatsapp-btn {
+            background: #25D366;
+            border-color: #25D366;
+            color: white;
+        }
+        .referral-box .btn-group .btn.whatsapp-btn:hover {
+            background: #1da851;
+            border-color: #1da851;
+        }
+        
+        .whatsapp-box { background: #25D366; border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; color: white; text-decoration: none; }
+        .whatsapp-box i { font-size: 28px; }
+        .whatsapp-box .info .title { font-weight: 600; font-size: 14px; }
+        .whatsapp-box .info .sub { font-size: 11px; opacity: 0.9; }
+        .whatsapp-box .btn { margin-left: auto; background: rgba(255,255,255,0.2); color: white; padding: 4px 14px; border-radius: 6px; text-decoration: none; font-weight: 500; font-size: 11px; border: none; cursor: pointer; }
+        .whatsapp-box .btn:hover { background: rgba(255,255,255,0.3); }
+        
+        .flash-message { padding: 10px 14px; border-radius: 10px; margin-bottom: 12px; font-size: 13px; }
+        .flash-success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+        .flash-error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+        
+        /* ============================== */
+        /* TOAST NOTIFICATION */
+        /* ============================== */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #0f172a;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 9999;
+            animation: slideUp 0.4s ease;
+        }
+        .toast.show { display: block; }
+        .toast i { margin-right: 8px; }
+        .toast.success i { color: #22c55e; }
+        @keyframes slideUp {
+            0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        
+        .sidebar-left { position: fixed; left: -280px; top: 0; width: 270px; height: 100vh; background: #ffffff; box-shadow: 4px 0 30px rgba(0,0,0,0.1); transition: 0.4s ease; padding: 20px 16px; overflow-y: auto; z-index: 1000; border-right: 1px solid #eef2f6; }
+        .sidebar-left.open { left: 0; }
+        .sidebar-left .close-btn { background: none; border: none; font-size: 24px; color: #94a3b8; cursor: pointer; float: right; padding: 4px; }
+        .sidebar-left .sidebar-logo { font-size: 18px; font-weight: 800; color: #0f172a; margin: 30px 0 6px; }
+        .sidebar-left .sidebar-logo span { color: #3b82f6; }
+        .sidebar-left .sidebar-logo small { display: block; font-size: 9px; font-weight: 400; color: #94a3b8; letter-spacing: 2px; }
+        .sidebar-left .sidebar-title { font-size: 13px; font-weight: 600; color: #0f172a; margin: 18px 0 10px; padding-bottom: 6px; border-bottom: 1px solid #eef2f6; }
+        .sidebar-left .sidebar-title small { font-size: 10px; font-weight: 400; color: #94a3b8; display: block; }
+        .sidebar-left .qa-item { display: flex; align-items: center; gap: 14px; padding: 11px 14px; border-radius: 10px; color: #475569; text-decoration: none; transition: 0.3s; margin-bottom: 2px; font-size: 14px; cursor: pointer; border: none; background: none; width: 100%; text-align: left; }
+        .sidebar-left .qa-item:hover { background: #f1f5f9; color: #0f172a; }
+        .sidebar-left .qa-item .icon { font-size: 18px; width: 26px; text-align: center; }
+        .sidebar-left .qa-divider { border-top: 1px solid #eef2f6; margin: 10px 0; }
+        .sidebar-left .badge-count { background: #ef4444; color: white; font-size: 9px; padding: 1px 6px; border-radius: 10px; margin-left: auto; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 999; display: none; }
+        .overlay.show { display: block; }
+        
+        @media (max-width: 420px) { .app-container { padding: 12px 10px; border-radius: 16px; } .balance-card .amount { font-size: 26px; } .summary-grid { grid-template-columns: repeat(2, 1fr); } .action-grid { gap: 4px; } .action-btn { padding: 8px 2px; } .action-btn .icon { font-size: 16px; } .action-btn .label { font-size: 8px; } .sidebar-left { width: 230px; left: -240px; } }
+        @media (min-width: 600px) { .app-container { max-width: 560px; padding: 24px 28px; } }
     </style>
+</head>
+<body>
+
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<div class="sidebar-left" id="leftSidebar">
+    <button class="close-btn" onclick="closeSidebar()">✕</button>
+    <div class="sidebar-logo">NOVA<span>PAY</span><small>✦ INTERNATIONAL</small></div>
+    <div class="sidebar-title">Quick Access<small>SERVICES</small></div>
+    <a href="/dashboard" class="qa-item" onclick="closeSidebar();"><span class="icon">📊</span> Dashboard</a>
+    <a href="/deposit" class="qa-item" onclick="closeSidebar();"><span class="icon">💰</span> Deposit</a>
+    <a href="/mining" class="qa-item" onclick="closeSidebar();"><span class="icon">⛏️</span> Mining</a>
+    <a href="/withdraw" class="qa-item" onclick="closeSidebar();"><span class="icon">💸</span> Withdraw</a>
+    <a href="/team" class="qa-item" onclick="closeSidebar();"><span class="icon">👥</span> Team</a>
+    <a href="/bonus" class="qa-item" onclick="closeSidebar();"><span class="icon">🎁</span> Bonus</a>
+    <a href="/notifications" class="qa-item" onclick="closeSidebar();"><span class="icon">🔔</span> Notifications
+        <% if (typeof unreadCount !== 'undefined' && unreadCount > 0) { %>
+            <span class="badge-count"><%= unreadCount %></span>
+        <% } %>
+    </a>
+    <a href="/records" class="qa-item" onclick="closeSidebar();"><span class="icon">📊</span> Records</a>
+    <a href="/support" class="qa-item" onclick="closeSidebar();"><span class="icon">🛡️</span> Support</a>
+    <a href="/terms" class="qa-item" onclick="closeSidebar();"><span class="icon">📜</span> Terms</a>
+    <div class="qa-divider"></div>
+    <a href="/logout" class="qa-item" style="color:#ef4444;"><span class="icon">🚪</span> Logout</a>
+</div>
+
+<div class="app-container">
+
+    <div class="header">
+        <div style="display:flex;align-items:center;gap:6px;">
+            <button class="menu-btn" onclick="openSidebar()">☰</button>
+            <div class="logo">NOVA<span>PAY</span><small>✦ INTERNATIONAL</small></div>
+        </div>
+        <span class="badge">● LIVE</span>
+    </div>
+
+    <a href="https://whatsapp.com/channel/novapay" target="_blank" class="whatsapp-top">
+        <div style="display:flex;align-items:center;gap:8px;">
+            <i class="fab fa-whatsapp"></i>
+            <span class="text">Join WhatsApp Channel</span>
+        </div>
+        <span class="btn">Follow</span>
+    </a>
+
+    <% if (typeof success !== 'undefined' && success) { %>
+        <div class="flash-message flash-success"><%= success %></div>
+    <% } %>
+    <% if (typeof error !== 'undefined' && error) { %>
+        <div class="flash-message flash-error"><%= error %></div>
+    <% } %>
+
+    <div class="user-info">
+        <div class="name">👋 Welcome, <%= user.username %><small>TRUSTED PLATFORM</small></div>
+        <span class="vip-tag">👑 VIP ELITE</span>
+    </div>
+
+    <div class="today-earnings">
+        <div>
+            <div class="label">📈 Today's Earnings</div>
+            <div class="value">PKR <%= typeof todayEarnings !== 'undefined' ? todayEarnings.toFixed(2) : '0.00' %></div>
+        </div>
+        <div style="font-size:12px;opacity:0.8;">
+            <i class="fas fa-clock"></i> Daily
+        </div>
+    </div>
+
+    <div class="balance-card">
+        <button class="refresh-btn" onclick="refreshBalance()" id="refreshBtn">
+            <i class="fas fa-sync-alt"></i>
+        </button>
+        <div class="label">💰 Available Balance</div>
+        <div class="amount" id="liveBalance">PKR <%= user.balance ? user.balance.toFixed(2) : '0.00' %></div>
+        <div class="sub">Live Balance</div>
+    </div>
+
+    <!-- Action Grid with 5 Buttons (Deposit, Withdraw, Mining, Team, Bonus) -->
+    <div class="action-grid">
+        <a href="/deposit" class="action-btn">
+            <span class="icon">💰</span>
+            <span class="label">Deposit</span>
+        </a>
+        <a href="/withdraw" class="action-btn">
+            <span class="icon">💸</span>
+            <span class="label">Withdraw</span>
+        </a>
+        <a href="/mining" class="action-btn">
+            <span class="icon">⛏️</span>
+            <span class="label">Mining</span>
+        </a>
+        <a href="/team" class="action-btn">
+            <span class="icon">👥</span>
+            <span class="label">Team</span>
+        </a>
+        <a href="/bonus" class="action-btn">
+            <span class="icon">🎁</span>
+            <span class="label">Bonus</span>
+        </a>
+    </div>
+
+    <!-- Active Plans Section -->
+    <div class="section-title">
+        Active Plans
+        <small>YOUR CURRENT INVESTMENTS</small>
+    </div>
+    <% if (typeof userPlans !== 'undefined' && userPlans && userPlans.length > 0) { %>
+        <% userPlans.forEach(function(plan) { %>
+            <div class="active-plan">
+                <div class="plan-info">
+                    <div class="name"><%= plan.plan_name %></div>
+                    <div class="daily">Daily: PKR <%= plan.daily_income %></div>
+                </div>
+                <span class="status-badge"><i class="fas fa-check-circle"></i> Active</span>
+            </div>
+        <% }); %>
+    <% } else { %>
+        <p style="color:#94a3b8;text-align:center;padding:10px;font-size:13px;">No active plans. Purchase a plan to start earning!</p>
+    <% } %>
+
+    <!-- Investment Plans - Bara + Highlight -->
+    <div class="section-title">
+        Investment Plans
+        <small>CHOOSE YOUR PLAN</small>
+    </div>
 
     <% if (typeof allPlans !== 'undefined' && allPlans && allPlans.length > 0) { %>
         <% allPlans.forEach(function(plan, index) { 
@@ -421,15 +504,32 @@
         </div>
     </div>
 
+    <!-- ============================== -->
+    <!-- REFERRAL BOX - MODIFIED -->
+    <!-- ============================== -->
     <div class="referral-box">
         <div class="label">🔗 Your Referral Link</div>
-        <div class="link">http://localhost:3000/register?ref=<%= user.referral_code %></div>
+        <div class="link" id="referralLink"><%= baseUrl %>/register?ref=<%= user.referral_code %></div>
         <div class="stats">
             <span>👥 Referrals: <%= typeof referralCount !== 'undefined' ? referralCount : 0 %></span>
-            <span>💰 Commission: 10%</span>
+            <span class="commission-badge">
+                <i class="fas fa-gift"></i> 10% Commission
+            </span>
+        </div>
+        <div class="btn-group">
+            <button class="btn copy-btn" onclick="copyReferralLink()">
+                <i class="fas fa-copy"></i> Copy Link
+            </button>
+            <button class="btn share-btn" onclick="shareReferralLink()">
+                <i class="fas fa-share-alt"></i> Share
+            </button>
+            <button class="btn whatsapp-btn" onclick="openWhatsApp()">
+                <i class="fab fa-whatsapp"></i> WhatsApp
+            </button>
         </div>
     </div>
 
+    <!-- WhatsApp Box -->
     <a href="https://wa.me/923001234567" target="_blank" class="whatsapp-box">
         <i class="fab fa-whatsapp"></i>
         <div class="info">
@@ -441,7 +541,21 @@
 
 </div>
 
+<!-- ============================== -->
+<!-- TOAST NOTIFICATION -->
+<!-- ============================== -->
+<div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toastMessage">Link copied!</span>
+</div>
+
+<!-- ============================== -->
+<!-- SCRIPTS -->
+<!-- ============================== -->
 <script>
+    // ==============================
+    // SIDEBAR
+    // ==============================
     function openSidebar() {
         document.getElementById('leftSidebar').classList.add('open');
         document.getElementById('overlay').classList.add('show');
@@ -454,6 +568,9 @@
     }
     document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeSidebar(); });
 
+    // ==============================
+    // BUY PLAN
+    // ==============================
     function buyPlan(planId, investment, name) {
         if (confirm(`Purchase ${name} plan for PKR ${investment}?`)) {
             fetch('/plan/buy', {
@@ -474,6 +591,9 @@
         }
     }
 
+    // ==============================
+    // REFRESH BALANCE
+    // ==============================
     function refreshBalance() {
         const btn = document.getElementById('refreshBtn');
         btn.classList.add('spinning');
@@ -490,6 +610,83 @@
                 btn.classList.remove('spinning');
                 alert('Failed to refresh balance');
             });
+    }
+
+    // ==============================
+    // TOAST FUNCTION
+    // ==============================
+    function showToast(message, type) {
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toastMessage');
+        toastMessage.textContent = message;
+        toast.className = 'toast show ' + (type || 'success');
+        setTimeout(function() {
+            toast.classList.remove('show');
+        }, 3000);
+    }
+
+    // ==============================
+    // COPY REFERRAL LINK
+    // ==============================
+    function copyReferralLink() {
+        const link = document.getElementById('referralLink').textContent;
+        
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(link).then(function() {
+                showToast('✅ Referral link copied!', 'success');
+            }).catch(function() {
+                fallbackCopy(link);
+            });
+        } else {
+            fallbackCopy(link);
+        }
+    }
+
+    function fallbackCopy(text) {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-9999px';
+        textArea.style.top = '-9999px';
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            showToast('✅ Referral link copied!', 'success');
+        } catch (err) {
+            showToast('❌ Failed to copy link', 'error');
+        }
+        document.body.removeChild(textArea);
+    }
+
+    // ==============================
+    // SHARE REFERRAL LINK
+    // ==============================
+    function shareReferralLink() {
+        const link = document.getElementById('referralLink').textContent;
+        
+        if (navigator.share) {
+            navigator.share({
+                title: 'Join NovaPay',
+                text: 'Join NovaPay and start earning! Use my referral link:',
+                url: link
+            }).catch(function(err) {
+                if (err.name !== 'AbortError') {
+                    copyReferralLink();
+                }
+            });
+        } else {
+            copyReferralLink();
+        }
+    }
+
+    // ==============================
+    // OPEN WHATSAPP
+    // ==============================
+    function openWhatsApp() {
+        const link = document.getElementById('referralLink').textContent;
+        const message = encodeURIComponent('Join NovaPay and start earning! Use my referral link: ' + link);
+        window.open('https://wa.me/?text=' + message, '_blank');
     }
 </script>
 
