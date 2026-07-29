@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovaPay - Register</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body {
+            background: #f0f4f8;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .register-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 32px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .logo {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+        .logo span { color: #3b82f6; }
+        .logo small {
+            display: block;
+            font-size: 10px;
+            font-weight: 400;
+            color: #94a3b8;
+            letter-spacing: 2px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #64748b;
+            font-size: 14px;
+            margin: 8px 0 24px;
+        }
+        .form-group {
+            margin-bottom: 14px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 4px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+        }
+        .btn-register {
+            width: 100%;
+            padding: 12px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-register:hover { background: #2563eb; }
+        .flash-error {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 10px 14px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            font-size: 13px;
+        }
+        .links {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 14px;
+            color: #64748b;
+        }
+        .links a { color: #3b82f6; text-decoration: none; font-weight: 600; }
+        .links a:hover { text-decoration: underline; }
+        .hint {
+            font-size: 11px;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="logo">NOVA<span>PAY</span><small>✦ INTERNATIONAL</small></div>
+        <div class="subtitle">Create your account</div>
+
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="flash-error"><%= error %></div>
+        <% } %>
+
+        <form method="POST" action="/register">
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" name="username" placeholder="Choose a username" required>
+            </div>
+            <div class="form-group">
+                <label>Mobile Number</label>
+                <input type="text" name="mobile" placeholder="03XXXXXXXXX" required>
+            </div>
+            <div class="form-group">
+                <label>Password (exactly 8 digits)</label>
+                <input type="password" name="password" placeholder="8-digit password" maxlength="8" required>
+                <div class="hint">Password must be exactly 8 characters</div>
+            </div>
+            <div class="form-group">
+                <label>Confirm Password</label>
+                <input type="password" name="confirm_password" placeholder="Confirm password" maxlength="8" required>
+            </div>
+            <!-- Password field ke baad, submit button se pehle -->
+<div class="form-group">
+    <label>
+        <input type="checkbox" name="agree" required>
+        I agree to the 
+        <a href="/terms" style="color: #f0b90b;">Terms & Conditions</a>
+    </label>
+</div>
+
+<!-- Submit button -->
+<button type="submit">Register</button>
+            <div class="form-group">
+                <label>Referral Code (Optional)</label>
+                <input type="text" name="referral_code" placeholder="Enter referral code" value="<%= typeof referral !== 'undefined' ? referral : '' %>">
+            </div>
+            <button type="submit" class="btn-register">Create Account</button>
+        </form>
+
+        <div class="links">
+            Already have an account? <a href="/login">Sign In</a>
+        </div>
+    </div>
+</body>
+</html>

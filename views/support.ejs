@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovaPay - Support</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #f0f4f8; min-height: 100vh; padding: 20px; }
+        .container { max-width: 480px; margin: 0 auto; background: white; border-radius: 20px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eef2f6; }
+        .header .logo { font-size: 20px; font-weight: 800; color: #0f172a; }
+        .header .logo span { color: #3b82f6; }
+        .header a { color: #3b82f6; text-decoration: none; font-size: 14px; }
+        
+        .support-card {
+            background: #f8fafc;
+            border: 1px solid #eef2f6;
+            border-radius: 12px;
+            padding: 20px 18px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            text-decoration: none;
+            color: #0f172a;
+            transition: 0.3s;
+        }
+        .support-card:hover {
+            border-color: #25D366;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(37, 211, 102, 0.15);
+        }
+        .support-card .icon {
+            font-size: 36px;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 14px;
+            background: #25D366;
+            color: white;
+            flex-shrink: 0;
+        }
+        .support-card .info .title {
+            font-weight: 700;
+            font-size: 16px;
+            color: #0f172a;
+        }
+        .support-card .info .sub {
+            font-size: 13px;
+            color: #64748b;
+            margin-top: 2px;
+        }
+        .support-card .arrow {
+            margin-left: auto;
+            color: #94a3b8;
+        }
+        
+        .whatsapp-btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: #25D366;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            margin-top: 8px;
+            transition: 0.3s;
+        }
+        .whatsapp-btn:hover {
+            background: #1da851;
+            transform: scale(1.02);
+            box-shadow: 0 4px 16px rgba(37, 211, 102, 0.3);
+        }
+        .whatsapp-btn i {
+            margin-right: 10px;
+        }
+        
+        .flash-message { padding: 10px 14px; border-radius: 10px; margin-bottom: 12px; font-size: 13px; }
+        .flash-success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+        .flash-error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+        
+        .info-text {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 13px;
+            margin: 20px 0 10px;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="logo">🛡️ NOVA<span>PAY</span></div>
+        <a href="/dashboard"><i class="fas fa-arrow-left"></i> Back</a>
+    </div>
+
+    <% if (typeof success !== 'undefined' && success) { %>
+        <div class="flash-message flash-success"><%= success %></div>
+    <% } %>
+    <% if (typeof error !== 'undefined' && error) { %>
+        <div class="flash-message flash-error"><%= error %></div>
+    <% } %>
+
+    <h3 style="margin-bottom:16px;color:#0f172a;">📞 Support</h3>
+
+    <!-- WhatsApp Channel Only -->
+    <a href="<%= settings.whatsapp_channel || 'https://whatsapp.com/channel/novapay' %>" target="_blank" class="support-card">
+        <div class="icon"><i class="fab fa-whatsapp"></i></div>
+        <div class="info">
+            <div class="title">WhatsApp Channel</div>
+            <div class="sub">Join our channel for updates & support</div>
+        </div>
+        <div class="arrow"><i class="fas fa-chevron-right"></i></div>
+    </a>
+
+    <a href="https://wa.me/<%= settings.whatsapp_number ? settings.whatsapp_number.replace('+', '') : '923001234567' %>" target="_blank" class="whatsapp-btn">
+        <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+    </a>
+
+    <div class="info-text">
+        <i class="fas fa-clock"></i> Support available 24/7
+    </div>
+</div>
+
+</body>
+</html>

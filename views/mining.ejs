@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovaPay - Mining</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #f0f4f8; min-height: 100vh; padding: 20px; }
+        .container { max-width: 480px; margin: 0 auto; background: white; border-radius: 20px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eef2f6; }
+        .header .logo { font-size: 20px; font-weight: 800; color: #0f172a; }
+        .header .logo span { color: #3b82f6; }
+        .header a { color: #3b82f6; text-decoration: none; font-size: 14px; }
+        .balance-box { background: linear-gradient(135deg, #1e293b, #0f172a); border-radius: 12px; padding: 15px 20px; margin-bottom: 16px; text-align: center; color: white; }
+        .balance-box .label { font-size: 11px; color: #94a3b8; text-transform: uppercase; }
+        .balance-box .amount { font-size: 28px; font-weight: 700; }
+        .reset-info { background: #f8fafc; border: 1px solid #eef2f6; border-radius: 10px; padding: 10px 14px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; font-size: 12px; color: #64748b; }
+        .reset-info i { color: #3b82f6; font-size: 16px; }
+        .mining-card { background: #f8fafc; border: 1px solid #eef2f6; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .mining-card .info .name { font-weight: 600; font-size: 14px; color: #0f172a; }
+        .mining-card .info .daily { font-size: 12px; color: #64748b; }
+        .mining-card .info .status { font-size: 11px; margin-top: 2px; }
+        .status-collected { color: #22c55e; }
+        .status-pending { color: #f59e0b; }
+        .collect-btn { background: #3b82f6; color: white; border: none; padding: 6px 20px; border-radius: 20px; font-weight: 600; font-size: 12px; cursor: pointer; transition: 0.3s; }
+        .collect-btn:hover { background: #2563eb; transform: scale(1.05); }
+        .collect-btn:disabled { background: #94a3b8; cursor: not-allowed; transform: none; }
+        .collect-btn.collecting { background: #f59e0b; animation: pulse 0.6s ease; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        .collect-btn.collected { background: #22c55e; }
+        .collect-success { animation: collectSuccess 0.5s ease; }
+        @keyframes collectSuccess { 0% { transform: scale(1); } 30% { transform: scale(1.2); background: #22c55e; } 70% { transform: scale(0.95); } 100% { transform: scale(1); } }
+        .flash-message { padding: 10px 14px; border-radius: 10px; margin-bottom: 12px; font-size: 13px; }
+        .flash-success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+        .flash-error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+        .no-plans { text-align: center; padding: 40px 20px; color: #94a3b8; }
+        .no-plans i { font-size: 48px; margin-bottom: 10px; display: block; }
+        .no-plans a { color: #3b82f6; text-decoration: none; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="logo">⛏️ NOVA<span>PAY</span></div>
+        <a href="/dashboard"><i class="fas fa-arrow-left"></i> Back</a>
+    </div>
+
+    <div class="balance-box">
+        <div class="label">💰 Your Balance</div>
+        <div class="amount" id="miningBalance">PKR <%= user.balance ? user.balance.toFixed(2) : '0.00' %></div>
+    </div>
+
+    <div class="reset-info">
+        <i class="fas fa-clock"></i>
+        <span>Mining resets every day at <strong>12:00 AM</strong>. Collect your daily earnings!</span>
+    </div>
+
+    <% if (typeof success !== 'undefined' && success) { %>
+        <div class="flash-message flash-success"><%= success %></div>
+    <% } %>
+    <% if (typeof error !== 'undefined' && error) { %>
+        <div class="flash-message flash-error"><%= error %></div>
+    <% } %>
+
+    <h3 style="margin-bottom:12px;color:#0f172a;">📋 Your Active Plans</h3>
+
+    <% if (typeof userPlans !== 'undefined' && userPlans && userPlans.length > 0) { %>
+        <% userPlans.forEach(function(plan) { 
+            var today = new Date().toISOString().split('T')[0];
+            var collected = plan.last_collected === today;
+        %>
+            <div class="mining-card" id="plan-<%= plan.id %>">
+                <div class="info">
+                    <div class="name"><%= plan.plan_name %></div>
+                    <div class="daily">Daily Income: PKR <%= plan.daily_income %></div>
+                    <div class="status <%= collected ? 'status-collected' : 'status-pending' %>">
+                        <i class="fas <%= collected ? 'fa-check-circle' : 'fa-clock' %>"></i>
+                        <%= collected ? 'Collected Today' : 'Ready to Collect' %>
+                    </div>
+                </div>
+                <button class="collect-btn <%= collected ? 'collected' : '' %>" 
+                        onclick="collectMining(<%= plan.id %>, <%= plan.daily_income %>)" 
+                        <%= collected ? 'disabled' : '' %>>
+                    <i class="fas <%= collected ? 'fa-check' : 'fa-hand-holding-usd' %>"></i>
+                    <%= collected ? 'Collected' : 'Collect' %>
+                </button>
+            </div>
+        <% }); %>
+    <% } else { %>
+        <div class="no-plans">
+            <i class="fas fa-hard-hat"></i>
+            <h3>No Active Plans</h3>
+            <p>Purchase a plan from the dashboard to start mining!</p>
+            <br>
+            <a href="/dashboard">← Go to Dashboard</a>
+        </div>
+    <% } %>
+</div>
+
+<script>
+    function collectMining(planId, amount) {
+        const card = document.getElementById('plan-' + planId);
+        const btn = card.querySelector('.collect-btn');
+        
+        if (btn.disabled) return;
+        
+        btn.disabled = true;
+        btn.classList.add('collecting');
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Collecting...';
+        
+        fetch('/mining/collect', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ plan_id: planId })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                btn.classList.remove('collecting');
+                btn.classList.add('collect-success');
+                btn.innerHTML = '<i class="fas fa-check"></i> Collected ✓';
+                btn.classList.add('collected');
+                
+                const status = card.querySelector('.status');
+                status.className = 'status status-collected';
+                status.innerHTML = '<i class="fas fa-check-circle"></i> Collected Today';
+                
+                document.getElementById('miningBalance').textContent = 'PKR ' + data.newBalance.toFixed(2);
+                
+                const liveBalance = document.getElementById('liveBalance');
+                if (liveBalance) {
+                    liveBalance.textContent = 'PKR ' + data.newBalance.toFixed(2);
+                }
+                
+                setTimeout(() => {
+                    btn.classList.remove('collect-success');
+                }, 500);
+                
+                alert('✅ ' + data.message);
+            } else {
+                btn.disabled = false;
+                btn.classList.remove('collecting');
+                btn.innerHTML = '<i class="fas fa-hand-holding-usd"></i> Collect';
+                alert('❌ ' + data.message);
+            }
+        })
+        .catch(err => {
+            btn.disabled = false;
+            btn.classList.remove('collecting');
+            btn.innerHTML = '<i class="fas fa-hand-holding-usd"></i> Collect';
+            alert('❌ Error: ' + err);
+        });
+    }
+</script>
+
+</body>
+</html>

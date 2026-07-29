@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovaPay - Records</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #f0f4f8; min-height: 100vh; padding: 20px; }
+        .container { max-width: 480px; margin: 0 auto; background: white; border-radius: 20px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eef2f6; }
+        .header .logo { font-size: 20px; font-weight: 800; color: #0f172a; }
+        .header .logo span { color: #3b82f6; }
+        .header a { color: #3b82f6; text-decoration: none; font-size: 14px; }
+        .section-title { font-size: 14px; font-weight: 600; color: #0f172a; margin: 16px 0 10px; }
+        .section-title small { font-size: 10px; font-weight: 400; color: #94a3b8; display: block; }
+        .record-item {
+            background: #f8fafc;
+            border: 1px solid #eef2f6;
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .record-item .info .type { font-weight: 600; font-size: 13px; color: #0f172a; }
+        .record-item .info .date { font-size: 10px; color: #94a3b8; }
+        .record-item .amount { font-weight: 700; font-size: 14px; }
+        .record-item .amount.credit { color: #22c55e; }
+        .record-item .amount.debit { color: #ef4444; }
+        .badge-status {
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 9px;
+            font-weight: 600;
+        }
+        .badge-pending { background: #fef3c7; color: #92400e; }
+        .badge-approved { background: #dcfce7; color: #166534; }
+        .badge-rejected { background: #fee2e2; color: #991b1b; }
+        .badge-completed { background: #dcfce7; color: #166534; }
+        .no-data { text-align: center; padding: 20px; color: #94a3b8; font-size: 13px; }
+        .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+        .tab-btn { padding: 6px 14px; border: 1px solid #eef2f6; border-radius: 8px; background: white; color: #64748b; cursor: pointer; font-size: 12px; }
+        .tab-btn.active { background: #3b82f6; color: white; border-color: #3b82f6; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="logo">📊 NOVA<span>PAY</span></div>
+        <a href="/dashboard"><i class="fas fa-arrow-left"></i> Back</a>
+    </div>
+
+    <h3 style="margin-bottom:12px;color:#0f172a;">📋 Complete History</h3>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('deposits', this)">Deposits</button>
+        <button class="tab-btn" onclick="switchTab('withdraws', this)">Withdraws</button>
+        <button class="tab-btn" onclick="switchTab('mining', this)">Mining</button>
+        <button class="tab-btn" onclick="switchTab('referrals', this)">Referrals</button>
+        <button class="tab-btn" onclick="switchTab('bonuses', this)">Bonuses</button>
+        <button class="tab-btn" onclick="switchTab('plans', this)">Plans</button>
+    </div>
+
+    <!-- Deposits -->
+    <div id="tab-deposits" class="tab-content active">
+        <div class="section-title">Deposits <small>YOUR DEPOSIT HISTORY</small></div>
+        <% if (typeof deposits !== 'undefined' && deposits && deposits.length > 0) { %>
+            <% deposits.forEach(function(d) { %>
+                <div class="record-item">
+                    <div class="info">
+                        <div class="type">💰 Deposit</div>
+                        <div class="date"><%= d.created_at ? new Date(d.created_at).toLocaleDateString() : 'N/A' %></div>
+                    </div>
+                    <div>
+                        <span class="badge-status badge-<%= d.status %>"><%= d.status %></span>
+                        <span class="amount credit">+PKR <%= d.amount %></span>
+                    </div>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <div class="no-data">No deposits found</div>
+        <% } %>
+    </div>
+
+    <!-- Withdraws -->
+    <div id="tab-withdraws" class="tab-content">
+        <div class="section-title">Withdraws <small>YOUR WITHDRAW HISTORY</small></div>
+        <% if (typeof withdraws !== 'undefined' && withdraws && withdraws.length > 0) { %>
+            <% withdraws.forEach(function(w) { %>
+                <div class="record-item">
+                    <div class="info">
+                        <div class="type">💸 Withdraw</div>
+                        <div class="date"><%= w.created_at ? new Date(w.created_at).toLocaleDateString() : 'N/A' %></div>
+                    </div>
+                    <div>
+                        <span class="badge-status badge-<%= w.status %>"><%= w.status %></span>
+                        <span class="amount debit">-PKR <%= w.amount %></span>
+                    </div>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <div class="no-data">No withdraws found</div>
+        <% } %>
+    </div>
+
+    <!-- Mining -->
+    <div id="tab-mining" class="tab-content">
+        <div class="section-title">Mining <small>YOUR MINING EARNINGS</small></div>
+        <% if (typeof miningHistory !== 'undefined' && miningHistory && miningHistory.length > 0) { %>
+            <% miningHistory.forEach(function(m) { %>
+                <div class="record-item">
+                    <div class="info">
+                        <div class="type">⛏️ Mining</div>
+                        <div class="date"><%= m.collected_date || 'N/A' %></div>
+                    </div>
+                    <div>
+                        <span class="badge-status badge-completed">Collected</span>
+                        <span class="amount credit">+PKR <%= m.amount %></span>
+                    </div>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <div class="no-data">No mining history found</div>
+        <% } %>
+    </div>
+
+    <!-- Referrals -->
+    <div id="tab-referrals" class="tab-content">
+        <div class="section-title">Referrals <small>YOUR REFERRAL EARNINGS</small></div>
+        <% if (typeof referralHistory !== 'undefined' && referralHistory && referralHistory.length > 0) { %>
+            <% referralHistory.forEach(function(r) { %>
+                <div class="record-item">
+                    <div class="info">
+                        <div class="type">👥 Referral Commission</div>
+                        <div class="date"><%= r.created_at ? new Date(r.created_at).toLocaleDateString() : 'N/A' %></div>
+                    </div>
+                    <div>
+                        <span class="badge-status badge-completed">Earned</span>
+                        <span class="amount credit">+PKR <%= r.commission %></span>
+                    </div>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <div class="no-data">No referral earnings found</div>
+        <% } %>
+    </div>
+
+    <!-- Bonuses -->
+    <div id="tab-bonuses" class="tab-content">
+        <div class="section-title">Bonuses <small>YOUR BONUS HISTORY</small></div>
+        <% if (typeof bonuses !== 'undefined' && bonuses && bonuses.length > 0) { %>
+            <% bonuses.forEach(function(b) { %>
+                <div class="record-item">
+                    <div class="info">
+                        <div class="type">🎁 <%= b.reason || 'Bonus' %></div>
+                        <div class="date"><%= b.created_at ? new Date(b.created_at).toLocaleDateString() : 'N/A' %></div>
+                    </div>
+                    <div>
+                        <span class="badge-status badge-completed">Received</span>
+                        <span class="amount credit">+PKR <%= b.amount %></span>
+                    </div>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <div class="no-data">No bonuses found</div>
+        <% } %>
+    </div>
+
+    <!-- Plans -->
+    <div id="tab-plans" class="tab-content">
+        <div class="section-title">Plans <small>YOUR PLAN PURCHASES</small></div>
+        <% if (typeof purchasedPlans !== 'undefined' && purchasedPlans && purchasedPlans.length > 0) { %>
+            <% purchasedPlans.forEach(function(p) { %>
+                <div class="record-item">
+                    <div class="info">
+                        <div class="type">📈 <%= p.name %></div>
+                        <div class="date"><%= p.purchased_at ? new Date(p.purchased_at).toLocaleDateString() : 'N/A' %></div>
+                    </div>
+                    <div>
+                        <span class="badge-status badge-<%= p.status %>"><%= p.status %></span>
+                        <span class="amount debit">-PKR <%= p.investment %></span>
+                    </div>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <div class="no-data">No plans purchased</div>
+        <% } %>
+    </div>
+</div>
+
+<script>
+    function switchTab(tab, btn) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        document.getElementById('tab-' + tab).classList.add('active');
+        if (btn) btn.classList.add('active');
+    }
+</script>
+
+</body>
+</html>

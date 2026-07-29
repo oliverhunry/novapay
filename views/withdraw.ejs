@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovaPay - Withdraw</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #f0f4f8; min-height: 100vh; padding: 20px; }
+        .container { max-width: 480px; margin: 0 auto; background: white; border-radius: 20px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eef2f6; }
+        .header .logo { font-size: 20px; font-weight: 800; color: #0f172a; }
+        .header .logo span { color: #3b82f6; }
+        .header a { color: #3b82f6; text-decoration: none; font-size: 14px; }
+        .balance-box { background: linear-gradient(135deg, #1e293b, #0f172a); border-radius: 12px; padding: 15px 20px; margin-bottom: 20px; text-align: center; color: white; }
+        .balance-box .label { font-size: 11px; color: #94a3b8; text-transform: uppercase; }
+        .balance-box .amount { font-size: 24px; font-weight: 700; }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 4px; }
+        .form-group input, .form-group select { width: 100%; padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 14px; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+        .btn-submit { width: 100%; padding: 12px; background: #3b82f6; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; }
+        .btn-submit:hover { background: #2563eb; }
+        .flash-message { padding: 10px 14px; border-radius: 10px; margin-bottom: 12px; font-size: 13px; }
+        .flash-success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+        .flash-error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+        .info-box { background: #f8fafc; border: 1px solid #eef2f6; border-radius: 10px; padding: 12px; margin-bottom: 16px; }
+        .info-box .title { font-weight: 600; font-size: 13px; color: #0f172a; margin-bottom: 4px; }
+        .info-box .detail { font-size: 12px; color: #64748b; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="logo">💸 NOVA<span>PAY</span></div>
+        <a href="/dashboard"><i class="fas fa-arrow-left"></i> Back</a>
+    </div>
+
+    <div class="balance-box">
+        <div class="label">Your Balance</div>
+        <div class="amount">PKR <%= user.balance ? user.balance.toFixed(2) : '0.00' %></div>
+    </div>
+
+    <% if (typeof success !== 'undefined' && success) { %>
+        <div class="flash-message flash-success"><%= success %></div>
+    <% } %>
+    <% if (typeof error !== 'undefined' && error) { %>
+        <div class="flash-message flash-error"><%= error %></div>
+    <% } %>
+
+    <div class="info-box">
+        <div class="title">📌 Withdraw Instructions</div>
+        <div class="detail">Minimum withdraw: PKR 100</div>
+        <div class="detail">Your request will be processed within 30 minutes.</div>
+    </div>
+
+    <form action="/withdraw" method="POST">
+        <div class="form-group">
+            <label>Amount (PKR)</label>
+            <input type="number" name="amount" min="100" step="10" required>
+        </div>
+        <div class="form-group">
+            <label>Payment Method</label>
+            <select name="payment_method" required>
+                <option value="EasyPaisa">EasyPaisa</option>
+                <option value="JazzCash">JazzCash</option>
+                <option value="Bank Transfer">Bank Transfer</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Account Holder Name</label>
+            <input type="text" name="account_holder" placeholder="Enter account holder name" required>
+        </div>
+        <div class="form-group">
+            <label>Account Number</label>
+            <input type="text" name="account_number" placeholder="Enter account number" required>
+        </div>
+        <button type="submit" class="btn-submit"><i class="fas fa-paper-plane"></i> Submit Withdraw</button>
+    </form>
+</div>
+
+</body>
+</html>

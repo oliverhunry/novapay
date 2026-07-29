@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovaPay - Notifications</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #f0f4f8; min-height: 100vh; padding: 20px; }
+        .container { max-width: 480px; margin: 0 auto; background: white; border-radius: 20px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eef2f6; }
+        .header .logo { font-size: 20px; font-weight: 800; color: #0f172a; }
+        .header .logo span { color: #3b82f6; }
+        .header a { color: #3b82f6; text-decoration: none; font-size: 14px; }
+        .notification-item {
+            background: #f8fafc;
+            border: 1px solid #eef2f6;
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin-bottom: 8px;
+            transition: 0.3s;
+        }
+        .notification-item.unread {
+            border-left: 4px solid #3b82f6;
+            background: #eff6ff;
+        }
+        .notification-item .title {
+            font-weight: 600;
+            font-size: 13px;
+            color: #0f172a;
+        }
+        .notification-item .message {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 4px;
+        }
+        .notification-item .date {
+            font-size: 10px;
+            color: #94a3b8;
+            margin-top: 6px;
+        }
+        .no-data {
+            text-align: center;
+            padding: 40px 20px;
+            color: #94a3b8;
+        }
+        .no-data i { font-size: 48px; display: block; margin-bottom: 10px; }
+        .mark-read-btn {
+            background: #eef2f6;
+            border: none;
+            color: #475569;
+            font-size: 10px;
+            padding: 2px 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            float: right;
+        }
+        .mark-read-btn:hover { background: #3b82f6; color: white; }
+        .flash-message { padding: 10px 14px; border-radius: 10px; margin-bottom: 12px; font-size: 13px; }
+        .flash-success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+        .flash-error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="logo">🔔 NOVA<span>PAY</span></div>
+        <a href="/dashboard"><i class="fas fa-arrow-left"></i> Back</a>
+    </div>
+
+    <% if (typeof success !== 'undefined' && success) { %>
+        <div class="flash-message flash-success"><%= success %></div>
+    <% } %>
+    <% if (typeof error !== 'undefined' && error) { %>
+        <div class="flash-message flash-error"><%= error %></div>
+    <% } %>
+
+    <h3 style="margin-bottom:12px;color:#0f172a;">📋 All Notifications</h3>
+
+    <% if (typeof notifications !== 'undefined' && notifications && notifications.length > 0) { %>
+        <% notifications.forEach(function(notif) { %>
+            <div class="notification-item <%= notif.is_read === 0 ? 'unread' : '' %>">
+                <div class="title">
+                    <%= notif.title %>
+                    <% if (notif.is_read === 0) { %>
+                        <span style="background:#3b82f6;color:white;font-size:8px;padding:1px 8px;border-radius:10px;margin-left:6px;">NEW</span>
+                    <% } %>
+                </div>
+                <div class="message"><%= notif.message %></div>
+                <div class="date"><%= notif.created_at ? new Date(notif.created_at).toLocaleString() : 'N/A' %></div>
+            </div>
+        <% }); %>
+    <% } else { %>
+        <div class="no-data">
+            <i class="fas fa-bell-slash"></i>
+            <p>No notifications yet</p>
+        </div>
+    <% } %>
+</div>
+
+</body>
+</html>

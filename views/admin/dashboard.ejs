@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovaPay - Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #0b0e14; color: #e8edf5; padding: 16px; }
+        .admin-container { max-width: 1200px; margin: 0 auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid #1e293b; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+        .logo { font-size: 24px; font-weight: 800; }
+        .logo span { color: #3b82f6; }
+        .logo small { display: block; font-size: 10px; font-weight: 400; color: #94a3b8; letter-spacing: 2px; }
+        .header-actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+        .btn { padding: 8px 16px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-block; font-size: 13px; }
+        .btn-primary { background: #3b82f6; color: white; }
+        .btn-primary:hover { background: #2563eb; }
+        .btn-danger { background: #b91c1c; color: white; }
+        .btn-danger:hover { background: #991b1b; }
+        .btn-success { background: #059669; color: white; }
+        .btn-success:hover { background: #047857; }
+        .btn-outline { background: transparent; border: 1px solid #3b4a60; color: #e8edf5; }
+        .btn-outline:hover { background: #1e2a3a; }
+        .btn-warning { background: #d97706; color: white; }
+        .btn-warning:hover { background: #b45309; }
+        .btn-sm { padding: 4px 12px; font-size: 12px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 24px; }
+        .stat-card { background: #131a26; border-radius: 12px; padding: 16px; border: 1px solid #1e293b; text-align: center; }
+        .stat-card .number { font-size: 24px; font-weight: 700; color: #fbbf24; }
+        .stat-card .label { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-card .number.green { color: #34d399; }
+        .stat-card .number.blue { color: #60a5fa; }
+        .stat-card .number.purple { color: #a78bfa; }
+        .stat-card .number.red { color: #f87171; }
+        .stat-card .number.gold { color: #fbbf24; }
+        .section { background: #131a26; border-radius: 16px; padding: 20px; border: 1px solid #1e293b; margin-bottom: 20px; }
+        .section h3 { font-size: 16px; margin-bottom: 16px; color: #f1f5f9; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th, td { padding: 10px 8px; text-align: left; border-bottom: 1px solid #1e293b; }
+        th { color: #94a3b8; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+        td { color: #e8edf5; }
+        .badge-status { padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-block; }
+        .badge-pending { background: #92400e; color: #fbbf24; }
+        .badge-approved { background: #065f46; color: #34d399; }
+        .badge-rejected { background: #7f1d1d; color: #f87171; }
+        .badge-active { background: #065f46; color: #34d399; }
+        .badge-suspended { background: #7f1d1d; color: #f87171; }
+        .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+        .tab-btn { padding: 8px 16px; border: 1px solid #1e293b; border-radius: 8px; background: transparent; color: #94a3b8; cursor: pointer; transition: 0.3s; font-size: 13px; }
+        .tab-btn.active { background: #3b82f6; color: white; border-color: #3b82f6; }
+        .tab-btn:hover:not(.active) { background: #1e293b; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .form-inline { display: flex; gap: 10px; flex-wrap: wrap; align-items: end; }
+        .form-inline .form-group { flex: 1; min-width: 120px; }
+        .form-inline label { display: block; font-size: 11px; color: #94a3b8; margin-bottom: 2px; }
+        .form-inline input, .form-inline select { width: 100%; padding: 6px 10px; border: 1px solid #1e293b; border-radius: 6px; background: #0f172a; color: #e8edf5; font-size: 13px; }
+        .form-inline input:focus, .form-inline select:focus { outline: none; border-color: #3b82f6; }
+        @media (max-width: 700px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } .header { flex-direction: column; align-items: flex-start; } }
+        @media (max-width: 480px) { .stats-grid { grid-template-columns: 1fr 1fr; } .stat-card .number { font-size: 18px; } table { font-size: 11px; } th, td { padding: 6px 4px; } }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="header">
+            <div class="logo">NOVA<span>PAY</span><small>✦ ADMIN PANEL</small></div>
+            <div class="header-actions">
+                <span style="color:#94a3b8;font-size:13px;">Welcome, Admin</span>
+                <a href="/admin/logout" class="btn btn-danger btn-sm">Logout</a>
+                <a href="/" class="btn btn-outline btn-sm">← User Panel</a>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card"><div class="number"><%= typeof stats !== 'undefined' ? stats.total_users : 0 %></div><div class="label">Total Users</div></div>
+            <div class="stat-card"><div class="number green"><%= typeof stats !== 'undefined' ? stats.active_users : 0 %></div><div class="label">Active Users</div></div>
+            <div class="stat-card"><div class="number blue"><%= typeof stats !== 'undefined' ? stats.total_deposits : 0 %></div><div class="label">Total Deposits (PKR)</div></div>
+            <div class="stat-card"><div class="number purple"><%= typeof stats !== 'undefined' ? stats.total_withdraws : 0 %></div><div class="label">Total Withdraws (PKR)</div></div>
+            <div class="stat-card"><div class="number red"><%= typeof stats !== 'undefined' ? stats.pending_deposits : 0 %></div><div class="label">Pending Deposits</div></div>
+            <div class="stat-card"><div class="number red"><%= typeof stats !== 'undefined' ? stats.pending_withdraws : 0 %></div><div class="label">Pending Withdraws</div></div>
+            <div class="stat-card"><div class="number green"><%= typeof stats !== 'undefined' ? stats.total_investments : 0 %></div><div class="label">Total Investments (PKR)</div></div>
+            <div class="stat-card"><div class="number gold"><%= typeof stats !== 'undefined' ? stats.total_earnings : 0 %></div><div class="label">Total Earnings Paid</div></div>
+        </div>
+
+        <div class="section">
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('deposits', this)">Deposits</button>
+                <button class="tab-btn" onclick="switchTab('withdraws', this)">Withdraws</button>
+                <button class="tab-btn" onclick="switchTab('plans', this)">Plans</button>
+                <button class="tab-btn" onclick="switchTab('accounts', this)">Accounts</button>
+                <button class="tab-btn" onclick="switchTab('support', this)">Support</button>
+                <button class="tab-btn" onclick="switchTab('users', this)">Users</button>
+            </div>
+
+            <!-- Deposits -->
+            <div id="tab-deposits" class="tab-content active">
+                <h3>Pending Deposits</h3>
+                <table>
+                    <thead><tr><th>User</th><th>Amount</th><th>Method</th><th>Slip</th><th>Actions</th></tr></thead>
+                    <tbody>
+                        <% 
+                            var pendingDeposits = [];
+                            if (typeof recentDeposits !== 'undefined' && recentDeposits) {
+                                pendingDeposits = recentDeposits.filter(function(d) { return d.status === 'pending'; });
+                            }
+                        %>
+                        <% if (pendingDeposits.length > 0) { %>
+                            <% pendingDeposits.forEach(function(d) { %>
+                                <tr>
+                                    <td><%= d.username || 'N/A' %></td>
+                                    <td>PKR <%= d.amount || 0 %></td>
+                                    <td><%= d.payment_method || 'N/A' %></td>
+                                    <td><% if (d.slip_image) { %><a href="<%= d.slip_image %>" target="_blank" style="color:#60a5fa;"><i class="fas fa-image"></i> View</a><% } else { %>N/A<% } %></td>
+                                    <td>
+                                        <button class="btn btn-success btn-sm" onclick="approveDeposit(<%= d.id %>)"><i class="fas fa-check"></i> Approve</button>
+                                        <button class="btn btn-danger btn-sm" onclick="rejectDeposit(<%= d.id %>)"><i class="fas fa-times"></i> Reject</button>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        <% } else { %>
+                            <tr><td colspan="5" style="text-align:center;color:#94a3b8;">No pending deposits</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+                <h3 style="margin-top:20px;">Recent Deposits</h3>
+                <table>
+                    <thead><tr><th>User</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+                    <tbody>
+                        <% var depositList = (typeof recentDeposits !== 'undefined' && recentDeposits) ? recentDeposits.slice(0, 10) : []; %>
+                        <% if (depositList.length > 0) { %>
+                            <% depositList.forEach(function(d) { %>
+                                <tr>
+                                    <td><%= d.username || 'N/A' %></td>
+                                    <td>PKR <%= d.amount || 0 %></td>
+                                    <td><span class="badge-status badge-<%= d.status || 'pending' %>"><%= d.status || 'pending' %></span></td>
+                                    <td><%= d.created_at ? new Date(d.created_at).toLocaleDateString() : 'N/A' %></td>
+                                </tr>
+                            <% }); %>
+                        <% } else { %>
+                            <tr><td colspan="4" style="text-align:center;color:#94a3b8;">No deposits found</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Withdraws -->
+            <div id="tab-withdraws" class="tab-content">
+                <h3>Pending Withdraws</h3>
+                <table>
+                    <thead><tr><th>User</th><th>Amount</th><th>Method</th><th>Account</th><th>Actions</th></tr></thead>
+                    <tbody>
+                        <% 
+                            var pendingWithdraws = [];
+                            if (typeof recentWithdraws !== 'undefined' && recentWithdraws) {
+                                pendingWithdraws = recentWithdraws.filter(function(w) { return w.status === 'pending'; });
+                            }
+                        %>
+                        <% if (pendingWithdraws.length > 0) { %>
+                            <% pendingWithdraws.forEach(function(w) { %>
+                                <tr>
+                                    <td><%= w.username || 'N/A' %></td>
+                                    <td>PKR <%= w.amount || 0 %></td>
+                                    <td><%= w.payment_method || 'N/A' %></td>
+                                    <td><%= w.account_holder || 'N/A' %></td>
+                                    <td>
+                                        <button class="btn btn-success btn-sm" onclick="approveWithdraw(<%= w.id %>)"><i class="fas fa-check"></i> Approve</button>
+                                        <button class="btn btn-danger btn-sm" onclick="rejectWithdraw(<%= w.id %>)"><i class="fas fa-times"></i> Reject</button>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        <% } else { %>
+                            <tr><td colspan="5" style="text-align:center;color:#94a3b8;">No pending withdraws</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+                <h3 style="margin-top:20px;">Recent Withdraws</h3>
+                <table>
+                    <thead><tr><th>User</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+                    <tbody>
+                        <% var withdrawList = (typeof recentWithdraws !== 'undefined' && recentWithdraws) ? recentWithdraws.slice(0, 10) : []; %>
+                        <% if (withdrawList.length > 0) { %>
+                            <% withdrawList.forEach(function(w) { %>
+                                <tr>
+                                    <td><%= w.username || 'N/A' %></td>
+                                    <td>PKR <%= w.amount || 0 %></td>
+                                    <td><span class="badge-status badge-<%= w.status || 'pending' %>"><%= w.status || 'pending' %></span></td>
+                                    <td><%= w.created_at ? new Date(w.created_at).toLocaleDateString() : 'N/A' %></td>
+                                </tr>
+                            <% }); %>
+                        <% } else { %>
+                            <tr><td colspan="4" style="text-align:center;color:#94a3b8;">No withdraws found</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Plans -->
+            <div id="tab-plans" class="tab-content">
+                <div style="margin-bottom:16px;">
+                    <h3>Add New Plan</h3>
+                    <form class="form-inline" onsubmit="addPlan(event)">
+                        <div class="form-group"><label>Plan Name</label><input type="text" id="planName" required></div>
+                        <div class="form-group"><label>Investment (PKR)</label><input type="number" id="planInvestment" required></div>
+                        <div class="form-group"><label>Daily Income (PKR)</label><input type="number" id="planDaily" required></div>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Add Plan</button>
+                    </form>
+                </div>
+                <h3>All Plans</h3>
+                <table>
+                    <thead><tr><th>Name</th><th>Investment</th><th>Daily Income</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody>
+                        <% var planList = (typeof plans !== 'undefined' && plans) ? plans : []; %>
+                        <% if (planList.length > 0) { %>
+                            <% planList.forEach(function(p) { %>
+                                <tr>
+                                    <td><%= p.name || 'N/A' %></td>
+                                    <td>PKR <%= p.investment || 0 %></td>
+                                    <td>PKR <%= p.daily_income || 0 %></td>
+                                    <td><span class="badge-status badge-<%= p.status || 'active' %>"><%= p.status || 'active' %></span></td>
+                                    <td>
+                                        <button class="btn btn-warning btn-sm" onclick="editPlan(<%= p.id %>, '<%= p.name %>', <%= p.investment %>, <%= p.daily_income %>, '<%= p.status %>')"><i class="fas fa-edit"></i> Edit</button>
+                                        <button class="btn btn-danger btn-sm" onclick="deletePlan(<%= p.id %>)"><i class="fas fa-trash"></i> Delete</button>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        <% } else { %>
+                            <tr><td colspan="5" style="text-align:center;color:#94a3b8;">No plans found</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Accounts -->
+            <div id="tab-accounts" class="tab-content">
+                <div style="margin-bottom:16px;">
+                    <h3>Add Deposit Account</h3>
+                    <form class="form-inline" onsubmit="addAccount(event)">
+                        <div class="form-group"><label>Method</label><input type="text" id="accMethod" placeholder="EasyPaisa" required></div>
+                        <div class="form-group"><label>Account Title</label><input type="text" id="accTitle" required></div>
+                        <div class="form-group"><label>Account Number</label><input type="text" id="accNumber" required></div>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Add Account</button>
+                    </form>
+                </div>
+                <h3>Deposit Accounts</h3>
+                <table>
+                    <thead><tr><th>Method</th><th>Title</th><th>Number</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody>
+                        <% var accountList = (typeof accounts !== 'undefined' && accounts) ? accounts : []; %>
+                        <% if (accountList.length > 0) { %>
+                            <% accountList.forEach(function(a) { %>
+                                <tr>
+                                    <td><%= a.method || 'N/A' %></td>
+                                    <td><%= a.account_title || 'N/A' %></td>
+                                    <td><%= a.account_number || 'N/A' %></td>
+                                    <td><span class="badge-status badge-<%= a.status || 'active' %>"><%= a.status || 'active' %></span></td>
+                                    <td>
+                                        <button class="btn btn-warning btn-sm" onclick="editAccount(<%= a.id %>, '<%= a.method %>', '<%= a.account_title %>', '<%= a.account_number %>', '<%= a.status %>')"><i class="fas fa-edit"></i> Edit</button>
+                                        <button class="btn btn-danger btn-sm" onclick="deleteAccount(<%= a.id %>)"><i class="fas fa-trash"></i> Delete</button>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        <% } else { %>
+                            <tr><td colspan="5" style="text-align:center;color:#94a3b8;">No accounts found</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Support -->
+            <div id="tab-support" class="tab-content">
+                <h3>Support/Contact Settings</h3>
+                <form onsubmit="updateSupport(event)" style="max-width:500px;">
+                    <div class="form-group" style="margin-bottom:12px;">
+                        <label>WhatsApp Channel Link</label>
+                        <input type="text" id="supportWhatsapp" value="<%= typeof supportSettings !== 'undefined' && supportSettings.whatsapp_channel ? supportSettings.whatsapp_channel : '' %>" style="width:100%;padding:8px;border:1px solid #1e293b;border-radius:6px;background:#0f172a;color:#e8edf5;">
+                    </div>
+                    <div class="form-group" style="margin-bottom:12px;">
+                        <label>WhatsApp Number</label>
+                        <input type="text" id="supportNumber" value="<%= typeof supportSettings !== 'undefined' && supportSettings.whatsapp_number ? supportSettings.whatsapp_number : '' %>" style="width:100%;padding:8px;border:1px solid #1e293b;border-radius:6px;background:#0f172a;color:#e8edf5;">
+                    </div>
+                    <div class="form-group" style="margin-bottom:12px;">
+                        <label>Email</label>
+                        <input type="email" id="supportEmail" value="<%= typeof supportSettings !== 'undefined' && supportSettings.email ? supportSettings.email : '' %>" style="width:100%;padding:8px;border:1px solid #1e293b;border-radius:6px;background:#0f172a;color:#e8edf5;">
+                    </div>
+                    <div class="form-group" style="margin-bottom:12px;">
+                        <label>Phone</label>
+                        <input type="text" id="supportPhone" value="<%= typeof supportSettings !== 'undefined' && supportSettings.phone ? supportSettings.phone : '' %>" style="width:100%;padding:8px;border:1px solid #1e293b;border-radius:6px;background:#0f172a;color:#e8edf5;">
+                    </div>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Update Settings</button>
+                </form>
+            </div>
+
+            <!-- Users -->
+            <div id="tab-users" class="tab-content">
+                <h3>User Management</h3>
+                <table>
+                    <thead><tr><th>Username</th><th>Mobile</th><th>Balance</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody id="usersTable"><tr><td colspan="5" style="text-align:center;color:#94a3b8;"><i class="fas fa-spinner fa-spin"></i> Loading users...</td></tr></tbody>
+                </table>
+                <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                    <div>
+                        <h4>Give Bonus</h4>
+                        <form class="form-inline" onsubmit="giveBonus(event)" style="flex-direction:column;align-items:stretch;">
+                            <div class="form-group"><label>User ID</label><input type="number" id="bonusUserId" required></div>
+                            <div class="form-group"><label>Amount (PKR)</label><input type="number" id="bonusAmount" required></div>
+                            <div class="form-group"><label>Reason</label><input type="text" id="bonusReason" placeholder="Bonus reason"></div>
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-gift"></i> Give Bonus</button>
+                        </form>
+                    </div>
+                    <div>
+                        <h4>Adjust Balance</h4>
+                        <form class="form-inline" onsubmit="adjustBalance(event)" style="flex-direction:column;align-items:stretch;">
+                            <div class="form-group"><label>User ID</label><input type="number" id="balanceUserId" required></div>
+                            <div class="form-group"><label>Amount (PKR)</label><input type="number" id="balanceAmount" required></div>
+                            <div class="form-group">
+                                <label>Action</label>
+                                <select id="balanceAction">
+                                    <option value="add">Add</option>
+                                    <option value="subtract">Subtract</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-warning"><i class="fas fa-edit"></i> Update Balance</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tab, btn) {
+            document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); });
+            document.querySelectorAll('.tab-btn').forEach(function(el) { el.classList.remove('active'); });
+            var target = document.getElementById('tab-' + tab);
+            if (target) target.classList.add('active');
+            if (btn) btn.classList.add('active');
+        }
+
+        function approveDeposit(id) {
+            if (confirm('Approve this deposit?')) {
+                fetch('/admin/deposit/approve', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ deposit_id: id }) })
+                .then(function(r) { return r.json(); })
+                .then(function(data) { alert(data.message); location.reload(); })
+                .catch(function(err) { alert('Error: ' + err); });
+            }
+        }
+
+        function rejectDeposit(id) {
+            if (confirm('Reject this deposit?')) {
+                fetch('/admin/deposit/reject', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ deposit_id: id }) })
+                .then(function(r) { return r.json(); })
+                .then(function(data) { alert(data.message); location.reload(); })
+                .catch(function(err) { alert('Error: ' + err); });
+            }
+        }
+
+        function approveWithdraw(id) {
+            if (confirm('Approve this withdraw?')) {
+                fetch('/admin/withdraw/approve', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ withdraw_id: id }) })
+                .then(function(r) { return r.json(); })
+                .then(function(data) { alert(data.message); location.reload(); })
+                .catch(function(err) { alert('Error: ' + err); });
+            }
+        }
+
+        function rejectWithdraw(id) {
+            if (confirm('Reject this withdraw?')) {
+                fetch('/admin/withdraw/reject', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ withdraw_id: id }) })
+                .then(function(r) { return r.json(); })
+                .then(function(data) { alert(data.message); location.reload(); })
+                .catch(function(err) { alert('Error: ' + err); });
+            }
+        }
+
+        function addPlan(e) {
+            e.preventDefault();
+            var name = document.getElementById('planName').value;
+            var investment = document.getElementById('planInvestment').value;
+            var daily_income = document.getElementById('planDaily').value;
+            fetch('/admin/plan/add', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: name, investment: investment, daily_income: daily_income }) })
+            .then(function(r) { return r.json(); })
+            .then(function(data) { alert(data.message); location.reload(); })
+            .catch(function(err) { alert('Error: ' + err); });
+        }
+
+        function editPlan(id, name, investment, daily_income, status) {
+            var newName = prompt('Enter new plan name:', name);
+            if (newName === null) return;
+            var newInvestment = prompt('Enter new investment:', investment);
+            if (newInvestment === null) return;
+            var newDaily = prompt('Enter new daily income:', daily_income);
+            if (newDaily === null) return;
+            var newStatus = prompt('Enter status (active/inactive):', status);
+            if (newStatus === null) return;
+            
+            fetch('/admin/plan/edit', { 
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json' }, 
+                body: JSON.stringify({ plan_id: id, name: newName, investment: newInvestment, daily_income: newDaily, status: newStatus }) 
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(data) { alert(data.message); location.reload(); })
+            .catch(function(err) { alert('Error: ' + err); });
+        }
+
+        function deletePlan(id) {
+            if (confirm('Delete this plan?')) {
+                fetch('/admin/plan/delete', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ plan_id: id }) })
+                .then(function(r) { return r.json(); })
+                .then(function(data) { alert(data.message); location.reload(); })
+                .catch(function(err) { alert('Error: ' + err); });
+            }
+        }
+
+        function addAccount(e) {
+            e.preventDefault();
+            var method = document.getElementById('accMethod').value;
+            var account_title = document.getElementById('accTitle').value;
+            var account_number = document.getElementById('accNumber').value;
+            fetch('/admin/account/add', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ method: method, account_title: account_title, account_number: account_number }) })
+            .then(function(r) { return r.json(); })
+            .then(function(data) { alert(data.message); location.reload(); })
+            .catch(function(err) { alert('Error: ' + err); });
+        }
+
+        function editAccount(id, method, title, number, status) {
+            var newMethod = prompt('Enter new method:', method);
+            if (newMethod === null) return;
+            var newTitle = prompt('Enter new account title:', title);
+            if (newTitle === null) return;
+            var newNumber = prompt('Enter new account number:', number);
+            if (newNumber === null) return;
+            var newStatus = prompt('Enter status (active/inactive):', status);
+            if (newStatus === null) return;
+            
+            fetch('/admin/account/edit', { 
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json' }, 
+                body: JSON.stringify({ account_id: id, method: newMethod, account_title: newTitle, account_number: newNumber, status: newStatus }) 
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(data) { alert(data.message); location.reload(); })
+            .catch(function(err) { alert('Error: ' + err); });
+        }
+
+        function deleteAccount(id) {
+            if (confirm('Delete this account?')) {
+                fetch('/admin/account/delete', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ account_id: id }) })
+                .then(function(r) { return r.json(); })
+                .then(function(data) { alert(data.message); location.reload(); })
+                .catch(function(err) { alert('Error: ' + err); });
+            }
+        }
+
+        function updateSupport(e) {
+            e.preventDefault();
+            var whatsapp_channel = document.getElementById('supportWhatsapp').value;
+            var whatsapp_number = document.getElementById('supportNumber').value;
+            var email = document.getElementById('supportEmail').value;
+            var phone = document.getElementById('supportPhone').value;
+            fetch('/admin/support/update', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ whatsapp_channel: whatsapp_channel, whatsapp_number: whatsapp_number, email: email, phone: phone }) })
+            .then(function(r) { return r.json(); })
+            .then(function(data) { alert(data.message); location.reload(); })
+            .catch(function(err) { alert('Error: ' + err); });
+        }
+
+        function giveBonus(e) {
+            e.preventDefault();
+            var user_id = document.getElementById('bonusUserId').value;
+            var amount = document.getElementById('bonusAmount').value;
+            var reason = document.getElementById('bonusReason').value;
+            fetch('/admin/bonus/give', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ user_id: user_id, amount: amount, reason: reason }) })
+            .then(function(r) { return r.json(); })
+            .then(function(data) { alert(data.message); location.reload(); })
+            .catch(function(err) { alert('Error: ' + err); });
+        }
+
+        function adjustBalance(e) {
+            e.preventDefault();
+            var user_id = document.getElementById('balanceUserId').value;
+            var amount = document.getElementById('balanceAmount').value;
+            var action = document.getElementById('balanceAction').value;
+            
+            if (confirm('Are you sure you want to ' + action + ' PKR ' + amount + ' to user ' + user_id + '?')) {
+                fetch('/admin/user/balance', { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify({ user_id: user_id, amount: amount, action: action }) 
+                })
+                .then(function(r) { return r.json(); })
+                .then(function(data) { alert(data.message); location.reload(); })
+                .catch(function(err) { alert('Error: ' + err); });
+            }
+        }
+
+        fetch('/admin/users')
+            .then(function(r) { return r.json(); })
+            .then(function(users) {
+                var tbody = document.getElementById('usersTable');
+                if (users && users.length > 0) {
+                    var html = '';
+                    users.forEach(function(u) {
+                        html += '<tr><td>' + (u.username || 'N/A') + '</td><td>' + (u.mobile || 'N/A') + '</td><td>PKR ' + (u.balance || 0) + '</td><td><span class="badge-status badge-' + (u.status || 'active') + '">' + (u.status || 'active') + '</span></td><td><button class="btn btn-sm btn-info" onclick="viewUser(' + u.id + ')"><i class="fas fa-eye"></i> View</button> <button class="btn btn-sm ' + (u.status === 'active' ? 'btn-danger' : 'btn-success') + '" onclick="toggleUser(' + u.id + ', \'' + (u.status === 'active' ? 'suspended' : 'active') + '\')">' + (u.status === 'active' ? '<i class="fas fa-ban"></i> Suspend' : '<i class="fas fa-check"></i> Activate') + '</button></td></tr>';
+                    });
+                    tbody.innerHTML = html;
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#94a3b8;">No users found</td></tr>';
+                }
+            })
+            .catch(function(err) {
+                document.getElementById('usersTable').innerHTML = '<tr><td colspan="5" style="text-align:center;color:#f87171;">Error loading users</td></tr>';
+            });
+
+        function viewUser(id) {
+            fetch('/admin/user/' + id)
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    if (data.success) {
+                        var msg = '👤 User: ' + data.user.username + '\n';
+                        msg += '📱 Mobile: ' + data.user.mobile + '\n';
+                        msg += '💰 Balance: PKR ' + data.user.balance + '\n';
+                        msg += '📊 Status: ' + data.user.status + '\n';
+                        msg += '📥 Total Deposit: PKR ' + data.user.total_deposit + '\n';
+                        msg += '📤 Total Withdraw: PKR ' + data.user.total_withdraw + '\n';
+                        msg += '📈 Total Earnings: PKR ' + data.user.total_earnings + '\n';
+                        msg += '👥 Team Earnings: PKR ' + data.user.team_earnings + '\n';
+                        msg += '🎁 Bonus: PKR ' + data.user.bonus_balance + '\n';
+                        msg += '\n📋 Plans: ' + (data.plans ? data.plans.length : 0) + '\n';
+                        msg += '💳 Deposits: ' + (data.deposits ? data.deposits.length : 0) + '\n';
+                        msg += '💸 Withdraws: ' + (data.withdraws ? data.withdraws.length : 0);
+                        alert(msg);
+                    } else {
+                        alert('User not found');
+                    }
+                })
+                .catch(function(err) { alert('Error loading user'); });
+        }
+
+        function toggleUser(id, status) {
+            if (confirm('Change user status to ' + status + '?')) {
+                fetch('/admin/user/status', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ user_id: id, status: status }) })
+                .then(function(r) { return r.json(); })
+                .then(function(data) { alert(data.message); location.reload(); })
+                .catch(function(err) { alert('Error: ' + err); });
+            }
+        }
+    </script>
+</body>
+</html>

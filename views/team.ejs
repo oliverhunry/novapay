@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovaPay - Team</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #f0f4f8; min-height: 100vh; padding: 20px; }
+        .container { max-width: 480px; margin: 0 auto; background: white; border-radius: 20px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eef2f6; }
+        .header .logo { font-size: 20px; font-weight: 800; color: #0f172a; }
+        .header .logo span { color: #3b82f6; }
+        .header a { color: #3b82f6; text-decoration: none; font-size: 14px; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .stat-card { background: #f8fafc; border: 1px solid #eef2f6; border-radius: 12px; padding: 14px; text-align: center; }
+        .stat-card .number { font-size: 22px; font-weight: 700; color: #0f172a; }
+        .stat-card .number.green { color: #22c55e; }
+        .stat-card .number.blue { color: #3b82f6; }
+        .stat-card .number.purple { color: #8b5cf6; }
+        .stat-card .number.gold { color: #f59e0b; }
+        .stat-card .label { font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
+        .section-title { font-size: 14px; font-weight: 600; color: #0f172a; margin: 16px 0 10px; }
+        .section-title small { font-size: 10px; font-weight: 400; color: #94a3b8; display: block; }
+        .team-member { background: #f8fafc; border: 1px solid #eef2f6; border-radius: 10px; padding: 10px 14px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .team-member .info .name { font-weight: 600; font-size: 13px; color: #0f172a; }
+        .team-member .info .date { font-size: 10px; color: #94a3b8; }
+        .team-member .badge { background: #22c55e; color: white; font-size: 9px; padding: 2px 10px; border-radius: 12px; }
+        .team-member .badge.inactive { background: #94a3b8; }
+        .commission-item { background: #f8fafc; border: 1px solid #eef2f6; border-radius: 10px; padding: 10px 14px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .commission-item .info .text { font-size: 13px; color: #0f172a; }
+        .commission-item .info .date { font-size: 10px; color: #94a3b8; }
+        .commission-item .amount { font-weight: 700; color: #22c55e; }
+        .no-data { text-align: center; padding: 30px 20px; color: #94a3b8; }
+        .no-data i { font-size: 40px; display: block; margin-bottom: 10px; }
+        .referral-link-box { background: #f8fafc; border: 1px solid #eef2f6; border-radius: 10px; padding: 12px; margin-bottom: 16px; }
+        .referral-link-box .label { font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
+        .referral-link-box .link { color: #3b82f6; word-break: break-all; font-size: 12px; margin-top: 4px; }
+        .flash-message { padding: 10px 14px; border-radius: 10px; margin-bottom: 12px; font-size: 13px; }
+        .flash-success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+        .flash-error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="logo">👥 NOVA<span>PAY</span></div>
+        <a href="/dashboard"><i class="fas fa-arrow-left"></i> Back</a>
+    </div>
+
+    <% if (typeof success !== 'undefined' && success) { %>
+        <div class="flash-message flash-success"><%= success %></div>
+    <% } %>
+    <% if (typeof error !== 'undefined' && error) { %>
+        <div class="flash-message flash-error"><%= error %></div>
+    <% } %>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="number blue"><%= typeof referrals !== 'undefined' ? referrals.length : 0 %></div>
+            <div class="label">Total Team Members</div>
+        </div>
+        <div class="stat-card">
+            <div class="number green"><%= typeof activeMembers !== 'undefined' ? activeMembers : 0 %></div>
+            <div class="label">Active Members</div>
+        </div>
+        <div class="stat-card">
+            <div class="number gold"><%= typeof totalTeamDeposit !== 'undefined' ? totalTeamDeposit.toFixed(2) : '0.00' %></div>
+            <div class="label">Team Deposit (PKR)</div>
+        </div>
+        <div class="stat-card">
+            <div class="number purple"><%= user.team_earnings ? user.team_earnings.toFixed(2) : '0.00' %></div>
+            <div class="label">Referral Earnings</div>
+        </div>
+    </div>
+
+    <div class="referral-link-box">
+        <div class="label">🔗 Your Referral Link</div>
+        <div class="link">http://localhost:3000/register?ref=<%= user.referral_code %></div>
+        <div style="margin-top:6px;display:flex;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:12px;color:#64748b;"><i class="fas fa-info-circle"></i> You get 10% commission</span>
+        </div>
+    </div>
+
+    <div class="section-title">
+        Referral History
+        <small>COMMISSIONS EARNED</small>
+    </div>
+    <% if (typeof referralHistory !== 'undefined' && referralHistory && referralHistory.length > 0) { %>
+        <% referralHistory.forEach(function(hist) { %>
+            <div class="commission-item">
+                <div class="info">
+                    <div class="text">💰 Commission from deposit</div>
+                    <div class="date"><%= hist.created_at ? new Date(hist.created_at).toLocaleDateString() : 'N/A' %></div>
+                </div>
+                <div class="amount">+PKR <%= hist.commission ? hist.commission.toFixed(2) : '0.00' %></div>
+            </div>
+        <% }); %>
+    <% } else { %>
+        <div class="no-data">
+            <i class="fas fa-handshake"></i>
+            <p>No commissions earned yet</p>
+            <p style="font-size:12px;">Share your referral link to start earning!</p>
+        </div>
+    <% } %>
+
+    <div class="section-title">
+        Team Members
+        <small>YOUR REFERRALS</small>
+    </div>
+    <% if (typeof referrals !== 'undefined' && referrals && referrals.length > 0) { %>
+        <% referrals.forEach(function(ref) { %>
+            <div class="team-member">
+                <div class="info">
+                    <div class="name"><%= ref.username %></div>
+                    <div class="date">Joined: <%= ref.created_at ? new Date(ref.created_at).toLocaleDateString() : 'N/A' %></div>
+                </div>
+                <span class="badge <%= ref.status === 'active' ? '' : 'inactive' %>">
+                    <i class="fas <%= ref.status === 'active' ? 'fa-check-circle' : 'fa-clock' %>"></i>
+                    <%= ref.status === 'active' ? 'Active' : 'Inactive' %>
+                </span>
+            </div>
+        <% }); %>
+    <% } else { %>
+        <div class="no-data">
+            <i class="fas fa-users"></i>
+            <p>No team members yet</p>
+            <p style="font-size:12px;">Share your referral link to grow your team!</p>
+        </div>
+    <% } %>
+</div>
+
+</body>
+</html>

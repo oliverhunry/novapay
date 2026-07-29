@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovaPay - Admin Login</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #0f172a; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .login-container { background: #1a2433; border-radius: 20px; padding: 40px 32px; max-width: 400px; width: 100%; border: 1px solid #2a3a52; }
+        .logo { text-align: center; font-size: 28px; font-weight: 800; color: #e8edf5; margin-bottom: 4px; }
+        .logo span { color: #3b82f6; }
+        .logo small { display: block; font-size: 10px; font-weight: 400; color: #94a3b8; letter-spacing: 2px; }
+        .subtitle { text-align: center; color: #94a3b8; font-size: 14px; margin: 8px 0 24px; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 600; color: #b9c7dd; margin-bottom: 4px; }
+        .form-group input { width: 100%; padding: 10px 14px; border: 1px solid #2a3a52; border-radius: 10px; font-size: 14px; background: #0f172a; color: #e8edf5; }
+        .form-group input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+        .btn-login { width: 100%; padding: 12px; background: #3b82f6; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; }
+        .btn-login:hover { background: #2563eb; }
+        .flash-error { background: #7f1d1d; color: #fca5a5; padding: 10px 14px; border-radius: 10px; margin-bottom: 16px; font-size: 13px; }
+        .back-link { text-align: center; margin-top: 16px; font-size: 14px; }
+        .back-link a { color: #60a5fa; text-decoration: none; }
+        .back-link a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">NOVA<span>PAY</span><small>✦ ADMIN PANEL</small></div>
+        <div class="subtitle">Secure Admin Login</div>
+
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="flash-error"><%= error %></div>
+        <% } %>
+
+        <form method="POST" action="/admin/login">
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" name="username" placeholder="admin" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Enter password" required>
+            </div>
+            <button type="submit" class="btn-login">Sign In</button>
+        </form>
+
+        <div class="back-link">
+            <a href="/">← Back to User Panel</a>
+        </div>
+    </div>
+</body>
+</html>

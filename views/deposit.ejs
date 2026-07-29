@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovaPay - Deposit</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #f0f4f8; min-height: 100vh; padding: 20px; }
+        .container { max-width: 480px; margin: 0 auto; background: white; border-radius: 20px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eef2f6; }
+        .header .logo { font-size: 20px; font-weight: 800; color: #0f172a; }
+        .header .logo span { color: #3b82f6; }
+        .header a { color: #3b82f6; text-decoration: none; font-size: 14px; }
+        .balance-box { background: linear-gradient(135deg, #1e293b, #0f172a); border-radius: 12px; padding: 15px 20px; margin-bottom: 20px; text-align: center; color: white; }
+        .balance-box .label { font-size: 11px; color: #94a3b8; text-transform: uppercase; }
+        .balance-box .amount { font-size: 24px; font-weight: 700; }
+        .account-card {
+            background: #f8fafc;
+            border: 2px solid #3b82f6;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            border-left: 5px solid #3b82f6;
+        }
+        .account-card .method { font-weight: 700; font-size: 14px; color: #0f172a; }
+        .account-card .title { font-size: 13px; color: #475569; }
+        .account-card .number { font-size: 16px; font-weight: 700; color: #3b82f6; margin-top: 4px; }
+        .account-card .highlight { background: #dbeafe; padding: 2px 8px; border-radius: 4px; font-size: 10px; color: #1d4ed8; }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 4px; }
+        .form-group input, .form-group select { width: 100%; padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 14px; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+        .btn-submit { width: 100%; padding: 12px; background: #3b82f6; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; }
+        .btn-submit:hover { background: #2563eb; }
+        .flash-message { padding: 10px 14px; border-radius: 10px; margin-bottom: 12px; font-size: 13px; }
+        .flash-success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+        .flash-error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+        .info-text { font-size: 12px; color: #64748b; margin-top: 4px; }
+        .min-amount { background: #fef3c7; padding: 8px 12px; border-radius: 8px; font-size: 12px; color: #92400e; margin-bottom: 16px; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="logo">💰 NOVA<span>PAY</span></div>
+        <a href="/dashboard"><i class="fas fa-arrow-left"></i> Back</a>
+    </div>
+
+    <div class="balance-box">
+        <div class="label">Your Balance</div>
+        <div class="amount">PKR <%= user.balance ? user.balance.toFixed(2) : '0.00' %></div>
+    </div>
+
+    <% if (typeof success !== 'undefined' && success) { %>
+        <div class="flash-message flash-success"><%= success %></div>
+    <% } %>
+    <% if (typeof error !== 'undefined' && error) { %>
+        <div class="flash-message flash-error"><%= error %></div>
+    <% } %>
+
+    <div class="min-amount">
+        <i class="fas fa-info-circle"></i> Minimum deposit: PKR 1,300
+    </div>
+
+    <h4 style="margin-bottom:12px;color:#0f172a;">🏦 Admin Deposit Accounts</h4>
+    
+    <% if (typeof accounts !== 'undefined' && accounts && accounts.length > 0) { %>
+        <% accounts.forEach(function(acc) { %>
+            <div class="account-card">
+                <div>
+                    <span class="method"><%= acc.method %></span>
+                    <span class="highlight"><i class="fas fa-check-circle"></i> Active</span>
+                </div>
+                <div class="title"><%= acc.account_title %></div>
+                <div class="number"><%= acc.account_number %></div>
+            </div>
+        <% }); %>
+    <% } else { %>
+        <div style="background:#f8fafc;padding:12px;border-radius:10px;text-align:center;color:#94a3b8;margin-bottom:12px;">
+            No accounts available. Contact admin.
+        </div>
+    <% } %>
+
+    <h4 style="margin:16px 0 12px;color:#0f172a;">📤 Submit Deposit Request</h4>
+
+    <form action="/deposit" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label>Amount (PKR)</label>
+            <input type="number" name="amount" min="1300" step="100" placeholder="Enter amount" required>
+        </div>
+        
+        <div class="form-group">
+            <label>Payment Screenshot / Slip</label>
+            <input type="file" name="slip" accept="image/*" required>
+            <div class="info-text"><i class="fas fa-info-circle"></i> Upload payment proof (PNG, JPG, JPEG)</div>
+        </div>
+
+        <button type="submit" class="btn-submit"><i class="fas fa-upload"></i> Submit Deposit</button>
+    </form>
+</div>
+
+</body>
+</html>
