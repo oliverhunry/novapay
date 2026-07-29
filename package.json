@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node Server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "postinstall": "node -e \"if (process.platform !== 'win32') require('child_process').execSync('npm rebuild sqlite3 --build-from-source', {stdio: 'inherit'})\""
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
