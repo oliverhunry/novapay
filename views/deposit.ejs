@@ -142,7 +142,7 @@
     <% } %>
 
     <div class="min-amount">
-        <i class="fas fa-info-circle"></i> Minimum deposit: PKR 1,300
+        <i class="fas fa-info-circle"></i> Minimum deposit: PKR 1,300 (No decimals allowed)
     </div>
 
     <h4 style="margin-bottom:12px;color:#0f172a;">🏦 Admin Deposit Accounts</h4>
@@ -169,8 +169,8 @@
     <form action="/deposit" method="POST" enctype="multipart/form-data" id="depositForm">
         <div class="form-group">
             <label><i class="fas fa-coins"></i> Amount (PKR)</label>
-            <input type="number" name="amount" id="depositAmount" min="1300" step="100" placeholder="Enter amount" required>
-            <div class="info-text"><i class="fas fa-info-circle"></i> Minimum deposit: PKR 1,300</div>
+            <input type="number" name="amount" id="depositAmount" min="1300" step="1" placeholder="Enter amount" required>
+            <div class="info-text"><i class="fas fa-info-circle"></i> Minimum: PKR 1,300 (No decimals)</div>
         </div>
         
         <div class="form-group">
@@ -204,7 +204,6 @@
         slipInput.addEventListener('change', function() {
             if (this.files && this.files.length > 0) {
                 const file = this.files[0];
-                // Validate file type
                 const validTypes = ['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'image/webp'];
                 if (!validTypes.includes(file.type)) {
                     alert('Please upload a valid image file (PNG, JPG, JPEG, GIF, WEBP)');
@@ -213,7 +212,6 @@
                     return;
                 }
                 
-                // Validate file size (max 5MB)
                 if (file.size > 5 * 1024 * 1024) {
                     alert('File size must be less than 5MB');
                     this.value = '';
@@ -228,34 +226,33 @@
             }
         });
 
-        // Validate amount on blur
-        depositAmount.addEventListener('blur', function() {
-            const value = parseFloat(this.value);
-            if (value && value < MIN_DEPOSIT) {
-                alert('Minimum deposit amount is PKR ' + MIN_DEPOSIT.toLocaleString());
-                this.value = '';
-                this.focus();
+        // ✅ Prevent decimal input (dot aur comma block karo)
+        depositAmount.addEventListener('keydown', function(e) {
+            if (e.key === '.' || e.key === ',') {
+                e.preventDefault();
             }
         });
 
-        // Validate amount on input
-        depositAmount.addEventListener('input', function() {
+        // ✅ On blur - remove decimals
+        depositAmount.addEventListener('blur', function() {
             const value = parseFloat(this.value);
-            if (value && value % 100 !== 0) {
-                // Round to nearest 100
-                const rounded = Math.round(value / 100) * 100;
-                if (rounded > 0) {
-                    this.value = rounded;
+            if (value && !isNaN(value)) {
+                // Remove decimals (round to whole number)
+                const rounded = Math.round(value);
+                this.value = rounded;
+                
+                if (rounded < MIN_DEPOSIT) {
+                    alert('Minimum deposit amount is PKR ' + MIN_DEPOSIT.toLocaleString());
+                    this.value = '';
                 }
             }
         });
 
-        // Form validation
+        // ✅ Form validation - sirf minimum aur decimals check
         depositForm.addEventListener('submit', function(e) {
             const amount = parseFloat(depositAmount.value);
             const file = slipInput.files[0];
 
-            // Validate amount
             if (!amount || isNaN(amount)) {
                 e.preventDefault();
                 alert('Please enter a valid amount');
@@ -270,14 +267,15 @@
                 return;
             }
 
-            if (amount % 100 !== 0) {
+            // ✅ Check for decimals
+            if (amount % 1 !== 0) {
                 e.preventDefault();
-                alert('Amount must be in multiples of 100 PKR');
+                alert('Amount must be a whole number (no decimals)');
+                depositAmount.value = Math.round(amount);
                 depositAmount.focus();
                 return;
             }
 
-            // Validate file
             if (!file) {
                 e.preventDefault();
                 alert('Please upload a payment screenshot or slip');
@@ -285,24 +283,21 @@
                 return;
             }
 
-            // Confirm before submission
             if (!confirm(`Are you sure you want to deposit PKR ${amount.toFixed(2)}?`)) {
                 e.preventDefault();
                 return;
             }
 
-            // Show loading state
             depositBtn.disabled = true;
             depositBtn.innerHTML = '<span class="spinner"></span> Submitting...';
         });
 
-        // Re-enable button if form submission fails
         window.addEventListener('pageshow', function() {
             depositBtn.disabled = false;
             depositBtn.innerHTML = '<i class="fas fa-upload"></i> Submit Deposit';
         });
 
-        // Copy account details on click (optional)
+        // Copy account details on click
         document.querySelectorAll('.account-card .number').forEach(function(element) {
             element.style.cursor = 'pointer';
             element.addEventListener('click', function() {
@@ -320,7 +315,6 @@
                         alert('Failed to copy. Please select the number manually.');
                     });
                 } else {
-                    // Fallback
                     const textArea = document.createElement('textarea');
                     textArea.value = text;
                     document.body.appendChild(textArea);
@@ -346,4 +340,3 @@
 </script>
 
 </body>
-</html>
