@@ -12,19 +12,154 @@
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eef2f6; }
         .header .logo { font-size: 20px; font-weight: 800; color: #0f172a; }
         .header .logo span { color: #3b82f6; }
-        .header a { color: #3b82f6; text-decoration: none; font-size: 14px; }
-        .balance-box { background: linear-gradient(135deg, #1e293b, #0f172a); border-radius: 12px; padding: 15px 20px; margin-bottom: 20px; text-align: center; color: white; }
-        .balance-box .label { font-size: 11px; color: #94a3b8; text-transform: uppercase; }
-        .balance-box .amount { font-size: 28px; font-weight: 700; }
-        .bonus-item { background: #f8fafc; border: 1px solid #eef2f6; border-radius: 10px; padding: 12px 14px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
-        .bonus-item .info .reason { font-weight: 600; font-size: 13px; color: #0f172a; }
-        .bonus-item .info .date { font-size: 10px; color: #94a3b8; }
-        .bonus-item .amount { font-weight: 700; color: #22c55e; }
-        .no-data { text-align: center; padding: 30px 20px; color: #94a3b8; }
-        .no-data i { font-size: 40px; display: block; margin-bottom: 10px; }
+        .header a { color: #3b82f6; text-decoration: none; font-size: 14px; transition: color 0.3s; }
+        .header a:hover { color: #2563eb; text-decoration: underline; }
+        .balance-box { 
+            background: linear-gradient(135deg, #1e293b, #0f172a); 
+            border-radius: 12px; 
+            padding: 15px 20px; 
+            margin-bottom: 16px; 
+            text-align: center; 
+            color: white; 
+            position: relative;
+            overflow: hidden;
+        }
+        .balance-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .balance-box .label { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
+        .balance-box .amount { font-size: 28px; font-weight: 700; position: relative; z-index: 1; }
+        .balance-box .amount .currency { font-size: 16px; font-weight: 400; color: #94a3b8; }
+        .balance-box .sub-info {
+            font-size: 10px;
+            color: #94a3b8;
+            margin-top: 2px;
+            position: relative;
+            z-index: 1;
+        }
+        .balance-box .sub-info i { margin-right: 4px; }
+        .bonus-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .bonus-stats .stat-item {
+            background: #f8fafc;
+            border: 1px solid #eef2f6;
+            border-radius: 10px;
+            padding: 10px 6px;
+            text-align: center;
+        }
+        .bonus-stats .stat-item .stat-label {
+            font-size: 8px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .bonus-stats .stat-item .stat-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-top: 2px;
+        }
+        .bonus-stats .stat-item .stat-value.green { color: #22c55e; }
+        .bonus-stats .stat-item .stat-value.purple { color: #8b5cf6; }
+        .bonus-stats .stat-item .stat-value.gold { color: #f59e0b; }
+        .bonus-item { 
+            background: #f8fafc; 
+            border: 1px solid #eef2f6; 
+            border-radius: 10px; 
+            padding: 12px 14px; 
+            margin-bottom: 8px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        .bonus-item:hover {
+            border-color: #8b5cf6;
+            transform: translateX(5px);
+            box-shadow: 0 2px 8px rgba(139,92,246,0.1);
+        }
+        .bonus-item .info .reason { 
+            font-weight: 600; 
+            font-size: 13px; 
+            color: #0f172a; 
+        }
+        .bonus-item .info .reason i {
+            margin-right: 6px;
+            color: #8b5cf6;
+        }
+        .bonus-item .info .date { 
+            font-size: 10px; 
+            color: #94a3b8; 
+            margin-top: 2px;
+        }
+        .bonus-item .info .date i {
+            margin-right: 4px;
+        }
+        .bonus-item .amount { 
+            font-weight: 700; 
+            color: #22c55e;
+            font-size: 15px;
+        }
+        .bonus-item .amount i {
+            margin-right: 3px;
+        }
+        .no-data { 
+            text-align: center; 
+            padding: 40px 20px; 
+            color: #94a3b8;
+        }
+        .no-data i { 
+            font-size: 48px; 
+            display: block; 
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+        .no-data p {
+            font-size: 14px;
+        }
+        .no-data .sub-text {
+            font-size: 12px;
+            color: #cbd5e1;
+            margin-top: 4px;
+        }
         .flash-message { padding: 10px 14px; border-radius: 10px; margin-bottom: 12px; font-size: 13px; }
         .flash-success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
         .flash-error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .section-header h3 {
+            color: #0f172a;
+            font-size: 16px;
+        }
+        .section-header .badge-count {
+            background: #8b5cf6;
+            color: white;
+            font-size: 10px;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+        @media (max-width: 480px) {
+            .container { padding: 16px; }
+            .balance-box .amount { font-size: 22px; }
+            .bonus-stats { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+            .bonus-stats .stat-item .stat-value { font-size: 12px; }
+        }
     </style>
 </head>
 <body>
@@ -37,12 +172,40 @@
 
     <div class="balance-box">
         <div class="label">💰 Your Balance</div>
-        <div class="amount">PKR <%= user.balance ? user.balance.toFixed(2) : '0.00' %></div>
+        <div class="amount" id="mainBalance">PKR <%= (typeof user.balance !== 'undefined' && user.balance !== null) ? Number(user.balance).toFixed(2) : '0.00' %></div>
+        <div class="sub-info"><i class="fas fa-sync-alt"></i> Auto-refreshes</div>
     </div>
 
     <div class="balance-box" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
         <div class="label">🎁 Bonus Balance</div>
-        <div class="amount">PKR <%= user.bonus_balance ? user.bonus_balance.toFixed(2) : '0.00' %></div>
+        <div class="amount" id="bonusBalance">PKR <%= (typeof user.bonus_balance !== 'undefined' && user.bonus_balance !== null) ? Number(user.bonus_balance).toFixed(2) : '0.00' %></div>
+        <div class="sub-info"><i class="fas fa-gift"></i> Special rewards</div>
+    </div>
+
+    <!-- Bonus Statistics -->
+    <div class="bonus-stats">
+        <div class="stat-item">
+            <div class="stat-label">Total Bonuses</div>
+            <div class="stat-value green" id="totalBonuses">
+                PKR <%= (typeof bonuses !== 'undefined' && bonuses) ? bonuses.reduce((sum, b) => sum + parseFloat(b.amount || 0), 0).toFixed(2) : '0.00' %>
+            </div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label">Bonus Count</div>
+            <div class="stat-value purple" id="bonusCount">
+                <%= (typeof bonuses !== 'undefined' && bonuses) ? bonuses.length : 0 %>
+            </div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label">Last Bonus</div>
+            <div class="stat-value gold" id="lastBonus">
+                <% if (typeof bonuses !== 'undefined' && bonuses && bonuses.length > 0) { %>
+                    <%= new Date(bonuses[0].created_at).toLocaleDateString() %>
+                <% } else { %>
+                    N/A
+                <% } %>
+            </div>
+        </div>
     </div>
 
     <% if (typeof success !== 'undefined' && success) { %>
@@ -52,25 +215,114 @@
         <div class="flash-message flash-error"><%= error %></div>
     <% } %>
 
-    <h3 style="margin-bottom:12px;color:#0f172a;">📋 Bonus History</h3>
+    <div class="section-header">
+        <h3>📋 Bonus History</h3>
+        <span class="badge-count"><%= (typeof bonuses !== 'undefined' && bonuses) ? bonuses.length : 0 %> entries</span>
+    </div>
 
     <% if (typeof bonuses !== 'undefined' && bonuses && bonuses.length > 0) { %>
-        <% bonuses.forEach(function(bonus) { %>
+        <% bonuses.forEach(function(bonus) { 
+            const date = bonus.created_at ? new Date(bonus.created_at) : null;
+            const formattedDate = date ? date.toLocaleDateString('en-PK', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            }) : 'N/A';
+        %>
             <div class="bonus-item">
                 <div class="info">
-                    <div class="reason"><%= bonus.reason || 'Bonus' %></div>
-                    <div class="date"><%= bonus.created_at ? new Date(bonus.created_at).toLocaleDateString() : 'N/A' %></div>
+                    <div class="reason"><i class="fas fa-gift"></i> <%= bonus.reason || 'Bonus' %></div>
+                    <div class="date"><i class="far fa-calendar-alt"></i> <%= formattedDate %></div>
                 </div>
-                <div class="amount">+PKR <%= bonus.amount ? bonus.amount.toFixed(2) : '0.00' %></div>
+                <div class="amount"><i class="fas fa-plus-circle"></i> PKR <%= (typeof bonus.amount !== 'undefined' && bonus.amount !== null) ? Number(bonus.amount).toFixed(2) : '0.00' %></div>
             </div>
         <% }); %>
     <% } else { %>
         <div class="no-data">
             <i class="fas fa-gift"></i>
             <p>No bonuses received yet</p>
+            <div class="sub-text">Complete tasks and referrals to earn bonuses</div>
         </div>
     <% } %>
 </div>
+
+<script>
+    (function() {
+        'use strict';
+
+        // Auto-refresh balance every 30 seconds
+        let autoRefreshInterval = null;
+
+        function refreshBalances() {
+            fetch('/api/balance')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success && data.data) {
+                        const mainBalance = document.getElementById('mainBalance');
+                        const bonusBalance = document.getElementById('bonusBalance');
+                        
+                        if (mainBalance) {
+                            mainBalance.textContent = 'PKR ' + Number(data.data.balance).toFixed(2);
+                        }
+                        if (bonusBalance) {
+                            bonusBalance.textContent = 'PKR ' + Number(data.data.bonus_balance || 0).toFixed(2);
+                        }
+                    }
+                })
+                .catch(err => {
+                    // Silently fail for auto-refresh
+                });
+        }
+
+        function startAutoRefresh() {
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+            }
+            autoRefreshInterval = setInterval(refreshBalances, 30000);
+        }
+
+        function stopAutoRefresh() {
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+                autoRefreshInterval = null;
+            }
+        }
+
+        // Start auto-refresh when page loads
+        document.addEventListener('DOMContentLoaded', startAutoRefresh);
+
+        // Stop auto-refresh when page is hidden
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                stopAutoRefresh();
+            } else {
+                startAutoRefresh();
+                // Refresh immediately when tab becomes visible
+                refreshBalances();
+            }
+        });
+
+        // Clean up on page unload
+        window.addEventListener('beforeunload', function() {
+            stopAutoRefresh();
+        });
+
+        // Add animation to bonus items
+        const bonusItems = document.querySelectorAll('.bonus-item');
+        bonusItems.forEach((item, index) => {
+            item.style.opacity = '0';
+            item.style.transform = 'translateY(10px)';
+            setTimeout(() => {
+                item.style.transition = 'all 0.3s ease';
+                item.style.opacity = '1';
+                item.style.transform = 'translateY(0)';
+            }, 100 + (index * 50));
+        });
+
+    })();
+</script>
 
 </body>
 </html>

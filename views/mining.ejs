@@ -1,3 +1,10 @@
+<% 
+    console.log("🔍 User Plans Data:", JSON.stringify(userPlans));
+    var today = new Date().toISOString().split('T')[0];
+    console.log("📅 Today:", today);
+%>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,31 +20,135 @@
         .header .logo { font-size: 20px; font-weight: 800; color: #0f172a; }
         .header .logo span { color: #3b82f6; }
         .header a { color: #3b82f6; text-decoration: none; font-size: 14px; }
+        .header a:hover { color: #2563eb; text-decoration: underline; }
+        
         .balance-box { background: linear-gradient(135deg, #1e293b, #0f172a); border-radius: 12px; padding: 15px 20px; margin-bottom: 16px; text-align: center; color: white; }
-        .balance-box .label { font-size: 11px; color: #94a3b8; text-transform: uppercase; }
+        .balance-box .label { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
         .balance-box .amount { font-size: 28px; font-weight: 700; }
-        .reset-info { background: #f8fafc; border: 1px solid #eef2f6; border-radius: 10px; padding: 10px 14px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; font-size: 12px; color: #64748b; }
-        .reset-info i { color: #3b82f6; font-size: 16px; }
-        .mining-card { background: #f8fafc; border: 1px solid #eef2f6; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-        .mining-card .info .name { font-weight: 600; font-size: 14px; color: #0f172a; }
-        .mining-card .info .daily { font-size: 12px; color: #64748b; }
-        .mining-card .info .status { font-size: 11px; margin-top: 2px; }
+        
+        .reset-info {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-bottom: 16px;
+            font-size: 12px;
+            color: #92400e;
+            text-align: center;
+        }
+        .reset-info i { margin-right: 6px; color: #f59e0b; }
+        
+        .plan-card {
+            background: #f8fafc;
+            border: 1px solid #eef2f6;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .plan-card .plan-info .name {
+            font-weight: 600;
+            font-size: 14px;
+            color: #0f172a;
+        }
+        .plan-card .plan-info .income {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 2px;
+        }
+        .plan-card .plan-info .status {
+            font-size: 11px;
+            margin-top: 2px;
+        }
+        .status-ready { color: #f59e0b; }
         .status-collected { color: #22c55e; }
-        .status-pending { color: #f59e0b; }
-        .collect-btn { background: #3b82f6; color: white; border: none; padding: 6px 20px; border-radius: 20px; font-weight: 600; font-size: 12px; cursor: pointer; transition: 0.3s; }
-        .collect-btn:hover { background: #2563eb; transform: scale(1.05); }
-        .collect-btn:disabled { background: #94a3b8; cursor: not-allowed; transform: none; }
-        .collect-btn.collecting { background: #f59e0b; animation: pulse 0.6s ease; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
-        .collect-btn.collected { background: #22c55e; }
-        .collect-success { animation: collectSuccess 0.5s ease; }
-        @keyframes collectSuccess { 0% { transform: scale(1); } 30% { transform: scale(1.2); background: #22c55e; } 70% { transform: scale(0.95); } 100% { transform: scale(1); } }
+        
+        .plan-btn {
+            padding: 6px 20px;
+            border-radius: 20px;
+            border: none;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            white-space: nowrap;
+        }
+        .plan-btn.collect {
+            background: #3b82f6;
+            color: white;
+        }
+        .plan-btn.collect:hover {
+            background: #2563eb;
+            transform: scale(1.05);
+        }
+        .plan-btn.collect:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .plan-btn.collected {
+            background: #22c55e;
+            color: white;
+            cursor: default;
+        }
+        .plan-btn.collected i {
+            margin-right: 4px;
+        }
+        
+        .no-data { text-align: center; padding: 40px 20px; color: #94a3b8; }
+        .no-data i { font-size: 48px; display: block; margin-bottom: 12px; opacity: 0.5; }
+        .no-data a { color: #3b82f6; text-decoration: none; font-weight: 600; }
+        
         .flash-message { padding: 10px 14px; border-radius: 10px; margin-bottom: 12px; font-size: 13px; }
         .flash-success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
         .flash-error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
-        .no-plans { text-align: center; padding: 40px 20px; color: #94a3b8; }
-        .no-plans i { font-size: 48px; margin-bottom: 10px; display: block; }
-        .no-plans a { color: #3b82f6; text-decoration: none; font-weight: 600; }
+        
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #0f172a;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 9999;
+            animation: slideUp 0.4s ease;
+        }
+        .toast.show { display: block; }
+        .toast i { margin-right: 8px; }
+        .toast.success i { color: #22c55e; }
+        .toast.error i { color: #ef4444; }
+        @keyframes slideUp {
+            0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        .spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.6s linear infinite;
+            margin-right: 6px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 480px) {
+            .container { padding: 16px; }
+            .plan-card { flex-direction: column; align-items: stretch; gap: 10px; }
+            .plan-btn { width: 100%; text-align: center; padding: 10px; }
+        }
     </style>
 </head>
 <body>
@@ -50,12 +161,11 @@
 
     <div class="balance-box">
         <div class="label">💰 Your Balance</div>
-        <div class="amount" id="miningBalance">PKR <%= user.balance ? user.balance.toFixed(2) : '0.00' %></div>
+        <div class="amount" id="miningBalance">PKR <%= (typeof user.balance !== 'undefined' && user.balance !== null) ? Number(user.balance).toFixed(2) : '0.00' %></div>
     </div>
 
     <div class="reset-info">
-        <i class="fas fa-clock"></i>
-        <span>Mining resets every day at <strong>12:00 AM</strong>. Collect your daily earnings!</span>
+        <i class="fas fa-clock"></i> Mining resets every day at 12:00 AM. Collect your daily earnings!
     </div>
 
     <% if (typeof success !== 'undefined' && success) { %>
@@ -68,29 +178,35 @@
     <h3 style="margin-bottom:12px;color:#0f172a;">📋 Your Active Plans</h3>
 
     <% if (typeof userPlans !== 'undefined' && userPlans && userPlans.length > 0) { %>
-        <% userPlans.forEach(function(plan) { 
+        <% 
             var today = new Date().toISOString().split('T')[0];
-            var collected = plan.last_collected === today;
+            userPlans.forEach(function(plan) {
+                // Date ko string mein convert karo
+var lastCollectedStr = plan.last_collected ? new Date(plan.last_collected).toISOString().split('T')[0] : null;
+var isCollected = lastCollectedStr === today;
         %>
-            <div class="mining-card" id="plan-<%= plan.id %>">
-                <div class="info">
+            <div class="plan-card" id="plan-<%= plan.id %>">
+                <div class="plan-info">
                     <div class="name"><%= plan.plan_name %></div>
-                    <div class="daily">Daily Income: PKR <%= plan.daily_income %></div>
-                    <div class="status <%= collected ? 'status-collected' : 'status-pending' %>">
-                        <i class="fas <%= collected ? 'fa-check-circle' : 'fa-clock' %>"></i>
-                        <%= collected ? 'Collected Today' : 'Ready to Collect' %>
+                    <div class="income">Daily Income: PKR <%= (typeof plan.daily_income !== 'undefined' && plan.daily_income !== null) ? Number(plan.daily_income).toFixed(2) : '0.00' %></div>
+                    <div class="status <%= isCollected ? 'status-collected' : 'status-ready' %>">
+                        <i class="fas <%= isCollected ? 'fa-check-circle' : 'fa-clock' %>"></i>
+                        <%= isCollected ? 'Already Collected Today' : 'Ready to Collect' %>
                     </div>
                 </div>
-                <button class="collect-btn <%= collected ? 'collected' : '' %>" 
-                        onclick="collectMining(<%= plan.id %>, <%= plan.daily_income %>)" 
-                        <%= collected ? 'disabled' : '' %>>
-                    <i class="fas <%= collected ? 'fa-check' : 'fa-hand-holding-usd' %>"></i>
-                    <%= collected ? 'Collected' : 'Collect' %>
-                </button>
+                <% if (isCollected) { %>
+                    <button class="plan-btn collected" disabled>
+                        <i class="fas fa-check-circle"></i> Collected
+                    </button>
+                <% } else { %>
+                    <button class="plan-btn collect" onclick="collectMining(<%= plan.id %>, this)">
+                        <i class="fas fa-hand-holding-usd"></i> Collect
+                    </button>
+                <% } %>
             </div>
         <% }); %>
     <% } else { %>
-        <div class="no-plans">
+        <div class="no-data">
             <i class="fas fa-hard-hat"></i>
             <h3>No Active Plans</h3>
             <p>Purchase a plan from the dashboard to start mining!</p>
@@ -100,17 +216,45 @@
     <% } %>
 </div>
 
+<!-- Toast Notification -->
+<div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toastMessage">Success!</span>
+</div>
+
 <script>
-    function collectMining(planId, amount) {
-        const card = document.getElementById('plan-' + planId);
-        const btn = card.querySelector('.collect-btn');
+    function showToast(message, type) {
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toastMessage');
+        const icon = toast.querySelector('i');
         
-        if (btn.disabled) return;
+        toastMessage.textContent = message;
         
-        btn.disabled = true;
-        btn.classList.add('collecting');
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Collecting...';
+        if (type === 'success') {
+            icon.className = 'fas fa-check-circle';
+            toast.className = 'toast show success';
+        } else if (type === 'error') {
+            icon.className = 'fas fa-exclamation-circle';
+            toast.className = 'toast show error';
+        } else {
+            icon.className = 'fas fa-info-circle';
+            toast.className = 'toast show';
+        }
         
+        if (window.toastTimeout) {
+            clearTimeout(window.toastTimeout);
+        }
+        
+        window.toastTimeout = setTimeout(function() {
+            toast.classList.remove('show');
+        }, 4000);
+    }
+
+    function collectMining(planId, button) {
+        const originalHtml = button.innerHTML;
+        button.disabled = true;
+        button.innerHTML = '<span class="spinner"></span> Collecting...';
+
         fetch('/mining/collect', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -119,41 +263,76 @@
         .then(res => res.json())
         .then(data => {
             if (data.success) {
-                btn.classList.remove('collecting');
-                btn.classList.add('collect-success');
-                btn.innerHTML = '<i class="fas fa-check"></i> Collected ✓';
-                btn.classList.add('collected');
+                showToast('✅ ' + data.message, 'success');
                 
-                const status = card.querySelector('.status');
-                status.className = 'status status-collected';
-                status.innerHTML = '<i class="fas fa-check-circle"></i> Collected Today';
-                
-                document.getElementById('miningBalance').textContent = 'PKR ' + data.newBalance.toFixed(2);
-                
-                const liveBalance = document.getElementById('liveBalance');
-                if (liveBalance) {
-                    liveBalance.textContent = 'PKR ' + data.newBalance.toFixed(2);
+                // Update balance
+                const balanceEl = document.getElementById('miningBalance');
+                if (data.newBalance !== undefined) {
+                    balanceEl.textContent = 'PKR ' + Number(data.newBalance).toFixed(2);
                 }
                 
-                setTimeout(() => {
-                    btn.classList.remove('collect-success');
-                }, 500);
+                // Change button to "Collected" state
+                const planCard = document.getElementById('plan-' + planId);
+                const statusDiv = planCard.querySelector('.status');
                 
-                alert('✅ ' + data.message);
+                button.innerHTML = '<i class="fas fa-check-circle"></i> Collected';
+                button.className = 'plan-btn collected';
+                button.disabled = true;
+                
+                statusDiv.className = 'status status-collected';
+                statusDiv.innerHTML = '<i class="fas fa-check-circle"></i> Already Collected Today';
+                
+                // Reload after 2 seconds
+                setTimeout(function() {
+                    location.reload();
+                }, 2000);
             } else {
-                btn.disabled = false;
-                btn.classList.remove('collecting');
-                btn.innerHTML = '<i class="fas fa-hand-holding-usd"></i> Collect';
-                alert('❌ ' + data.message);
+                showToast('❌ ' + data.message, 'error');
+                button.disabled = false;
+                button.innerHTML = originalHtml;
             }
         })
         .catch(err => {
-            btn.disabled = false;
-            btn.classList.remove('collecting');
-            btn.innerHTML = '<i class="fas fa-hand-holding-usd"></i> Collect';
-            alert('❌ Error: ' + err);
+            showToast('❌ Request failed: ' + err.message, 'error');
+            button.disabled = false;
+            button.innerHTML = originalHtml;
         });
     }
+
+    // Auto-refresh balance every 30 seconds
+    let autoRefreshInterval = null;
+
+    function startAutoRefresh() {
+        if (autoRefreshInterval) {
+            clearInterval(autoRefreshInterval);
+        }
+        autoRefreshInterval = setInterval(function() {
+            fetch('/api/balance')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success && data.data) {
+                        const balanceEl = document.getElementById('miningBalance');
+                        if (balanceEl) {
+                            balanceEl.textContent = 'PKR ' + Number(data.data.balance).toFixed(2);
+                        }
+                    }
+                })
+                .catch(err => {});
+        }, 30000);
+    }
+
+    document.addEventListener('DOMContentLoaded', startAutoRefresh);
+
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+                autoRefreshInterval = null;
+            }
+        } else {
+            startAutoRefresh();
+        }
+    });
 </script>
 
 </body>

@@ -12,33 +12,70 @@
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eef2f6; }
         .header .logo { font-size: 20px; font-weight: 800; color: #0f172a; }
         .header .logo span { color: #3b82f6; }
-        .header a { color: #3b82f6; text-decoration: none; font-size: 14px; }
+        .header a { color: #3b82f6; text-decoration: none; font-size: 14px; transition: color 0.3s; }
+        .header a:hover { color: #2563eb; text-decoration: underline; }
         
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .stat-card { background: #f8fafc; border: 1px solid #eef2f6; border-radius: 12px; padding: 14px; text-align: center; }
-        .stat-card .number { font-size: 22px; font-weight: 700; color: #0f172a; }
+        .stat-card { background: #f8fafc; border: 1px solid #eef2f6; border-radius: 12px; padding: 14px; text-align: center; transition: all 0.3s ease; }
+        .stat-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .stat-card .number { font-size: 22px; font-weight: 700; color: #0f172a; transition: all 0.3s; }
         .stat-card .number.green { color: #22c55e; }
         .stat-card .number.blue { color: #3b82f6; }
         .stat-card .number.purple { color: #8b5cf6; }
         .stat-card .number.gold { color: #f59e0b; }
         .stat-card .label { font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-card .update-indicator {
+            display: none;
+            font-size: 8px;
+            color: #22c55e;
+            margin-top: 2px;
+        }
+        .stat-card .update-indicator.show {
+            display: block;
+        }
         
         .section-title { font-size: 14px; font-weight: 600; color: #0f172a; margin: 16px 0 10px; }
         .section-title small { font-size: 10px; font-weight: 400; color: #94a3b8; display: block; }
+        .section-title .entry-count {
+            float: right;
+            font-size: 10px;
+            font-weight: 400;
+            color: #94a3b8;
+        }
         
-        .team-member { background: #f8fafc; border: 1px solid #eef2f6; border-radius: 10px; padding: 10px 14px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .team-member { background: #f8fafc; border: 1px solid #eef2f6; border-radius: 10px; padding: 10px 14px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s ease; }
+        .team-member:hover { transform: translateX(3px); border-color: #3b82f6; box-shadow: 0 2px 8px rgba(59,130,246,0.1); }
         .team-member .info .name { font-weight: 600; font-size: 13px; color: #0f172a; }
-        .team-member .info .date { font-size: 10px; color: #94a3b8; }
-        .team-member .badge { background: #22c55e; color: white; font-size: 9px; padding: 2px 10px; border-radius: 12px; }
+        .team-member .info .name i { margin-right: 4px; color: #3b82f6; }
+        .team-member .info .date { font-size: 10px; color: #94a3b8; margin-top: 2px; }
+        .team-member .info .date i { margin-right: 3px; }
+        .team-member .badge { 
+            background: #22c55e; 
+            color: white; 
+            font-size: 9px; 
+            padding: 3px 12px; 
+            border-radius: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
         .team-member .badge.inactive { background: #94a3b8; }
+        .team-member .badge i { font-size: 8px; }
         
-        .commission-item { background: #f8fafc; border: 1px solid #eef2f6; border-radius: 10px; padding: 10px 14px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .commission-item { background: #f8fafc; border: 1px solid #eef2f6; border-radius: 10px; padding: 10px 14px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s ease; }
+        .commission-item:hover { transform: translateX(3px); border-color: #22c55e; box-shadow: 0 2px 8px rgba(34,197,94,0.1); }
         .commission-item .info .text { font-size: 13px; color: #0f172a; }
-        .commission-item .info .date { font-size: 10px; color: #94a3b8; }
-        .commission-item .amount { font-weight: 700; color: #22c55e; }
+        .commission-item .info .text i { margin-right: 6px; color: #f59e0b; }
+        .commission-item .info .date { font-size: 10px; color: #94a3b8; margin-top: 2px; }
+        .commission-item .info .date i { margin-right: 3px; }
+        .commission-item .amount { font-weight: 700; color: #22c55e; font-size: 14px; }
+        .commission-item .amount i { margin-right: 3px; }
         
         .no-data { text-align: center; padding: 30px 20px; color: #94a3b8; }
-        .no-data i { font-size: 40px; display: block; margin-bottom: 10px; }
+        .no-data i { font-size: 40px; display: block; margin-bottom: 10px; color: #d1d5db; }
+        .no-data p { font-size: 13px; }
+        .no-data .sub-text { font-size: 11px; color: #cbd5e1; margin-top: 4px; }
         
         /* ============================== */
         /* REFERRAL BOX - HIGHLIGHTED */
@@ -50,6 +87,10 @@
             padding: 16px 18px;
             margin-bottom: 16px;
             position: relative;
+            transition: all 0.3s ease;
+        }
+        .referral-link-box:hover {
+            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.15);
         }
         .referral-link-box .label {
             font-size: 11px;
@@ -58,6 +99,7 @@
             letter-spacing: 0.5px;
             font-weight: 700;
         }
+        .referral-link-box .label i { margin-right: 4px; }
         .referral-link-box .link {
             color: #1d4ed8;
             word-break: break-all;
@@ -92,16 +134,13 @@
             font-size: 12px;
             font-weight: 600;
             cursor: pointer;
-            transition: 0.3s;
+            transition: all 0.3s ease;
             color: #475569;
             display: flex;
             align-items: center;
             gap: 6px;
         }
         .referral-link-box .btn-group .btn:hover {
-            background: #3b82f6;
-            color: white;
-            border-color: #3b82f6;
             transform: scale(1.02);
         }
         .referral-link-box .btn-group .btn i {
@@ -124,6 +163,15 @@
         .referral-link-box .btn-group .btn.copy-btn:hover {
             background: #2563eb;
             border-color: #2563eb;
+        }
+        .referral-link-box .btn-group .btn.whatsapp-btn {
+            background: #25D366;
+            color: white;
+            border-color: #25D366;
+        }
+        .referral-link-box .btn-group .btn.whatsapp-btn:hover {
+            background: #1da851;
+            border-color: #1da851;
         }
         
         .flash-message { padding: 10px 14px; border-radius: 10px; margin-bottom: 12px; font-size: 13px; }
@@ -150,12 +198,17 @@
         .toast.show { display: block; }
         .toast i { margin-right: 8px; }
         .toast.success i { color: #22c55e; }
+        .toast.error i { color: #ef4444; }
         @keyframes slideUp {
             0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
             100% { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
         @media (max-width: 480px) {
             .referral-link-box .btn-group .btn { font-size: 11px; padding: 5px 12px; }
+            .stats-grid { gap: 6px; }
+            .stat-card { padding: 10px; }
+            .stat-card .number { font-size: 18px; }
+            .container { padding: 16px; }
         }
     </style>
 </head>
@@ -181,22 +234,25 @@
     <% } %>
 
     <!-- Stats Grid -->
-    <div class="stats-grid">
+    <div class="stats-grid" id="statsGrid">
         <div class="stat-card">
-            <div class="number blue"><%= typeof referrals !== 'undefined' ? referrals.length : 0 %></div>
+            <div class="number blue" id="totalTeam">0</div>
             <div class="label">Total Team Members</div>
         </div>
         <div class="stat-card">
-            <div class="number green"><%= typeof activeMembers !== 'undefined' ? activeMembers : 0 %></div>
+            <div class="number green" id="activeMembers">0</div>
             <div class="label">Active Members</div>
         </div>
         <div class="stat-card">
-            <div class="number gold"><%= typeof totalTeamDeposit !== 'undefined' ? totalTeamDeposit.toFixed(2) : '0.00' %></div>
+            <div class="number gold" id="teamDeposit">0.00</div>
             <div class="label">Team Deposit (PKR)</div>
         </div>
         <div class="stat-card">
-            <div class="number purple"><%= user.team_earnings ? user.team_earnings.toFixed(2) : '0.00' %></div>
+            <div class="number purple" id="teamEarnings">0.00</div>
             <div class="label">Referral Earnings</div>
+            <div class="update-indicator show" id="updateIndicator">
+                <i class="fas fa-sync-alt fa-fw"></i> Auto-updates
+            </div>
         </div>
     </div>
 
@@ -204,7 +260,7 @@
     <!-- REFERRAL LINK BOX - HIGHLIGHTED -->
     <!-- ============================== -->
     <div class="referral-link-box">
-        <div class="label">🔗 Your Referral Link</div>
+        <div class="label"><i class="fas fa-link"></i> Your Referral Link</div>
         <div class="link" id="referralLink"><%= baseUrl %>/register?ref=<%= user.referral_code %></div>
         
         <div style="margin-top:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
@@ -223,7 +279,7 @@
             <button class="btn share-btn" onclick="shareReferralLink()">
                 <i class="fas fa-share-alt"></i> Share
             </button>
-            <button class="btn" onclick="openWhatsApp()" style="background:#25D366;color:white;border-color:#25D366;">
+            <button class="btn whatsapp-btn" onclick="openWhatsApp()">
                 <i class="fab fa-whatsapp"></i> WhatsApp
             </button>
         </div>
@@ -235,22 +291,32 @@
     <div class="section-title">
         Referral History
         <small>COMMISSIONS EARNED</small>
+        <span class="entry-count"><%= (typeof referralHistory !== 'undefined' && referralHistory) ? referralHistory.length : 0 %> entries</span>
     </div>
     <% if (typeof referralHistory !== 'undefined' && referralHistory && referralHistory.length > 0) { %>
-        <% referralHistory.forEach(function(hist) { %>
+        <% referralHistory.forEach(function(hist) { 
+            const date = hist.created_at ? new Date(hist.created_at) : null;
+            const formattedDate = date ? date.toLocaleDateString('en-PK', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            }) : 'N/A';
+        %>
             <div class="commission-item">
                 <div class="info">
-                    <div class="text">💰 Commission from deposit</div>
-                    <div class="date"><%= hist.created_at ? new Date(hist.created_at).toLocaleDateString() : 'N/A' %></div>
+                    <div class="text"><i class="fas fa-coins"></i> Commission from deposit</div>
+                    <div class="date"><i class="far fa-calendar-alt"></i> <%= formattedDate %></div>
                 </div>
-                <div class="amount">+PKR <%= hist.commission ? hist.commission.toFixed(2) : '0.00' %></div>
+                <div class="amount"><i class="fas fa-plus-circle"></i> PKR <%= (typeof hist.commission !== 'undefined' && hist.commission !== null) ? Number(hist.commission).toFixed(2) : '0.00' %></div>
             </div>
         <% }); %>
     <% } else { %>
         <div class="no-data">
             <i class="fas fa-handshake"></i>
             <p>No commissions earned yet</p>
-            <p style="font-size:12px;">Share your referral link to start earning!</p>
+            <p class="sub-text">Share your referral link to start earning!</p>
         </div>
     <% } %>
 
@@ -260,13 +326,21 @@
     <div class="section-title">
         Team Members
         <small>YOUR REFERRALS</small>
+        <span class="entry-count"><%= (typeof referrals !== 'undefined' && referrals) ? referrals.length : 0 %> members</span>
     </div>
     <% if (typeof referrals !== 'undefined' && referrals && referrals.length > 0) { %>
-        <% referrals.forEach(function(ref) { %>
+        <% referrals.forEach(function(ref) { 
+            const date = ref.created_at ? new Date(ref.created_at) : null;
+            const formattedDate = date ? date.toLocaleDateString('en-PK', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric'
+            }) : 'N/A';
+        %>
             <div class="team-member">
                 <div class="info">
-                    <div class="name"><%= ref.username %></div>
-                    <div class="date">Joined: <%= ref.created_at ? new Date(ref.created_at).toLocaleDateString() : 'N/A' %></div>
+                    <div class="name"><i class="fas fa-user"></i> <%= ref.username %></div>
+                    <div class="date"><i class="far fa-calendar-alt"></i> Joined: <%= formattedDate %></div>
                 </div>
                 <span class="badge <%= ref.status === 'active' ? '' : 'inactive' %>">
                     <i class="fas <%= ref.status === 'active' ? 'fa-check-circle' : 'fa-clock' %>"></i>
@@ -278,79 +352,206 @@
         <div class="no-data">
             <i class="fas fa-users"></i>
             <p>No team members yet</p>
-            <p style="font-size:12px;">Share your referral link to grow your team!</p>
+            <p class="sub-text">Share your referral link to grow your team!</p>
         </div>
     <% } %>
 </div>
 
 <!-- ============================== -->
-<!-- SCRIPTS -->
+<!-- SCRIPTS - OPTIMIZED -->
 <!-- ============================== -->
 <script>
-    function showToast(message, type) {
-        const toast = document.getElementById('toast');
-        const toastMessage = document.getElementById('toastMessage');
-        toastMessage.textContent = message;
-        toast.className = 'toast show ' + (type || 'success');
-        setTimeout(function() {
-            toast.classList.remove('show');
-        }, 3000);
-    }
+    (function() {
+        'use strict';
 
-    function copyReferralLink() {
-        const link = document.getElementById('referralLink').textContent;
-        
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(link).then(function() {
-                showToast('✅ Referral link copied!', 'success');
-            }).catch(function() {
+        // ==============================
+        // TOAST FUNCTION
+        // ==============================
+        function showToast(message, type) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            const icon = toast.querySelector('i');
+            
+            toastMessage.textContent = message;
+            
+            if (type === 'success') {
+                icon.className = 'fas fa-check-circle';
+            } else if (type === 'error') {
+                icon.className = 'fas fa-exclamation-circle';
+            } else {
+                icon.className = 'fas fa-info-circle';
+            }
+            
+            toast.className = 'toast show ' + (type || 'success');
+            
+            if (window.toastTimeout) {
+                clearTimeout(window.toastTimeout);
+            }
+            window.toastTimeout = setTimeout(function() {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // ==============================
+        // REFERRAL FUNCTIONS
+        // ==============================
+        window.copyReferralLink = function() {
+            const link = document.getElementById('referralLink').textContent;
+            
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(link).then(function() {
+                    showToast('✅ Referral link copied!', 'success');
+                }).catch(function() {
+                    fallbackCopy(link);
+                });
+            } else {
                 fallbackCopy(link);
-            });
-        } else {
-            fallbackCopy(link);
-        }
-    }
+            }
+        };
 
-    function fallbackCopy(text) {
-        const textArea = document.createElement('textarea');
-        textArea.value = text;
-        textArea.style.position = 'fixed';
-        textArea.style.left = '-9999px';
-        textArea.style.top = '-9999px';
-        document.body.appendChild(textArea);
-        textArea.select();
-        try {
-            document.execCommand('copy');
-            showToast('✅ Referral link copied!', 'success');
-        } catch (err) {
-            showToast('❌ Failed to copy link', 'error');
+        function fallbackCopy(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-9999px';
+            textArea.style.top = '-9999px';
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showToast('✅ Referral link copied!', 'success');
+            } catch (err) {
+                showToast('❌ Failed to copy link', 'error');
+            }
+            document.body.removeChild(textArea);
         }
-        document.body.removeChild(textArea);
-    }
 
-    function shareReferralLink() {
-        const link = document.getElementById('referralLink').textContent;
-        
-        if (navigator.share) {
-            navigator.share({
-                title: 'Join NovaPay',
-                text: 'Join NovaPay and start earning! Use my referral link:',
-                url: link
-            }).catch(function(err) {
-                if (err.name !== 'AbortError') {
-                    copyReferralLink();
+        window.shareReferralLink = function() {
+            const link = document.getElementById('referralLink').textContent;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Join NovaPay',
+                    text: 'Join NovaPay and start earning! Use my referral link:',
+                    url: link
+                }).catch(function(err) {
+                    if (err.name !== 'AbortError') {
+                        window.copyReferralLink();
+                    }
+                });
+            } else {
+                window.copyReferralLink();
+            }
+        };
+
+        window.openWhatsApp = function() {
+            const link = document.getElementById('referralLink').textContent;
+            const message = encodeURIComponent('Join NovaPay and start earning! Use my referral link: ' + link);
+            window.open('https://wa.me/?text=' + message, '_blank');
+        };
+
+        // ==============================
+        // AUTO-REFRESH STATS
+        // ==============================
+        let autoRefreshInterval = null;
+
+        function updateStats() {
+            fetch('/api/balance')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success && data.data) {
+                        // Update team earnings
+                        const teamEarnings = document.getElementById('teamEarnings');
+                        if (teamEarnings) {
+                            teamEarnings.textContent = Number(data.data.team_earnings || 0).toFixed(2);
+                        }
+                    }
+                })
+                .catch(err => {
+                    // Silently fail for auto-refresh
+                });
+        }
+
+        function startAutoRefresh() {
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+            }
+            autoRefreshInterval = setInterval(updateStats, 30000);
+        }
+
+        function stopAutoRefresh() {
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+                autoRefreshInterval = null;
+            }
+        }
+
+        // Start auto-refresh when page loads
+        document.addEventListener('DOMContentLoaded', startAutoRefresh);
+
+        // Pause auto-refresh when page is hidden
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                stopAutoRefresh();
+            } else {
+                startAutoRefresh();
+                updateStats();
+            }
+        });
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', function() {
+            stopAutoRefresh();
+        });
+
+        // ==============================
+        // ANIMATE STATS ON LOAD
+        // ==============================
+        function animateNumbers() {
+            const stats = document.querySelectorAll('.stat-card .number');
+            stats.forEach(stat => {
+                const finalValue = stat.textContent;
+                const isCurrency = finalValue.includes('.');
+                const startValue = 0;
+                const duration = 600;
+                const startTime = performance.now();
+                
+                // Only animate if value is not empty
+                if (!finalValue || finalValue === '0' || finalValue === '0.00') return;
+                
+                function updateValue(currentTime) {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    
+                    // Ease out cubic
+                    const eased = 1 - Math.pow(1 - progress, 3);
+                    const current = startValue + (parseFloat(finalValue) - startValue) * eased;
+                    
+                    if (isCurrency) {
+                        stat.textContent = current.toFixed(2);
+                    } else {
+                        stat.textContent = Math.round(current);
+                    }
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(updateValue);
+                    } else {
+                        stat.textContent = finalValue;
+                    }
                 }
+                
+                requestAnimationFrame(updateValue);
             });
-        } else {
-            copyReferralLink();
         }
-    }
 
-    function openWhatsApp() {
-        const link = document.getElementById('referralLink').textContent;
-        const message = encodeURIComponent('Join NovaPay and start earning! Use my referral link: ' + link);
-        window.open('https://wa.me/?text=' + message, '_blank');
-    }
+        // Run animation after page loads
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', animateNumbers);
+        } else {
+            animateNumbers();
+        }
+
+    })();
 </script>
 
 </body>

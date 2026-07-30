@@ -59,7 +59,7 @@
             border: 1px solid #e2e8f0;
             border-radius: 10px;
             font-size: 14px;
-            transition: 0.3s;
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
         .form-group input:focus {
             outline: none;
@@ -81,12 +81,14 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: 0.3s;
+            transition: background 0.3s, transform 0.2s;
         }
-        .btn-register:hover { background: #2563eb; }
+        .btn-register:hover:not(:disabled) { background: #2563eb; }
+        .btn-register:active:not(:disabled) { transform: scale(0.98); }
         .btn-register:disabled {
             background: #94a3b8;
             cursor: not-allowed;
+            opacity: 0.7;
         }
         .flash-error {
             background: #fee2e2;
@@ -95,6 +97,7 @@
             border-radius: 10px;
             margin-bottom: 16px;
             font-size: 13px;
+            border: 1px solid #fca5a5;
         }
         .links {
             text-align: center;
@@ -102,8 +105,8 @@
             font-size: 14px;
             color: #64748b;
         }
-        .links a { color: #3b82f6; text-decoration: none; font-weight: 600; }
-        .links a:hover { text-decoration: underline; }
+        .links a { color: #3b82f6; text-decoration: none; font-weight: 600; transition: color 0.3s; }
+        .links a:hover { text-decoration: underline; color: #2563eb; }
         .hint {
             font-size: 11px;
             color: #94a3b8;
@@ -139,7 +142,7 @@
             line-height: 1.5;
         }
         .terms-group label a {
-            color: #f0b90b;
+            color: #3b82f6;
             font-weight: 600;
             text-decoration: none;
         }
@@ -169,19 +172,27 @@
         .referral-applied i {
             color: #22c55e;
         }
+        .register-icon {
+            text-align: center;
+            font-size: 48px;
+            color: #3b82f6;
+            margin-bottom: 10px;
+        }
 
         @media (max-width: 480px) {
             .register-container { padding: 28px 18px; }
+            .logo { font-size: 24px; }
         }
     </style>
 </head>
 <body>
     <div class="register-container">
+        <div class="register-icon">🚀</div>
         <div class="logo">NOVA<span>PAY</span><small>✦ INTERNATIONAL</small></div>
-        <div class="subtitle">Create your account</div>
+        <div class="subtitle">Create your account and start earning</div>
 
         <% if (typeof error !== 'undefined' && error) { %>
-            <div class="flash-error"><%= error %></div>
+            <div class="flash-error"><i class="fas fa-exclamation-circle"></i> <%= error %></div>
         <% } %>
 
         <form method="POST" action="/register" id="registerForm">
@@ -189,32 +200,33 @@
             <!-- USERNAME -->
             <!-- ============================== -->
             <div class="form-group">
-                <label>Username</label>
-                <input type="text" name="username" placeholder="Choose a username" required>
+                <label><i class="fas fa-user"></i> Username</label>
+                <input type="text" name="username" placeholder="Choose a username" required autofocus>
             </div>
 
             <!-- ============================== -->
             <!-- MOBILE NUMBER -->
             <!-- ============================== -->
             <div class="form-group">
-                <label>Mobile Number</label>
+                <label><i class="fas fa-phone"></i> Mobile Number</label>
                 <input type="text" name="mobile" placeholder="03XXXXXXXXX" required>
+                <div class="hint">Enter your mobile number (e.g., 03123456789)</div>
             </div>
 
             <!-- ============================== -->
             <!-- PASSWORD -->
             <!-- ============================== -->
             <div class="form-group">
-                <label>Password (exactly 8 digits)</label>
+                <label><i class="fas fa-lock"></i> Password (exactly 8 digits)</label>
                 <input type="password" name="password" placeholder="8-digit password" maxlength="8" required>
-                <div class="hint">Password must be exactly 8 characters</div>
+                <div class="hint">Password must be exactly 8 characters (numbers or letters)</div>
             </div>
 
             <!-- ============================== -->
             <!-- CONFIRM PASSWORD -->
             <!-- ============================== -->
             <div class="form-group">
-                <label>Confirm Password</label>
+                <label><i class="fas fa-check-circle"></i> Confirm Password</label>
                 <input type="password" name="confirm_password" placeholder="Confirm password" maxlength="8" required>
             </div>
 
@@ -222,7 +234,7 @@
             <!-- REFERRAL CODE - AUTO FILL -->
             <!-- ============================== -->
             <div class="form-group">
-                <label>Referral Code</label>
+                <label><i class="fas fa-gift"></i> Referral Code</label>
                 <input type="text" name="referral_code" id="referralCode" 
                        placeholder="Enter referral code" 
                        value="<%= typeof referral !== 'undefined' && referral ? referral : '' %>"
@@ -245,7 +257,7 @@
                 <input type="checkbox" id="agreeTerms" name="agree" required>
                 <label for="agreeTerms">
                     I agree to the 
-                    <a href="/terms" target="_blank">Terms & Conditions</a>
+                    <a href="/terms" target="_blank">Terms &amp; Conditions</a>
                     and 
                     <span class="highlight">10% Referral Commission</span> policy.
                 </label>
@@ -293,6 +305,32 @@
         // Initially disable button
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('registerBtn').disabled = true;
+        });
+
+        // Password match validation (client-side)
+        document.querySelector('input[name="confirm_password"]').addEventListener('input', function() {
+            const password = document.querySelector('input[name="password"]').value;
+            const confirm = this.value;
+            const hint = this.parentElement.querySelector('.hint');
+            
+            if (confirm.length > 0 && password !== confirm) {
+                if (!hint) {
+                    const newHint = document.createElement('div');
+                    newHint.className = 'hint';
+                    newHint.style.color = '#ef4444';
+                    newHint.innerHTML = '<i class="fas fa-times-circle"></i> Passwords do not match';
+                    this.parentElement.appendChild(newHint);
+                } else if (password !== confirm) {
+                    hint.innerHTML = '<i class="fas fa-times-circle"></i> Passwords do not match';
+                    hint.style.color = '#ef4444';
+                }
+            } else if (confirm.length > 0 && password === confirm) {
+                const hint = this.parentElement.querySelector('.hint');
+                if (hint) {
+                    hint.innerHTML = '<i class="fas fa-check-circle"></i> Passwords match';
+                    hint.style.color = '#22c55e';
+                }
+            }
         });
     </script>
 </body>

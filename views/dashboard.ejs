@@ -33,16 +33,13 @@
         .balance-card { background: linear-gradient(135deg, #1e293b, #0f172a); border-radius: 16px; padding: 18px 20px; margin-bottom: 16px; text-align: center; position: relative; }
         .balance-card .label { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
         .balance-card .amount { font-size: 32px; font-weight: 700; color: #ffffff; margin: 4px 0 2px; }
-        .balance-card .amount small { font-size: 14px; font-weight: 400; color: #94a3b8; }
         .balance-card .sub { font-size: 10px; color: #64748b; }
-        .refresh-btn { position: absolute; top: 10px; right: 15px; background: rgba(255,255,255,0.1); border: none; color: #94a3b8; cursor: pointer; font-size: 16px; padding: 4px 8px; border-radius: 6px; transition: 0.3s; }
+        .refresh-btn { position: absolute; top: 10px; right: 15px; background: rgba(255,255,255,0.1); border: none; color: #94a3b8; cursor: pointer; font-size: 16px; padding: 4px 8px; border-radius: 6px; }
         .refresh-btn:hover { background: rgba(255,255,255,0.2); color: white; }
-        .refresh-btn.spinning { animation: spin 0.6s linear; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
         .action-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 18px; }
         .action-btn { background: #f8fafc; border: 1px solid #eef2f6; border-radius: 12px; padding: 10px 4px; text-align: center; text-decoration: none; color: #1a2332; transition: 0.3s; cursor: pointer; }
-        .action-btn:hover { border-color: #3b82f6; background: #f0f4ff; transform: translateY(-2px); }
+        .action-btn:hover { border-color: #3b82f6; background: #f0f4ff; }
         .action-btn .icon { font-size: 20px; display: block; margin-bottom: 2px; }
         .action-btn .label { font-size: 9px; font-weight: 500; color: #475569; }
         
@@ -54,7 +51,6 @@
         .active-plan .plan-info .daily { font-size: 11px; color: #64748b; }
         .active-plan .status-badge { background: #22c55e; color: white; font-size: 9px; padding: 2px 10px; border-radius: 12px; }
         
-        /* Plans Line by Line */
         .plan-line {
             background: #f8fafc;
             border: 1px solid #eef2f6;
@@ -64,13 +60,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        .plan-line:hover {
-            border-color: #3b82f6;
-            transform: translateX(5px);
-            box-shadow: 0 4px 16px rgba(59,130,246,0.15);
         }
         .plan-line .plan-info .name {
             font-weight: 700;
@@ -84,15 +73,6 @@
             padding: 2px 12px;
             border-radius: 12px;
             margin-left: 8px;
-            display: inline-block;
-        }
-        .plan-line .plan-info .name .premium-badge {
-            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-            color: white;
-            font-size: 10px;
-            padding: 2px 12px;
-            border-radius: 12px;
-            margin-left: 6px;
             display: inline-block;
         }
         .plan-line .plan-info .details {
@@ -126,16 +106,10 @@
             font-size: 14px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
             white-space: nowrap;
-            box-shadow: 0 2px 8px rgba(59,130,246,0.25);
         }
         .plan-line .plan-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(59,130,246,0.4);
-        }
-        .plan-line .plan-btn:active {
-            transform: scale(0.95);
+            opacity: 0.9;
         }
         .plan-line .plan-return {
             font-size: 13px;
@@ -160,12 +134,6 @@
                 text-align: center;
                 padding: 12px;
             }
-            .plan-line .plan-info .name {
-                font-size: 16px;
-            }
-            .plan-line .plan-info .details {
-                font-size: 13px;
-            }
         }
         
         .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px; }
@@ -178,9 +146,6 @@
         .summary-item .value.gold { color: #f59e0b; }
         .summary-item .value.purple { color: #8b5cf6; }
         
-        /* ============================== */
-        /* REFERRAL BOX - MODIFIED */
-        /* ============================== */
         .referral-box { 
             background: #f8fafc; 
             border: 1px solid #eef2f6; 
@@ -229,16 +194,12 @@
             border-radius: 6px;
             cursor: pointer;
             font-size: 12px;
-            transition: 0.3s;
             display: flex;
             align-items: center;
             gap: 6px;
             border: 1px solid #eef2f6;
             background: #f8fafc;
             color: #475569;
-        }
-        .referral-box .btn-group .btn:hover {
-            transform: scale(1.02);
         }
         .referral-box .btn-group .btn.copy-btn:hover {
             background: #3b82f6;
@@ -255,10 +216,6 @@
             border-color: #25D366;
             color: white;
         }
-        .referral-box .btn-group .btn.whatsapp-btn:hover {
-            background: #1da851;
-            border-color: #1da851;
-        }
         
         .whatsapp-box { background: #25D366; border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; color: white; text-decoration: none; }
         .whatsapp-box i { font-size: 28px; }
@@ -271,9 +228,6 @@
         .flash-success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
         .flash-error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
         
-        /* ============================== */
-        /* TOAST NOTIFICATION */
-        /* ============================== */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -288,15 +242,9 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
             display: none;
             z-index: 9999;
-            animation: slideUp 0.4s ease;
         }
         .toast.show { display: block; }
         .toast i { margin-right: 8px; }
-        .toast.success i { color: #22c55e; }
-        @keyframes slideUp {
-            0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
-            100% { opacity: 1; transform: translateX(-50%) translateY(0); }
-        }
         
         .sidebar-left { position: fixed; left: -280px; top: 0; width: 270px; height: 100vh; background: #ffffff; box-shadow: 4px 0 30px rgba(0,0,0,0.1); transition: 0.4s ease; padding: 20px 16px; overflow-y: auto; z-index: 1000; border-right: 1px solid #eef2f6; }
         .sidebar-left.open { left: 0; }
@@ -377,7 +325,7 @@
     <div class="today-earnings">
         <div>
             <div class="label">📈 Today's Earnings</div>
-            <div class="value">PKR <%= typeof todayEarnings !== 'undefined' ? todayEarnings.toFixed(2) : '0.00' %></div>
+            <div class="value">PKR <%= (typeof todayEarnings !== 'undefined' && todayEarnings !== null) ? Number(todayEarnings).toFixed(2) : '0.00' %></div>
         </div>
         <div style="font-size:12px;opacity:0.8;">
             <i class="fas fa-clock"></i> Daily
@@ -388,12 +336,11 @@
         <button class="refresh-btn" onclick="refreshBalance()" id="refreshBtn">
             <i class="fas fa-sync-alt"></i>
         </button>
-        <div class="label">💰 Available Balance</div>
-        <div class="amount" id="liveBalance">PKR <%= user.balance ? user.balance.toFixed(2) : '0.00' %></div>
+        <div class="label">AVAILABLE BALANCE</div>
+        <div class="amount" id="liveBalance">PKR <%= (typeof user.balance !== 'undefined' && user.balance !== null) ? Number(user.balance).toFixed(2) : '0.00' %></div>
         <div class="sub">Live Balance</div>
     </div>
 
-    <!-- Action Grid with 5 Buttons (Deposit, Withdraw, Mining, Team, Bonus) -->
     <div class="action-grid">
         <a href="/deposit" class="action-btn">
             <span class="icon">💰</span>
@@ -417,7 +364,6 @@
         </a>
     </div>
 
-    <!-- Active Plans Section -->
     <div class="section-title">
         Active Plans
         <small>YOUR CURRENT INVESTMENTS</small>
@@ -427,7 +373,7 @@
             <div class="active-plan">
                 <div class="plan-info">
                     <div class="name"><%= plan.plan_name %></div>
-                    <div class="daily">Daily: PKR <%= plan.daily_income %></div>
+                    <div class="daily">Daily: PKR <%= (typeof plan.daily_income !== 'undefined' && plan.daily_income !== null) ? Number(plan.daily_income).toFixed(2) : '0.00' %></div>
                 </div>
                 <span class="status-badge"><i class="fas fa-check-circle"></i> Active</span>
             </div>
@@ -436,7 +382,6 @@
         <p style="color:#94a3b8;text-align:center;padding:10px;font-size:13px;">No active plans. Purchase a plan to start earning!</p>
     <% } %>
 
-    <!-- Investment Plans - Bara + Highlight -->
     <div class="section-title">
         Investment Plans
         <small>CHOOSE YOUR PLAN</small>
@@ -444,27 +389,24 @@
 
     <% if (typeof allPlans !== 'undefined' && allPlans && allPlans.length > 0) { %>
         <% allPlans.forEach(function(plan, index) { 
-            var returnPercent = ((plan.daily_income / plan.investment) * 100).toFixed(0);
+            var returnPercent = ((Number(plan.daily_income) / Number(plan.investment)) * 100).toFixed(0);
         %>
-            <div class="plan-line">
+            <div class="plan-line" id="plan-<%= plan.id %>">
                 <div class="plan-info">
                     <div class="name">
                         <%= plan.name %>
                         <% if (index === 0) { %>
                             <span class="vip-badge"><i class="fas fa-crown"></i> VIP</span>
                         <% } %>
-                        <% if (plan.investment >= 50000) { %>
-                            <span class="premium-badge"><i class="fas fa-star"></i> PREMIUM</span>
-                        <% } %>
                         <div class="plan-return"><span>🔥 <%= returnPercent %>% Daily Return</span></div>
                     </div>
                     <div class="details">
-                        <span class="price">💰 PKR <%= plan.investment.toLocaleString() %></span>
+                        <span class="price">💰 PKR <%= Number(plan.investment).toLocaleString() %></span>
                         &nbsp;|&nbsp;
-                        <span class="daily"><i class="fas fa-arrow-up"></i> +PKR <%= plan.daily_income.toLocaleString() %> / day</span>
+                        <span class="daily"><i class="fas fa-arrow-up"></i> +PKR <%= Number(plan.daily_income).toLocaleString() %> / day</span>
                     </div>
                 </div>
-                <button class="plan-btn" onclick="buyPlan(<%= plan.id %>, <%= plan.investment %>, '<%= plan.name %>')">
+                <button class="plan-btn" onclick="buyPlan(<%= plan.id %>, <%= Number(plan.investment) %>, '<%= plan.name.replace(/'/g, "\\'") %>', this)">
                     <i class="fas fa-shopping-cart"></i> Buy Now
                 </button>
             </div>
@@ -476,7 +418,6 @@
         </div>
     <% } %>
 
-    <!-- Account Summary -->
     <div class="section-title">
         Account Summary
         <small>YOUR FINANCIAL OVERVIEW</small>
@@ -485,28 +426,25 @@
         <div class="summary-item">
             <span class="icon">📥</span>
             <div class="label">Total Deposit</div>
-            <div class="value green">PKR <%= user.total_deposit ? user.total_deposit.toFixed(2) : '0.00' %></div>
+            <div class="value green">PKR <%= (typeof user.total_deposit !== 'undefined' && user.total_deposit !== null) ? Number(user.total_deposit).toFixed(2) : '0.00' %></div>
         </div>
         <div class="summary-item">
             <span class="icon">📤</span>
             <div class="label">Total Withdraw</div>
-            <div class="value blue">PKR <%= user.total_withdraw ? user.total_withdraw.toFixed(2) : '0.00' %></div>
+            <div class="value blue">PKR <%= (typeof user.total_withdraw !== 'undefined' && user.total_withdraw !== null) ? Number(user.total_withdraw).toFixed(2) : '0.00' %></div>
         </div>
         <div class="summary-item">
             <span class="icon">📈</span>
             <div class="label">Total Earnings</div>
-            <div class="value gold">PKR <%= user.total_earnings ? user.total_earnings.toFixed(2) : '0.00' %></div>
+            <div class="value gold">PKR <%= (typeof user.total_earnings !== 'undefined' && user.total_earnings !== null) ? Number(user.total_earnings).toFixed(2) : '0.00' %></div>
         </div>
         <div class="summary-item">
             <span class="icon">👥</span>
             <div class="label">Team Earnings</div>
-            <div class="value purple">PKR <%= user.team_earnings ? user.team_earnings.toFixed(2) : '0.00' %></div>
+            <div class="value purple">PKR <%= (typeof user.team_earnings !== 'undefined' && user.team_earnings !== null) ? Number(user.team_earnings).toFixed(2) : '0.00' %></div>
         </div>
     </div>
 
-    <!-- ============================== -->
-    <!-- REFERRAL BOX - MODIFIED -->
-    <!-- ============================== -->
     <div class="referral-box">
         <div class="label">🔗 Your Referral Link</div>
         <div class="link" id="referralLink"><%= baseUrl %>/register?ref=<%= user.referral_code %></div>
@@ -529,7 +467,6 @@
         </div>
     </div>
 
-    <!-- WhatsApp Box -->
     <a href="https://wa.me/923001234567" target="_blank" class="whatsapp-box">
         <i class="fab fa-whatsapp"></i>
         <div class="info">
@@ -541,21 +478,12 @@
 
 </div>
 
-<!-- ============================== -->
-<!-- TOAST NOTIFICATION -->
-<!-- ============================== -->
 <div class="toast" id="toast">
     <i class="fas fa-check-circle"></i>
     <span id="toastMessage">Link copied!</span>
 </div>
 
-<!-- ============================== -->
-<!-- SCRIPTS -->
-<!-- ============================== -->
 <script>
-    // ==============================
-    // SIDEBAR
-    // ==============================
     function openSidebar() {
         document.getElementById('leftSidebar').classList.add('open');
         document.getElementById('overlay').classList.add('show');
@@ -568,11 +496,13 @@
     }
     document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeSidebar(); });
 
-    // ==============================
-    // BUY PLAN
-    // ==============================
-    function buyPlan(planId, investment, name) {
-        if (confirm(`Purchase ${name} plan for PKR ${investment}?`)) {
+    function buyPlan(planId, investment, name, button) {
+        const btn = button || document.getElementById('buyBtn-' + planId);
+        const originalHtml = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+        if (confirm(`Purchase ${name} plan for PKR ${investment.toLocaleString()}?`)) {
             fetch('/plan/buy', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -584,56 +514,60 @@
                     alert(data.message);
                     location.reload();
                 } else {
-                    alert('Error: ' + data.message);
+                    if (data.redirect) {
+                        alert('Insufficient balance. Redirecting to deposit...');
+                        window.location.href = data.redirect;
+                    } else {
+                        alert('Error: ' + data.message);
+                        btn.disabled = false;
+                        btn.innerHTML = originalHtml;
+                    }
                 }
             })
-            .catch(err => alert('Request failed'));
+            .catch(err => {
+                alert('Request failed');
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+            });
+        } else {
+            btn.disabled = false;
+            btn.innerHTML = originalHtml;
         }
     }
 
-    // ==============================
-    // REFRESH BALANCE
-    // ==============================
     function refreshBalance() {
         const btn = document.getElementById('refreshBtn');
-        btn.classList.add('spinning');
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
         
         fetch('/api/balance')
             .then(res => res.json())
             .then(data => {
                 if (data.success && data.data) {
-                    document.getElementById('liveBalance').textContent = 'PKR ' + data.data.balance.toFixed(2);
+                    document.getElementById('liveBalance').textContent = 'PKR ' + Number(data.data.balance).toFixed(2);
                 }
-                btn.classList.remove('spinning');
+                btn.innerHTML = '<i class="fas fa-sync-alt"></i>';
             })
             .catch(err => {
-                btn.classList.remove('spinning');
+                btn.innerHTML = '<i class="fas fa-sync-alt"></i>';
                 alert('Failed to refresh balance');
             });
     }
 
-    // ==============================
-    // TOAST FUNCTION
-    // ==============================
-    function showToast(message, type) {
+    function showToast(message) {
         const toast = document.getElementById('toast');
         const toastMessage = document.getElementById('toastMessage');
         toastMessage.textContent = message;
-        toast.className = 'toast show ' + (type || 'success');
+        toast.className = 'toast show';
         setTimeout(function() {
             toast.classList.remove('show');
         }, 3000);
     }
 
-    // ==============================
-    // COPY REFERRAL LINK
-    // ==============================
     function copyReferralLink() {
         const link = document.getElementById('referralLink').textContent;
-        
-        if (navigator.clipboard && navigator.clipboard.writeText) {
+        if (navigator.clipboard) {
             navigator.clipboard.writeText(link).then(function() {
-                showToast('✅ Referral link copied!', 'success');
+                showToast('✅ Referral link copied!');
             }).catch(function() {
                 fallbackCopy(link);
             });
@@ -652,19 +586,15 @@
         textArea.select();
         try {
             document.execCommand('copy');
-            showToast('✅ Referral link copied!', 'success');
+            showToast('✅ Referral link copied!');
         } catch (err) {
-            showToast('❌ Failed to copy link', 'error');
+            showToast('❌ Failed to copy link');
         }
         document.body.removeChild(textArea);
     }
 
-    // ==============================
-    // SHARE REFERRAL LINK
-    // ==============================
     function shareReferralLink() {
         const link = document.getElementById('referralLink').textContent;
-        
         if (navigator.share) {
             navigator.share({
                 title: 'Join NovaPay',
@@ -680,9 +610,6 @@
         }
     }
 
-    // ==============================
-    // OPEN WHATSAPP
-    // ==============================
     function openWhatsApp() {
         const link = document.getElementById('referralLink').textContent;
         const message = encodeURIComponent('Join NovaPay and start earning! Use my referral link: ' + link);

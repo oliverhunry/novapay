@@ -13,6 +13,7 @@
         .header .logo { font-size: 20px; font-weight: 800; color: #0f172a; }
         .header .logo span { color: #3b82f6; }
         .header a { color: #3b82f6; text-decoration: none; font-size: 14px; }
+        .header a:hover { color: #2563eb; text-decoration: underline; }
         .balance-box { background: linear-gradient(135deg, #1e293b, #0f172a); border-radius: 12px; padding: 15px 20px; margin-bottom: 20px; text-align: center; color: white; }
         .balance-box .label { font-size: 11px; color: #94a3b8; text-transform: uppercase; }
         .balance-box .amount { font-size: 24px; font-weight: 700; }
@@ -23,6 +24,11 @@
             padding: 14px 16px;
             margin-bottom: 12px;
             border-left: 5px solid #3b82f6;
+            transition: all 0.3s ease;
+        }
+        .account-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(59,130,246,0.15);
         }
         .account-card .method { font-weight: 700; font-size: 14px; color: #0f172a; }
         .account-card .title { font-size: 13px; color: #475569; }
@@ -30,15 +36,89 @@
         .account-card .highlight { background: #dbeafe; padding: 2px 8px; border-radius: 4px; font-size: 10px; color: #1d4ed8; }
         .form-group { margin-bottom: 14px; }
         .form-group label { display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 4px; }
-        .form-group input, .form-group select { width: 100%; padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 14px; }
-        .form-group input:focus, .form-group select:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
-        .btn-submit { width: 100%; padding: 12px; background: #3b82f6; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; }
+        .form-group label i { margin-right: 4px; color: #3b82f6; }
+        .form-group input, .form-group select { 
+            width: 100%; 
+            padding: 10px 14px; 
+            border: 1px solid #e2e8f0; 
+            border-radius: 10px; 
+            font-size: 14px; 
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus { 
+            outline: none; 
+            border-color: #3b82f6; 
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.1); 
+        }
+        .form-group input[type="file"] {
+            padding: 8px 10px;
+            background: #f8fafc;
+            cursor: pointer;
+        }
+        .form-group input[type="file"]:hover {
+            background: #f1f5f9;
+        }
+        .btn-submit { 
+            width: 100%; 
+            padding: 12px; 
+            background: #3b82f6; 
+            color: white; 
+            border: none; 
+            border-radius: 10px; 
+            font-size: 16px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: background 0.3s, transform 0.2s;
+        }
         .btn-submit:hover { background: #2563eb; }
+        .btn-submit:active { transform: scale(0.98); }
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
         .flash-message { padding: 10px 14px; border-radius: 10px; margin-bottom: 12px; font-size: 13px; }
         .flash-success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
         .flash-error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
         .info-text { font-size: 12px; color: #64748b; margin-top: 4px; }
-        .min-amount { background: #fef3c7; padding: 8px 12px; border-radius: 8px; font-size: 12px; color: #92400e; margin-bottom: 16px; text-align: center; }
+        .info-text i { margin-right: 4px; }
+        .min-amount { 
+            background: #fef3c7; 
+            padding: 8px 12px; 
+            border-radius: 8px; 
+            font-size: 12px; 
+            color: #92400e; 
+            margin-bottom: 16px; 
+            text-align: center; 
+        }
+        .min-amount i { margin-right: 6px; color: #f59e0b; }
+        .file-name-display {
+            font-size: 12px;
+            color: #3b82f6;
+            margin-top: 4px;
+            display: none;
+        }
+        .file-name-display.show {
+            display: block;
+        }
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.6s linear infinite;
+            margin-right: 6px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @media (max-width: 480px) {
+            .container { padding: 16px; }
+            .balance-box .amount { font-size: 20px; }
+        }
     </style>
 </head>
 <body>
@@ -51,7 +131,7 @@
 
     <div class="balance-box">
         <div class="label">Your Balance</div>
-        <div class="amount">PKR <%= user.balance ? user.balance.toFixed(2) : '0.00' %></div>
+        <div class="amount" id="depositBalance">PKR <%= (typeof user.balance !== 'undefined' && user.balance !== null) ? Number(user.balance).toFixed(2) : '0.00' %></div>
     </div>
 
     <% if (typeof success !== 'undefined' && success) { %>
@@ -86,21 +166,184 @@
 
     <h4 style="margin:16px 0 12px;color:#0f172a;">📤 Submit Deposit Request</h4>
 
-    <form action="/deposit" method="POST" enctype="multipart/form-data">
+    <form action="/deposit" method="POST" enctype="multipart/form-data" id="depositForm">
         <div class="form-group">
-            <label>Amount (PKR)</label>
-            <input type="number" name="amount" min="1300" step="100" placeholder="Enter amount" required>
+            <label><i class="fas fa-coins"></i> Amount (PKR)</label>
+            <input type="number" name="amount" id="depositAmount" min="1300" step="100" placeholder="Enter amount" required>
+            <div class="info-text"><i class="fas fa-info-circle"></i> Minimum deposit: PKR 1,300</div>
         </div>
         
         <div class="form-group">
-            <label>Payment Screenshot / Slip</label>
-            <input type="file" name="slip" accept="image/*" required>
+            <label><i class="fas fa-image"></i> Payment Screenshot / Slip</label>
+            <input type="file" name="slip" id="slipInput" accept="image/*" required>
             <div class="info-text"><i class="fas fa-info-circle"></i> Upload payment proof (PNG, JPG, JPEG)</div>
+            <div class="file-name-display" id="fileNameDisplay">
+                <i class="fas fa-check-circle" style="color:#22c55e;"></i> Selected: <span id="fileName"></span>
+            </div>
         </div>
 
-        <button type="submit" class="btn-submit"><i class="fas fa-upload"></i> Submit Deposit</button>
+        <button type="submit" class="btn-submit" id="depositBtn">
+            <i class="fas fa-upload"></i> Submit Deposit
+        </button>
     </form>
 </div>
+
+<script>
+    (function() {
+        'use strict';
+
+        const depositForm = document.getElementById('depositForm');
+        const depositBtn = document.getElementById('depositBtn');
+        const depositAmount = document.getElementById('depositAmount');
+        const slipInput = document.getElementById('slipInput');
+        const fileNameDisplay = document.getElementById('fileNameDisplay');
+        const fileName = document.getElementById('fileName');
+        const MIN_DEPOSIT = 1300;
+
+        // File name display
+        slipInput.addEventListener('change', function() {
+            if (this.files && this.files.length > 0) {
+                const file = this.files[0];
+                // Validate file type
+                const validTypes = ['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'image/webp'];
+                if (!validTypes.includes(file.type)) {
+                    alert('Please upload a valid image file (PNG, JPG, JPEG, GIF, WEBP)');
+                    this.value = '';
+                    fileNameDisplay.classList.remove('show');
+                    return;
+                }
+                
+                // Validate file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('File size must be less than 5MB');
+                    this.value = '';
+                    fileNameDisplay.classList.remove('show');
+                    return;
+                }
+
+                fileName.textContent = file.name;
+                fileNameDisplay.classList.add('show');
+            } else {
+                fileNameDisplay.classList.remove('show');
+            }
+        });
+
+        // Validate amount on blur
+        depositAmount.addEventListener('blur', function() {
+            const value = parseFloat(this.value);
+            if (value && value < MIN_DEPOSIT) {
+                alert('Minimum deposit amount is PKR ' + MIN_DEPOSIT.toLocaleString());
+                this.value = '';
+                this.focus();
+            }
+        });
+
+        // Validate amount on input
+        depositAmount.addEventListener('input', function() {
+            const value = parseFloat(this.value);
+            if (value && value % 100 !== 0) {
+                // Round to nearest 100
+                const rounded = Math.round(value / 100) * 100;
+                if (rounded > 0) {
+                    this.value = rounded;
+                }
+            }
+        });
+
+        // Form validation
+        depositForm.addEventListener('submit', function(e) {
+            const amount = parseFloat(depositAmount.value);
+            const file = slipInput.files[0];
+
+            // Validate amount
+            if (!amount || isNaN(amount)) {
+                e.preventDefault();
+                alert('Please enter a valid amount');
+                depositAmount.focus();
+                return;
+            }
+
+            if (amount < MIN_DEPOSIT) {
+                e.preventDefault();
+                alert('Minimum deposit amount is PKR ' + MIN_DEPOSIT.toLocaleString());
+                depositAmount.focus();
+                return;
+            }
+
+            if (amount % 100 !== 0) {
+                e.preventDefault();
+                alert('Amount must be in multiples of 100 PKR');
+                depositAmount.focus();
+                return;
+            }
+
+            // Validate file
+            if (!file) {
+                e.preventDefault();
+                alert('Please upload a payment screenshot or slip');
+                slipInput.focus();
+                return;
+            }
+
+            // Confirm before submission
+            if (!confirm(`Are you sure you want to deposit PKR ${amount.toFixed(2)}?`)) {
+                e.preventDefault();
+                return;
+            }
+
+            // Show loading state
+            depositBtn.disabled = true;
+            depositBtn.innerHTML = '<span class="spinner"></span> Submitting...';
+        });
+
+        // Re-enable button if form submission fails
+        window.addEventListener('pageshow', function() {
+            depositBtn.disabled = false;
+            depositBtn.innerHTML = '<i class="fas fa-upload"></i> Submit Deposit';
+        });
+
+        // Copy account details on click (optional)
+        document.querySelectorAll('.account-card .number').forEach(function(element) {
+            element.style.cursor = 'pointer';
+            element.addEventListener('click', function() {
+                const text = this.textContent.trim();
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(function() {
+                        const originalText = element.textContent;
+                        element.textContent = '✅ Copied!';
+                        element.style.color = '#22c55e';
+                        setTimeout(function() {
+                            element.textContent = originalText;
+                            element.style.color = '#3b82f6';
+                        }, 2000);
+                    }).catch(function() {
+                        alert('Failed to copy. Please select the number manually.');
+                    });
+                } else {
+                    // Fallback
+                    const textArea = document.createElement('textarea');
+                    textArea.value = text;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    try {
+                        document.execCommand('copy');
+                        const originalText = element.textContent;
+                        element.textContent = '✅ Copied!';
+                        element.style.color = '#22c55e';
+                        setTimeout(function() {
+                            element.textContent = originalText;
+                            element.style.color = '#3b82f6';
+                        }, 2000);
+                    } catch (err) {
+                        alert('Failed to copy. Please select the number manually.');
+                    }
+                    document.body.removeChild(textArea);
+                }
+            });
+        });
+
+    })();
+</script>
 
 </body>
 </html>

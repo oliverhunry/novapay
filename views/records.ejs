@@ -12,7 +12,8 @@
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eef2f6; }
         .header .logo { font-size: 20px; font-weight: 800; color: #0f172a; }
         .header .logo span { color: #3b82f6; }
-        .header a { color: #3b82f6; text-decoration: none; font-size: 14px; }
+        .header a { color: #3b82f6; text-decoration: none; font-size: 14px; transition: color 0.3s; }
+        .header a:hover { color: #2563eb; text-decoration: underline; }
         .section-title { font-size: 14px; font-weight: 600; color: #0f172a; margin: 16px 0 10px; }
         .section-title small { font-size: 10px; font-weight: 400; color: #94a3b8; display: block; }
         .record-item {
@@ -24,6 +25,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: all 0.3s ease;
+        }
+        .record-item:hover {
+            transform: translateX(3px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
         .record-item .info .type { font-weight: 600; font-size: 13px; color: #0f172a; }
         .record-item .info .date { font-size: 10px; color: #94a3b8; }
@@ -35,17 +41,51 @@
             border-radius: 12px;
             font-size: 9px;
             font-weight: 600;
+            display: inline-block;
+            margin-right: 6px;
         }
         .badge-pending { background: #fef3c7; color: #92400e; }
         .badge-approved { background: #dcfce7; color: #166534; }
         .badge-rejected { background: #fee2e2; color: #991b1b; }
         .badge-completed { background: #dcfce7; color: #166534; }
+        .badge-active { background: #dcfce7; color: #166534; }
+        .badge-inactive { background: #fee2e2; color: #991b1b; }
         .no-data { text-align: center; padding: 20px; color: #94a3b8; font-size: 13px; }
+        .no-data i { font-size: 32px; display: block; margin-bottom: 8px; color: #d1d5db; }
         .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
-        .tab-btn { padding: 6px 14px; border: 1px solid #eef2f6; border-radius: 8px; background: white; color: #64748b; cursor: pointer; font-size: 12px; }
-        .tab-btn.active { background: #3b82f6; color: white; border-color: #3b82f6; }
+        .tab-btn { 
+            padding: 6px 14px; 
+            border: 1px solid #eef2f6; 
+            border-radius: 8px; 
+            background: white; 
+            color: #64748b; 
+            cursor: pointer; 
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+        .tab-btn:hover { 
+            border-color: #3b82f6; 
+            color: #3b82f6; 
+        }
+        .tab-btn.active { 
+            background: #3b82f6; 
+            color: white; 
+            border-color: #3b82f6; 
+        }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
+        .record-stats {
+            background: #f8fafc;
+            border: 1px solid #eef2f6;
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-bottom: 12px;
+            font-size: 12px;
+            color: #64748b;
+            display: flex;
+            justify-content: space-between;
+        }
+        .record-stats .count { font-weight: 600; color: #0f172a; }
     </style>
 </head>
 <body>
@@ -71,6 +111,10 @@
     <div id="tab-deposits" class="tab-content active">
         <div class="section-title">Deposits <small>YOUR DEPOSIT HISTORY</small></div>
         <% if (typeof deposits !== 'undefined' && deposits && deposits.length > 0) { %>
+            <div class="record-stats">
+                <span>Total: <span class="count"><%= deposits.length %></span> entries</span>
+                <span>Approved: <span class="count"><%= deposits.filter(d => d.status === 'approved').length %></span></span>
+            </div>
             <% deposits.forEach(function(d) { %>
                 <div class="record-item">
                     <div class="info">
@@ -79,12 +123,15 @@
                     </div>
                     <div>
                         <span class="badge-status badge-<%= d.status %>"><%= d.status %></span>
-                        <span class="amount credit">+PKR <%= d.amount %></span>
+                        <span class="amount credit">+PKR <%= (typeof d.amount !== 'undefined' && d.amount !== null) ? Number(d.amount).toFixed(2) : '0.00' %></span>
                     </div>
                 </div>
             <% }); %>
         <% } else { %>
-            <div class="no-data">No deposits found</div>
+            <div class="no-data">
+                <i class="fas fa-box-open"></i>
+                No deposits found
+            </div>
         <% } %>
     </div>
 
@@ -92,6 +139,10 @@
     <div id="tab-withdraws" class="tab-content">
         <div class="section-title">Withdraws <small>YOUR WITHDRAW HISTORY</small></div>
         <% if (typeof withdraws !== 'undefined' && withdraws && withdraws.length > 0) { %>
+            <div class="record-stats">
+                <span>Total: <span class="count"><%= withdraws.length %></span> entries</span>
+                <span>Approved: <span class="count"><%= withdraws.filter(w => w.status === 'approved').length %></span></span>
+            </div>
             <% withdraws.forEach(function(w) { %>
                 <div class="record-item">
                     <div class="info">
@@ -100,12 +151,15 @@
                     </div>
                     <div>
                         <span class="badge-status badge-<%= w.status %>"><%= w.status %></span>
-                        <span class="amount debit">-PKR <%= w.amount %></span>
+                        <span class="amount debit">-PKR <%= (typeof w.amount !== 'undefined' && w.amount !== null) ? Number(w.amount).toFixed(2) : '0.00' %></span>
                     </div>
                 </div>
             <% }); %>
         <% } else { %>
-            <div class="no-data">No withdraws found</div>
+            <div class="no-data">
+                <i class="fas fa-box-open"></i>
+                No withdraws found
+            </div>
         <% } %>
     </div>
 
@@ -113,6 +167,9 @@
     <div id="tab-mining" class="tab-content">
         <div class="section-title">Mining <small>YOUR MINING EARNINGS</small></div>
         <% if (typeof miningHistory !== 'undefined' && miningHistory && miningHistory.length > 0) { %>
+            <div class="record-stats">
+                <span>Total: <span class="count"><%= miningHistory.length %></span> collections</span>
+            </div>
             <% miningHistory.forEach(function(m) { %>
                 <div class="record-item">
                     <div class="info">
@@ -121,12 +178,15 @@
                     </div>
                     <div>
                         <span class="badge-status badge-completed">Collected</span>
-                        <span class="amount credit">+PKR <%= m.amount %></span>
+                        <span class="amount credit">+PKR <%= (typeof m.amount !== 'undefined' && m.amount !== null) ? Number(m.amount).toFixed(2) : '0.00' %></span>
                     </div>
                 </div>
             <% }); %>
         <% } else { %>
-            <div class="no-data">No mining history found</div>
+            <div class="no-data">
+                <i class="fas fa-box-open"></i>
+                No mining history found
+            </div>
         <% } %>
     </div>
 
@@ -134,6 +194,9 @@
     <div id="tab-referrals" class="tab-content">
         <div class="section-title">Referrals <small>YOUR REFERRAL EARNINGS</small></div>
         <% if (typeof referralHistory !== 'undefined' && referralHistory && referralHistory.length > 0) { %>
+            <div class="record-stats">
+                <span>Total: <span class="count"><%= referralHistory.length %></span> commissions</span>
+            </div>
             <% referralHistory.forEach(function(r) { %>
                 <div class="record-item">
                     <div class="info">
@@ -142,12 +205,15 @@
                     </div>
                     <div>
                         <span class="badge-status badge-completed">Earned</span>
-                        <span class="amount credit">+PKR <%= r.commission %></span>
+                        <span class="amount credit">+PKR <%= (typeof r.commission !== 'undefined' && r.commission !== null) ? Number(r.commission).toFixed(2) : '0.00' %></span>
                     </div>
                 </div>
             <% }); %>
         <% } else { %>
-            <div class="no-data">No referral earnings found</div>
+            <div class="no-data">
+                <i class="fas fa-box-open"></i>
+                No referral earnings found
+            </div>
         <% } %>
     </div>
 
@@ -155,6 +221,9 @@
     <div id="tab-bonuses" class="tab-content">
         <div class="section-title">Bonuses <small>YOUR BONUS HISTORY</small></div>
         <% if (typeof bonuses !== 'undefined' && bonuses && bonuses.length > 0) { %>
+            <div class="record-stats">
+                <span>Total: <span class="count"><%= bonuses.length %></span> bonuses</span>
+            </div>
             <% bonuses.forEach(function(b) { %>
                 <div class="record-item">
                     <div class="info">
@@ -163,12 +232,15 @@
                     </div>
                     <div>
                         <span class="badge-status badge-completed">Received</span>
-                        <span class="amount credit">+PKR <%= b.amount %></span>
+                        <span class="amount credit">+PKR <%= (typeof b.amount !== 'undefined' && b.amount !== null) ? Number(b.amount).toFixed(2) : '0.00' %></span>
                     </div>
                 </div>
             <% }); %>
         <% } else { %>
-            <div class="no-data">No bonuses found</div>
+            <div class="no-data">
+                <i class="fas fa-box-open"></i>
+                No bonuses found
+            </div>
         <% } %>
     </div>
 
@@ -176,20 +248,28 @@
     <div id="tab-plans" class="tab-content">
         <div class="section-title">Plans <small>YOUR PLAN PURCHASES</small></div>
         <% if (typeof purchasedPlans !== 'undefined' && purchasedPlans && purchasedPlans.length > 0) { %>
+            <div class="record-stats">
+                <span>Total: <span class="count"><%= purchasedPlans.length %></span> plans</span>
+                <span>Active: <span class="count"><%= purchasedPlans.filter(p => p.status === 'active').length %></span></span>
+            </div>
             <% purchasedPlans.forEach(function(p) { %>
                 <div class="record-item">
                     <div class="info">
-                        <div class="type">📈 <%= p.name %></div>
+                        <div class="type">📈 <%= p.plan_name || p.name %></div>
                         <div class="date"><%= p.purchased_at ? new Date(p.purchased_at).toLocaleDateString() : 'N/A' %></div>
+                        <div style="font-size:10px;color:#94a3b8;">Daily: PKR <%= (typeof p.daily_income !== 'undefined' && p.daily_income !== null) ? Number(p.daily_income).toFixed(2) : '0.00' %></div>
                     </div>
                     <div>
                         <span class="badge-status badge-<%= p.status %>"><%= p.status %></span>
-                        <span class="amount debit">-PKR <%= p.investment %></span>
+                        <span class="amount debit">-PKR <%= (typeof p.investment !== 'undefined' && p.investment !== null) ? Number(p.investment).toFixed(2) : '0.00' %></span>
                     </div>
                 </div>
             <% }); %>
         <% } else { %>
-            <div class="no-data">No plans purchased</div>
+            <div class="no-data">
+                <i class="fas fa-box-open"></i>
+                No plans purchased
+            </div>
         <% } %>
     </div>
 </div>

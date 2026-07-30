@@ -26,6 +26,8 @@
         .btn-warning { background: #d97706; color: white; }
         .btn-warning:hover { background: #b45309; }
         .btn-sm { padding: 4px 12px; font-size: 12px; }
+        .btn-info { background: #2563eb; color: white; }
+        .btn-info:hover { background: #1d4ed8; }
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 24px; }
         .stat-card { background: #131a26; border-radius: 12px; padding: 16px; border: 1px solid #1e293b; text-align: center; }
         .stat-card .number { font-size: 24px; font-weight: 700; color: #fbbf24; }
@@ -47,6 +49,7 @@
         .badge-rejected { background: #7f1d1d; color: #f87171; }
         .badge-active { background: #065f46; color: #34d399; }
         .badge-suspended { background: #7f1d1d; color: #f87171; }
+        .badge-inactive { background: #7f1d1d; color: #f87171; }
         .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
         .tab-btn { padding: 8px 16px; border: 1px solid #1e293b; border-radius: 8px; background: transparent; color: #94a3b8; cursor: pointer; transition: 0.3s; font-size: 13px; }
         .tab-btn.active { background: #3b82f6; color: white; border-color: #3b82f6; }
@@ -58,7 +61,8 @@
         .form-inline label { display: block; font-size: 11px; color: #94a3b8; margin-bottom: 2px; }
         .form-inline input, .form-inline select { width: 100%; padding: 6px 10px; border: 1px solid #1e293b; border-radius: 6px; background: #0f172a; color: #e8edf5; font-size: 13px; }
         .form-inline input:focus, .form-inline select:focus { outline: none; border-color: #3b82f6; }
-        @media (max-width: 700px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } .header { flex-direction: column; align-items: flex-start; } }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 12px; }
+        @media (max-width: 700px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } .header { flex-direction: column; align-items: flex-start; } .grid-2 { grid-template-columns: 1fr; } }
         @media (max-width: 480px) { .stats-grid { grid-template-columns: 1fr 1fr; } .stat-card .number { font-size: 18px; } table { font-size: 11px; } th, td { padding: 6px 4px; } }
     </style>
 </head>
@@ -68,30 +72,31 @@
             <div class="logo">NOVA<span>PAY</span><small>✦ ADMIN PANEL</small></div>
             <div class="header-actions">
                 <span style="color:#94a3b8;font-size:13px;">Welcome, Admin</span>
-                <a href="/admin/logout" class="btn btn-danger btn-sm">Logout</a>
-                <a href="/" class="btn btn-outline btn-sm">← User Panel</a>
+                <a href="/admin/logout" class="btn btn-danger btn-sm"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <a href="/" class="btn btn-outline btn-sm"><i class="fas fa-arrow-left"></i> User Panel</a>
             </div>
         </div>
 
         <div class="stats-grid">
-            <div class="stat-card"><div class="number"><%= typeof stats !== 'undefined' ? stats.total_users : 0 %></div><div class="label">Total Users</div></div>
-            <div class="stat-card"><div class="number green"><%= typeof stats !== 'undefined' ? stats.active_users : 0 %></div><div class="label">Active Users</div></div>
-            <div class="stat-card"><div class="number blue"><%= typeof stats !== 'undefined' ? stats.total_deposits : 0 %></div><div class="label">Total Deposits (PKR)</div></div>
-            <div class="stat-card"><div class="number purple"><%= typeof stats !== 'undefined' ? stats.total_withdraws : 0 %></div><div class="label">Total Withdraws (PKR)</div></div>
-            <div class="stat-card"><div class="number red"><%= typeof stats !== 'undefined' ? stats.pending_deposits : 0 %></div><div class="label">Pending Deposits</div></div>
-            <div class="stat-card"><div class="number red"><%= typeof stats !== 'undefined' ? stats.pending_withdraws : 0 %></div><div class="label">Pending Withdraws</div></div>
-            <div class="stat-card"><div class="number green"><%= typeof stats !== 'undefined' ? stats.total_investments : 0 %></div><div class="label">Total Investments (PKR)</div></div>
-            <div class="stat-card"><div class="number gold"><%= typeof stats !== 'undefined' ? stats.total_earnings : 0 %></div><div class="label">Total Earnings Paid</div></div>
+            <div class="stat-card"><div class="number"><%= typeof stats !== 'undefined' && stats.total_users ? stats.total_users : 0 %></div><div class="label">Total Users</div></div>
+            <div class="stat-card"><div class="number green"><%= typeof stats !== 'undefined' && stats.active_users ? stats.active_users : 0 %></div><div class="label">Active Users</div></div>
+            <div class="stat-card"><div class="number blue"><%= typeof stats !== 'undefined' && stats.total_deposits ? Number(stats.total_deposits).toFixed(2) : '0.00' %></div><div class="label">Total Deposits (PKR)</div></div>
+            <div class="stat-card"><div class="number purple"><%= typeof stats !== 'undefined' && stats.total_withdraws ? Number(stats.total_withdraws).toFixed(2) : '0.00' %></div><div class="label">Total Withdraws (PKR)</div></div>
+            <div class="stat-card"><div class="number red"><%= typeof stats !== 'undefined' && stats.pending_deposits ? stats.pending_deposits : 0 %></div><div class="label">Pending Deposits</div></div>
+            <div class="stat-card"><div class="number red"><%= typeof stats !== 'undefined' && stats.pending_withdraws ? stats.pending_withdraws : 0 %></div><div class="label">Pending Withdraws</div></div>
+            <div class="stat-card"><div class="number green"><%= typeof stats !== 'undefined' && stats.total_investments ? Number(stats.total_investments).toFixed(2) : '0.00' %></div><div class="label">Total Investments (PKR)</div></div>
+            <div class="stat-card"><div class="number gold"><%= typeof stats !== 'undefined' && stats.total_earnings ? Number(stats.total_earnings).toFixed(2) : '0.00' %></div><div class="label">Total Earnings Paid</div></div>
         </div>
 
         <div class="section">
             <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab('deposits', this)">Deposits</button>
-                <button class="tab-btn" onclick="switchTab('withdraws', this)">Withdraws</button>
-                <button class="tab-btn" onclick="switchTab('plans', this)">Plans</button>
-                <button class="tab-btn" onclick="switchTab('accounts', this)">Accounts</button>
-                <button class="tab-btn" onclick="switchTab('support', this)">Support</button>
-                <button class="tab-btn" onclick="switchTab('users', this)">Users</button>
+                <button class="tab-btn active" onclick="switchTab('deposits', this)"><i class="fas fa-plus-circle"></i> Deposits</button>
+                <button class="tab-btn" onclick="switchTab('withdraws', this)"><i class="fas fa-minus-circle"></i> Withdraws</button>
+                <button class="tab-btn" onclick="switchTab('plans', this)"><i class="fas fa-rocket"></i> Plans</button>
+                <button class="tab-btn" onclick="switchTab('accounts', this)"><i class="fas fa-university"></i> Accounts</button>
+                <button class="tab-btn" onclick="switchTab('support', this)"><i class="fas fa-headset"></i> Support</button>
+                <button class="tab-btn" onclick="switchTab('users', this)"><i class="fas fa-users"></i> Users</button>
+                <button class="tab-btn" onclick="switchTab('referral', this)"><i class="fas fa-gift"></i> Referral</button>
             </div>
 
             <!-- Deposits -->
@@ -110,7 +115,7 @@
                             <% pendingDeposits.forEach(function(d) { %>
                                 <tr>
                                     <td><%= d.username || 'N/A' %></td>
-                                    <td>PKR <%= d.amount || 0 %></td>
+                                    <td>PKR <%= (typeof d.amount !== 'undefined' && d.amount !== null) ? Number(d.amount).toFixed(2) : '0.00' %></td>
                                     <td><%= d.payment_method || 'N/A' %></td>
                                     <td><% if (d.slip_image) { %><a href="<%= d.slip_image %>" target="_blank" style="color:#60a5fa;"><i class="fas fa-image"></i> View</a><% } else { %>N/A<% } %></td>
                                     <td>
@@ -133,7 +138,7 @@
                             <% depositList.forEach(function(d) { %>
                                 <tr>
                                     <td><%= d.username || 'N/A' %></td>
-                                    <td>PKR <%= d.amount || 0 %></td>
+                                    <td>PKR <%= (typeof d.amount !== 'undefined' && d.amount !== null) ? Number(d.amount).toFixed(2) : '0.00' %></td>
                                     <td><span class="badge-status badge-<%= d.status || 'pending' %>"><%= d.status || 'pending' %></span></td>
                                     <td><%= d.created_at ? new Date(d.created_at).toLocaleDateString() : 'N/A' %></td>
                                 </tr>
@@ -161,7 +166,7 @@
                             <% pendingWithdraws.forEach(function(w) { %>
                                 <tr>
                                     <td><%= w.username || 'N/A' %></td>
-                                    <td>PKR <%= w.amount || 0 %></td>
+                                    <td>PKR <%= (typeof w.amount !== 'undefined' && w.amount !== null) ? Number(w.amount).toFixed(2) : '0.00' %></td>
                                     <td><%= w.payment_method || 'N/A' %></td>
                                     <td><%= w.account_holder || 'N/A' %></td>
                                     <td>
@@ -184,7 +189,7 @@
                             <% withdrawList.forEach(function(w) { %>
                                 <tr>
                                     <td><%= w.username || 'N/A' %></td>
-                                    <td>PKR <%= w.amount || 0 %></td>
+                                    <td>PKR <%= (typeof w.amount !== 'undefined' && w.amount !== null) ? Number(w.amount).toFixed(2) : '0.00' %></td>
                                     <td><span class="badge-status badge-<%= w.status || 'pending' %>"><%= w.status || 'pending' %></span></td>
                                     <td><%= w.created_at ? new Date(w.created_at).toLocaleDateString() : 'N/A' %></td>
                                 </tr>
@@ -202,8 +207,8 @@
                     <h3>Add New Plan</h3>
                     <form class="form-inline" onsubmit="addPlan(event)">
                         <div class="form-group"><label>Plan Name</label><input type="text" id="planName" required></div>
-                        <div class="form-group"><label>Investment (PKR)</label><input type="number" id="planInvestment" required></div>
-                        <div class="form-group"><label>Daily Income (PKR)</label><input type="number" id="planDaily" required></div>
+                        <div class="form-group"><label>Investment (PKR)</label><input type="number" id="planInvestment" step="100" required></div>
+                        <div class="form-group"><label>Daily Income (PKR)</label><input type="number" id="planDaily" step="10" required></div>
                         <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Add Plan</button>
                     </form>
                 </div>
@@ -216,11 +221,11 @@
                             <% planList.forEach(function(p) { %>
                                 <tr>
                                     <td><%= p.name || 'N/A' %></td>
-                                    <td>PKR <%= p.investment || 0 %></td>
-                                    <td>PKR <%= p.daily_income || 0 %></td>
+                                    <td>PKR <%= (typeof p.investment !== 'undefined' && p.investment !== null) ? Number(p.investment).toFixed(2) : '0.00' %></td>
+                                    <td>PKR <%= (typeof p.daily_income !== 'undefined' && p.daily_income !== null) ? Number(p.daily_income).toFixed(2) : '0.00' %></td>
                                     <td><span class="badge-status badge-<%= p.status || 'active' %>"><%= p.status || 'active' %></span></td>
                                     <td>
-                                        <button class="btn btn-warning btn-sm" onclick="editPlan(<%= p.id %>, '<%= p.name %>', <%= p.investment %>, <%= p.daily_income %>, '<%= p.status %>')"><i class="fas fa-edit"></i> Edit</button>
+                                        <button class="btn btn-warning btn-sm" onclick="editPlan(<%= p.id %>, '<%= p.name %>', <%= Number(p.investment) %>, <%= Number(p.daily_income) %>, '<%= p.status %>')"><i class="fas fa-edit"></i> Edit</button>
                                         <button class="btn btn-danger btn-sm" onclick="deletePlan(<%= p.id %>)"><i class="fas fa-trash"></i> Delete</button>
                                     </td>
                                 </tr>
@@ -299,12 +304,12 @@
                     <thead><tr><th>Username</th><th>Mobile</th><th>Balance</th><th>Status</th><th>Actions</th></tr></thead>
                     <tbody id="usersTable"><tr><td colspan="5" style="text-align:center;color:#94a3b8;"><i class="fas fa-spinner fa-spin"></i> Loading users...</td></tr></tbody>
                 </table>
-                <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                <div class="grid-2">
                     <div>
                         <h4>Give Bonus</h4>
                         <form class="form-inline" onsubmit="giveBonus(event)" style="flex-direction:column;align-items:stretch;">
                             <div class="form-group"><label>User ID</label><input type="number" id="bonusUserId" required></div>
-                            <div class="form-group"><label>Amount (PKR)</label><input type="number" id="bonusAmount" required></div>
+                            <div class="form-group"><label>Amount (PKR)</label><input type="number" id="bonusAmount" step="100" required></div>
                             <div class="form-group"><label>Reason</label><input type="text" id="bonusReason" placeholder="Bonus reason"></div>
                             <button type="submit" class="btn btn-primary"><i class="fas fa-gift"></i> Give Bonus</button>
                         </form>
@@ -313,7 +318,7 @@
                         <h4>Adjust Balance</h4>
                         <form class="form-inline" onsubmit="adjustBalance(event)" style="flex-direction:column;align-items:stretch;">
                             <div class="form-group"><label>User ID</label><input type="number" id="balanceUserId" required></div>
-                            <div class="form-group"><label>Amount (PKR)</label><input type="number" id="balanceAmount" required></div>
+                            <div class="form-group"><label>Amount (PKR)</label><input type="number" id="balanceAmount" step="100" required></div>
                             <div class="form-group">
                                 <label>Action</label>
                                 <select id="balanceAction">
@@ -325,6 +330,18 @@
                         </form>
                     </div>
                 </div>
+            </div>
+
+            <!-- Referral -->
+            <div id="tab-referral" class="tab-content">
+                <h3>Referral Settings</h3>
+                <form onsubmit="updateReferral(event)" style="max-width:400px;">
+                    <div class="form-group" style="margin-bottom:12px;">
+                        <label>Commission Percentage (%)</label>
+                        <input type="number" id="referralCommission" value="<%= typeof referralSettings !== 'undefined' && referralSettings.commission_percentage ? referralSettings.commission_percentage : 10 %>" step="0.5" min="0" max="100" style="width:100%;padding:8px;border:1px solid #1e293b;border-radius:6px;background:#0f172a;color:#e8edf5;">
+                    </div>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Update Referral Settings</button>
+                </form>
             </div>
         </div>
     </div>
@@ -466,6 +483,15 @@
             .catch(function(err) { alert('Error: ' + err); });
         }
 
+        function updateReferral(e) {
+            e.preventDefault();
+            var commission_percentage = document.getElementById('referralCommission').value;
+            fetch('/admin/referral/update', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ commission_percentage: commission_percentage }) })
+            .then(function(r) { return r.json(); })
+            .then(function(data) { alert(data.message); location.reload(); })
+            .catch(function(err) { alert('Error: ' + err); });
+        }
+
         function giveBonus(e) {
             e.preventDefault();
             var user_id = document.getElementById('bonusUserId').value;
@@ -502,7 +528,7 @@
                 if (users && users.length > 0) {
                     var html = '';
                     users.forEach(function(u) {
-                        html += '<tr><td>' + (u.username || 'N/A') + '</td><td>' + (u.mobile || 'N/A') + '</td><td>PKR ' + (u.balance || 0) + '</td><td><span class="badge-status badge-' + (u.status || 'active') + '">' + (u.status || 'active') + '</span></td><td><button class="btn btn-sm btn-info" onclick="viewUser(' + u.id + ')"><i class="fas fa-eye"></i> View</button> <button class="btn btn-sm ' + (u.status === 'active' ? 'btn-danger' : 'btn-success') + '" onclick="toggleUser(' + u.id + ', \'' + (u.status === 'active' ? 'suspended' : 'active') + '\')">' + (u.status === 'active' ? '<i class="fas fa-ban"></i> Suspend' : '<i class="fas fa-check"></i> Activate') + '</button></td></tr>';
+                        html += '<tr><td>' + (u.username || 'N/A') + '</td><td>' + (u.mobile || 'N/A') + '</td><td>PKR ' + (u.balance ? Number(u.balance).toFixed(2) : '0.00') + '</td><td><span class="badge-status badge-' + (u.status || 'active') + '">' + (u.status || 'active') + '</span></td><td><button class="btn btn-sm btn-info" onclick="viewUser(' + u.id + ')"><i class="fas fa-eye"></i> View</button> <button class="btn btn-sm ' + (u.status === 'active' ? 'btn-danger' : 'btn-success') + '" onclick="toggleUser(' + u.id + ', \'' + (u.status === 'active' ? 'suspended' : 'active') + '\')">' + (u.status === 'active' ? '<i class="fas fa-ban"></i> Suspend' : '<i class="fas fa-check"></i> Activate') + '</button></td></tr>';
                     });
                     tbody.innerHTML = html;
                 } else {
@@ -520,13 +546,13 @@
                     if (data.success) {
                         var msg = '👤 User: ' + data.user.username + '\n';
                         msg += '📱 Mobile: ' + data.user.mobile + '\n';
-                        msg += '💰 Balance: PKR ' + data.user.balance + '\n';
+                        msg += '💰 Balance: PKR ' + (data.user.balance ? Number(data.user.balance).toFixed(2) : '0.00') + '\n';
                         msg += '📊 Status: ' + data.user.status + '\n';
-                        msg += '📥 Total Deposit: PKR ' + data.user.total_deposit + '\n';
-                        msg += '📤 Total Withdraw: PKR ' + data.user.total_withdraw + '\n';
-                        msg += '📈 Total Earnings: PKR ' + data.user.total_earnings + '\n';
-                        msg += '👥 Team Earnings: PKR ' + data.user.team_earnings + '\n';
-                        msg += '🎁 Bonus: PKR ' + data.user.bonus_balance + '\n';
+                        msg += '📥 Total Deposit: PKR ' + (data.user.total_deposit ? Number(data.user.total_deposit).toFixed(2) : '0.00') + '\n';
+                        msg += '📤 Total Withdraw: PKR ' + (data.user.total_withdraw ? Number(data.user.total_withdraw).toFixed(2) : '0.00') + '\n';
+                        msg += '📈 Total Earnings: PKR ' + (data.user.total_earnings ? Number(data.user.total_earnings).toFixed(2) : '0.00') + '\n';
+                        msg += '👥 Team Earnings: PKR ' + (data.user.team_earnings ? Number(data.user.team_earnings).toFixed(2) : '0.00') + '\n';
+                        msg += '🎁 Bonus: PKR ' + (data.user.bonus_balance ? Number(data.user.bonus_balance).toFixed(2) : '0.00') + '\n';
                         msg += '\n📋 Plans: ' + (data.plans ? data.plans.length : 0) + '\n';
                         msg += '💳 Deposits: ' + (data.deposits ? data.deposits.length : 0) + '\n';
                         msg += '💸 Withdraws: ' + (data.withdraws ? data.withdraws.length : 0);
