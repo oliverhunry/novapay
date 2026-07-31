@@ -26,6 +26,109 @@
         .user-info .name small { font-size: 10px; font-weight: 400; color: #94a3b8; display: block; }
         .user-info .vip-tag { background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; font-size: 9px; font-weight: 700; padding: 3px 12px; border-radius: 20px; }
         
+        /* ============================== */
+        /* NEON GLOW LIVE UPDATES */
+        /* ============================== */
+        .glow-wrap {
+            background: linear-gradient(135deg, #0f172a, #1a1a2e);
+            border-radius: 12px;
+            padding: 10px 14px;
+            margin-bottom: 14px;
+            border: 1px solid rgba(34,197,94,0.2);
+            box-shadow: 0 0 30px rgba(34,197,94,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        .glow-wrap::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(34,197,94,0.05), transparent, rgba(59,130,246,0.05), transparent);
+            animation: rotate-glow 10s linear infinite;
+        }
+        @keyframes rotate-glow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .glow-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            position: relative;
+            z-index: 1;
+        }
+        .glow-header .title {
+            color: #22c55e;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(34,197,94,0.3);
+        }
+        .glow-header .title .star {
+            color: #fbbf24;
+        }
+        .glow-header .count-badge {
+            color: #64748b;
+            font-size: 9px;
+            background: rgba(148,163,184,0.1);
+            padding: 2px 10px;
+            border-radius: 10px;
+        }
+        .glow-items {
+            position: relative;
+            z-index: 1;
+            max-height: 80px;
+            overflow: hidden;
+        }
+        .glow-items-scroll {
+            animation: scroll-up-items 20s linear infinite;
+        }
+        .glow-wrap:hover .glow-items-scroll {
+            animation-play-state: paused;
+        }
+        @keyframes scroll-up-items {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
+        }
+        .glow-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(30,41,59,0.3);
+            animation: glow-fade 0.5s ease;
+        }
+        .glow-item:last-child { border-bottom: none; }
+        .glow-item .icon { font-size: 14px; flex-shrink: 0; }
+        .glow-item .text {
+            flex: 1;
+            color: #e8edf5;
+            font-size: 11px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .glow-item .text .highlight {
+            font-weight: 600;
+        }
+        .glow-item .text .highlight.green { color: #22c55e; }
+        .glow-item .text .highlight.red { color: #f87171; }
+        .glow-item .text .highlight.gold { color: #fbbf24; }
+        .glow-item .time {
+            color: #64748b;
+            font-size: 9px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        @keyframes glow-fade {
+            0% { opacity: 0; transform: translateX(-10px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+        
         .today-earnings { background: linear-gradient(135deg, #22c55e, #16a34a); border-radius: 12px; padding: 12px 16px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; color: white; }
         .today-earnings .label { font-size: 12px; opacity: 0.9; }
         .today-earnings .value { font-size: 20px; font-weight: 700; }
@@ -246,6 +349,134 @@
         .toast.show { display: block; }
         .toast i { margin-right: 8px; }
         
+        /* ============================== */
+        /* PREMIUM FLOATING NOTIFICATION */
+        /* ============================== */
+        #notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 99999;
+            pointer-events: none;
+            max-width: 100%;
+        }
+        #notification-card {
+            width: 340px;
+            min-height: 85px;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 14px 18px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.03);
+            pointer-events: auto;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            opacity: 0;
+            transform: translateX(120px) scale(0.95);
+            position: relative;
+            overflow: hidden;
+        }
+        #notification-card.notification-show {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+        }
+        #notification-card.notification-hidden {
+            opacity: 0;
+            transform: translateX(120px) scale(0.95);
+            pointer-events: none;
+        }
+        #notification-card:hover {
+            transform: translateX(-4px) scale(1.01);
+            border-color: rgba(59, 130, 246, 0.2);
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.7);
+        }
+        #notification-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 70% 30%, rgba(34,197,94,0.05), transparent 70%);
+            pointer-events: none;
+        }
+        .notif-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #22c55e, #3b82f6, #8b5cf6);
+            border-radius: 0 0 0 16px;
+            transition: width 0.1s linear;
+            width: 100%;
+        }
+        .notif-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 2px;
+        }
+        .notif-icon { font-size: 20px; line-height: 1; }
+        .notif-title {
+            flex: 1;
+            font-size: 10px;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .notif-close {
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            font-size: 13px;
+            padding: 2px 8px;
+            border-radius: 6px;
+            transition: 0.3s;
+            line-height: 1;
+        }
+        .notif-close:hover {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+        }
+        .notif-body {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            gap: 3px 6px;
+            margin-bottom: 4px;
+        }
+        .notif-name { font-size: 14px; font-weight: 700; color: #f1f5f9; }
+        .notif-action { font-size: 12px; color: #94a3b8; }
+        .notif-amount {
+            font-size: 15px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #22c55e, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .notif-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .notif-time { font-size: 9px; color: #64748b; }
+        .notif-location { font-size: 9px; color: #64748b; }
+        @media (max-width: 480px) {
+            #notification-card {
+                width: calc(100vw - 40px);
+                min-height: 75px;
+                padding: 12px 14px;
+                right: 20px;
+                max-width: 360px;
+            }
+            .notif-name { font-size: 13px; }
+            .notif-amount { font-size: 14px; }
+        }
+        
         .sidebar-left { position: fixed; left: -280px; top: 0; width: 270px; height: 100vh; background: #ffffff; box-shadow: 4px 0 30px rgba(0,0,0,0.1); transition: 0.4s ease; padding: 20px 16px; overflow-y: auto; z-index: 1000; border-right: 1px solid #eef2f6; }
         .sidebar-left.open { left: 0; }
         .sidebar-left .close-btn { background: none; border: none; font-size: 24px; color: #94a3b8; cursor: pointer; float: right; padding: 4px; }
@@ -267,6 +498,29 @@
     </style>
 </head>
 <body>
+
+<!-- ============================== -->
+<!-- NOTIFICATION CONTAINER -->
+<!-- ============================== -->
+<div id="notification-container">
+    <div id="notification-card" class="notification-hidden">
+        <div class="notif-header">
+            <span class="notif-icon" id="notifIcon">💰</span>
+            <span class="notif-title" id="notifTitle">Deposit</span>
+            <button class="notif-close" onclick="closeNotification()">✕</button>
+        </div>
+        <div class="notif-body">
+            <span class="notif-name" id="notifName">Ali</span>
+            <span class="notif-action" id="notifAction">deposited</span>
+            <span class="notif-amount" id="notifAmount">PKR 2,500</span>
+        </div>
+        <div class="notif-footer">
+            <span class="notif-time" id="notifTime">Just now</span>
+            <span class="notif-location" id="notifLocation">📍 Lahore</span>
+        </div>
+        <div class="notif-progress" id="notifProgress"></div>
+    </div>
+</div>
 
 <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 
@@ -309,6 +563,23 @@
         </div>
         <span class="btn">Follow</span>
     </a>
+
+    <!-- ============================== -->
+    <!-- NEON GLOW LIVE UPDATES -->
+    <!-- ============================== -->
+    <div class="glow-wrap">
+        <div class="glow-header">
+            <div class="title">
+                <span class="star">✦</span> LIVE <span class="star">✦</span>
+            </div>
+            <span class="count-badge" id="liveCount">0 updates</span>
+        </div>
+        <div class="glow-items">
+            <div class="glow-items-scroll" id="liveGlowItems">
+                <!-- JavaScript se data aayega -->
+            </div>
+        </div>
+    </div>
 
     <% if (typeof success !== 'undefined' && success) { %>
         <div class="flash-message flash-success"><%= success %></div>
@@ -484,6 +755,9 @@
 </div>
 
 <script>
+    // ==============================
+    // SIDEBAR
+    // ==============================
     function openSidebar() {
         document.getElementById('leftSidebar').classList.add('open');
         document.getElementById('overlay').classList.add('show');
@@ -496,6 +770,9 @@
     }
     document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeSidebar(); });
 
+    // ==============================
+    // BUY PLAN
+    // ==============================
     function buyPlan(planId, investment, name, button) {
         const btn = button || document.getElementById('buyBtn-' + planId);
         const originalHtml = btn.innerHTML;
@@ -535,6 +812,9 @@
         }
     }
 
+    // ==============================
+    // REFRESH BALANCE
+    // ==============================
     function refreshBalance() {
         const btn = document.getElementById('refreshBtn');
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
@@ -553,6 +833,9 @@
             });
     }
 
+    // ==============================
+    // TOAST
+    // ==============================
     function showToast(message) {
         const toast = document.getElementById('toast');
         const toastMessage = document.getElementById('toastMessage');
@@ -563,6 +846,9 @@
         }, 3000);
     }
 
+    // ==============================
+    // REFERRAL
+    // ==============================
     function copyReferralLink() {
         const link = document.getElementById('referralLink').textContent;
         if (navigator.clipboard) {
@@ -615,6 +901,310 @@
         const message = encodeURIComponent('Join NovaPay and start earning! Use my referral link: ' + link);
         window.open('https://wa.me/?text=' + message, '_blank');
     }
+
+    // ==============================
+    // NEON GLOW LIVE UPDATES
+    // ==============================
+    async function fetchLiveGlowUpdates() {
+        try {
+            const response = await fetch('/api/live-updates');
+            const data = await response.json();
+            
+            const container = document.getElementById('liveGlowItems');
+            const countBadge = document.getElementById('liveCount');
+            
+            if (data && data.length > 0) {
+                countBadge.textContent = data.length + ' updates';
+                
+                let html = '';
+                const items = [...data, ...data, ...data];
+                items.forEach(item => {
+                    let colorClass = 'green';
+                    let icon = '💰';
+                    
+                    if (item.type === 'withdraw') {
+                        colorClass = 'red';
+                        icon = '💸';
+                    } else if (item.type === 'earning') {
+                        colorClass = 'gold';
+                        icon = '⛏️';
+                    }
+                    
+                    const timeAgo = item.timeAgo || getTimeAgo(item.created_at);
+                    
+                    html += `
+                        <div class="glow-item">
+                            <span class="icon">${item.icon || icon}</span>
+                            <span class="text">
+                                <strong>${item.username || 'Anonymous'}</strong>
+                                ${item.action || 'transacted'}
+                                <span class="highlight ${colorClass}">PKR ${Number(item.amount).toFixed(2)}</span>
+                            </span>
+                            <span class="time">${timeAgo}</span>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+            } else {
+                countBadge.textContent = 'No updates';
+                container.innerHTML = `
+                    <div class="glow-item">
+                        <span class="icon">📢</span>
+                        <span class="text" style="color:#64748b;">No recent activity</span>
+                    </div>
+                `;
+            }
+        } catch (err) {
+            console.error('Live updates error:', err);
+        }
+    }
+
+    function getTimeAgo(date) {
+        const now = new Date();
+        const past = new Date(date);
+        const diffMs = now - past;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
+        
+        if (diffMins < 1) return 'Just now';
+        if (diffMins < 60) return diffMins + 'm ago';
+        if (diffHours < 24) return diffHours + 'h ago';
+        return diffDays + 'd ago';
+    }
+
+    let glowInterval = null;
+
+    function startGlowUpdates() {
+        if (glowInterval) clearInterval(glowInterval);
+        fetchLiveGlowUpdates();
+        glowInterval = setInterval(fetchLiveGlowUpdates, 5000);
+    }
+
+    document.addEventListener('DOMContentLoaded', startGlowUpdates);
+
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            if (glowInterval) {
+                clearInterval(glowInterval);
+                glowInterval = null;
+            }
+        } else {
+            startGlowUpdates();
+        }
+    });
+
+    // ==============================
+    // PREMIUM FLOATING NOTIFICATION
+    // ==============================
+    const notifNames = [
+        'Ali', 'Ahmed', 'Usman', 'Hamza', 'Bilal', 'Awais', 'Zain', 'Saad',
+        'Arslan', 'Umer', 'Talha', 'Fahad', 'Asad', 'Shahzaib', 'Irfan',
+        'Noman', 'Yasir', 'Waqas', 'Adnan', 'Sufyan', 'Hassan', 'Rayan',
+        'Omar', 'Danish', 'Kamran', 'Shahid', 'Farhan', 'Imran', 'Rehan',
+        'Saif', 'Mubashir', 'Nadeem', 'Jawad', 'Sohail', 'Tariq', 'Zahid',
+        'Faisal', 'Anas', 'Muneeb', 'Haris', 'Huzaifa', 'Shayan', 'Rafay',
+        'Usaid', 'Rohan', 'Daniyal', 'Hamid', 'Rizwan', 'Tanveer', 'Sajid'
+    ];
+
+    const notifCities = [
+        'Lahore', 'Karachi', 'Islamabad', 'Rawalpindi', 'Faisalabad',
+        'Multan', 'Peshawar', 'Sialkot', 'Gujranwala', 'Hyderabad',
+        'Bahawalpur', 'Sargodha', 'Bhakkar', 'Mianwali', 'Jhelum',
+        'Attock', 'Kasur', 'Sheikhupura', 'Sahiwal', 'Gujrat'
+    ];
+
+    const notifAmounts = [100, 150, 200, 250, 300, 350, 500, 650, 800, 1000,
+        1200, 1500, 1800, 2000, 2500, 3000, 3500, 4000, 5000, 7000,
+        8500, 10000, 12000, 15000, 20000, 25000, 30000, 50000, 75000, 100000
+    ];
+
+    const notifTimes = ['Just now', '30 seconds ago', '1 minute ago', '2 minutes ago',
+        '3 minutes ago', '5 minutes ago', '8 minutes ago', '12 minutes ago',
+        '15 minutes ago', '20 minutes ago', '25 minutes ago', '30 minutes ago'
+    ];
+
+    const notifCategories = [
+        { id: 'deposit', icon: '⬇️', title: 'Deposit', action: 'deposited' },
+        { id: 'withdraw', icon: '⬆️', title: 'Withdraw', action: 'withdrew' },
+        { id: 'reward', icon: '🎁', title: 'Daily Reward', action: 'earned' },
+        { id: 'profit', icon: '💰', title: 'Profit', action: 'received' },
+        { id: 'vip', icon: '👑', title: 'VIP Bonus', action: 'received' },
+        { id: 'team', icon: '🏆', title: 'Team Bonus', action: 'received' },
+        { id: 'referral', icon: '🤝', title: 'Referral Bonus', action: 'received' },
+        { id: 'investment', icon: '⭐', title: 'Investment', action: 'purchased' },
+        { id: 'cashback', icon: '🔄', title: 'Cashback', action: 'received' }
+    ];
+
+    let notificationQueue = [];
+    let isShowing = false;
+    let notificationTimer = null;
+    let progressTimer = null;
+    let currentProgress = 100;
+    let lastCategory = null;
+    let lastName = null;
+    let lastCity = null;
+    let lastAmount = null;
+
+    function generateNotification() {
+        let category;
+        let attempts = 0;
+        do {
+            category = notifCategories[Math.floor(Math.random() * notifCategories.length)];
+            attempts++;
+        } while (category.id === lastCategory && attempts < 20);
+        lastCategory = category.id;
+
+        let name;
+        attempts = 0;
+        do {
+            name = notifNames[Math.floor(Math.random() * notifNames.length)];
+            attempts++;
+        } while (name === lastName && attempts < 20);
+        lastName = name;
+
+        let city;
+        attempts = 0;
+        do {
+            city = notifCities[Math.floor(Math.random() * notifCities.length)];
+            attempts++;
+        } while (city === lastCity && attempts < 20);
+        lastCity = city;
+
+        let amount;
+        attempts = 0;
+        do {
+            amount = notifAmounts[Math.floor(Math.random() * notifAmounts.length)];
+            attempts++;
+        } while (amount === lastAmount && attempts < 20);
+        lastAmount = amount;
+
+        const time = notifTimes[Math.floor(Math.random() * notifTimes.length)];
+
+        let amountText = `PKR ${amount.toLocaleString()}`;
+        if (category.id === 'vip') {
+            amountText = `VIP Bonus PKR ${amount.toLocaleString()}`;
+        } else if (category.id === 'team') {
+            amountText = `Team Bonus PKR ${amount.toLocaleString()}`;
+        } else if (category.id === 'referral') {
+            amountText = `Referral PKR ${amount.toLocaleString()}`;
+        } else if (category.id === 'investment') {
+            amountText = `VIP Plan PKR ${amount.toLocaleString()}`;
+        } else if (category.id === 'reward') {
+            amountText = `Daily Reward PKR ${amount.toLocaleString()}`;
+        } else if (category.id === 'cashback') {
+            amountText = `Cashback PKR ${amount.toLocaleString()}`;
+        } else if (category.id === 'profit') {
+            amountText = `Profit PKR ${amount.toLocaleString()}`;
+        }
+
+        return {
+            icon: category.icon,
+            title: category.title,
+            action: category.action,
+            name: name,
+            city: city,
+            amount: amount,
+            amountText: amountText,
+            time: time,
+            category: category.id
+        };
+    }
+
+    function showNotification(notification) {
+        const card = document.getElementById('notification-card');
+        document.getElementById('notifIcon').textContent = notification.icon;
+        document.getElementById('notifTitle').textContent = notification.title;
+        document.getElementById('notifName').textContent = notification.name;
+        document.getElementById('notifAction').textContent = notification.action;
+        document.getElementById('notifAmount').textContent = notification.amountText;
+        document.getElementById('notifTime').textContent = notification.time;
+        document.getElementById('notifLocation').textContent = `📍 ${notification.city}`;
+
+        currentProgress = 100;
+        document.getElementById('notifProgress').style.width = '100%';
+
+        card.classList.remove('notification-hidden');
+        card.classList.add('notification-show');
+        isShowing = true;
+
+        const duration = 4000;
+        const interval = 50;
+        const step = (interval / duration) * 100;
+
+        progressTimer = setInterval(() => {
+            currentProgress -= step;
+            if (currentProgress <= 0) {
+                currentProgress = 0;
+                document.getElementById('notifProgress').style.width = '0%';
+                clearInterval(progressTimer);
+                hideNotification();
+            } else {
+                document.getElementById('notifProgress').style.width = currentProgress + '%';
+            }
+        }, interval);
+
+        notificationTimer = setTimeout(() => {
+            hideNotification();
+        }, duration);
+    }
+
+    function hideNotification() {
+        const card = document.getElementById('notification-card');
+        card.classList.remove('notification-show');
+        card.classList.add('notification-hidden');
+        isShowing = false;
+
+        clearTimeout(notificationTimer);
+        clearInterval(progressTimer);
+
+        const delay = 3000 + Math.random() * 7000;
+        setTimeout(() => {
+            if (!isShowing) {
+                showNextNotification();
+            }
+        }, delay);
+    }
+
+    function closeNotification() {
+        clearTimeout(notificationTimer);
+        clearInterval(progressTimer);
+        hideNotification();
+    }
+
+    function showNextNotification() {
+        if (isShowing) return;
+
+        let notification;
+        if (notificationQueue.length > 0) {
+            notification = notificationQueue.shift();
+        } else {
+            notification = generateNotification();
+            for (let i = 0; i < 5; i++) {
+                notificationQueue.push(generateNotification());
+            }
+        }
+
+        showNotification(notification);
+    }
+
+    function initNotificationSystem() {
+        for (let i = 0; i < 10; i++) {
+            notificationQueue.push(generateNotification());
+        }
+
+        setTimeout(() => {
+            showNextNotification();
+        }, 2000);
+
+        setInterval(() => {
+            while (notificationQueue.length < 8) {
+                notificationQueue.push(generateNotification());
+            }
+        }, 10000);
+    }
+
+    document.addEventListener('DOMContentLoaded', initNotificationSystem);
 </script>
 
 </body>

@@ -474,6 +474,116 @@ async function logActivity(userId, action, details, ip) {
 }
 
 // ========================
+// SEND NOTIFICATION
+// ========================
+async function sendNotification(userId, title, message) {
+    try {
+        await pool.query(
+            `INSERT INTO notifications (user_id, title, message) VALUES ($1, $2, $3)`,
+            [userId, title, message]
+        );
+        console.log(`📱 Notification sent to user ${userId}: ${title}`);
+    } catch (err) {
+        console.error("Notification error:", err.message);
+    }
+}
+
+// ========================
+// GET USERS WHO HAVEN'T DEPOSITED
+// ========================
+async function getUsersWithoutDeposit() {
+    try {
+        const result = await pool.query(`
+            SELECT u.id, u.username, u.mobile 
+            FROM users u
+            LEFT JOIN deposits d ON u.id = d.user_id AND d.status = 'approved'
+            WHERE d.id IS NULL 
+            AND u.status = 'active'
+            AND u.id != 1
+        `);
+        return result.rows;
+    } catch (err) {
+        console.error("Error fetching users without deposit:", err);
+        return [];
+    }
+}
+
+// ========================
+// SEND DEPOSIT REMINDERS
+// ========================
+async function sendDepositReminders() {
+    try {
+        console.log("📢 Sending deposit reminders...");
+        
+        const users = await getUsersWithoutDeposit();
+        
+        if (users.length === 0) {
+            console.log("✅ All users have deposited. No reminders needed.");
+            return;
+        }
+        
+        console.log(`📢 Found ${users.length} users without deposit`);
+        
+        const messages = [
+            "💰 Start earning today! Make your first deposit and get bonus.",
+            "🚀 Don't miss out! Deposit now and start your investment journey.",
+            "📈 Your future starts here! Make a deposit and earn daily profits.",
+            "💰 Special offer! First deposit bonus waiting for you.",
+            "🌟 Join our successful investors! Deposit and start earning now.",
+            "💎 Limited time offer! Deposit now and get extra rewards.",
+            "🏆 Become a VIP member! Deposit and unlock premium features.",
+            "📊 Start your financial freedom today! Deposit now."
+        ];
+        
+        const titles = [
+            "💡 Start Earning Today!",
+            "🚀 Don't Miss Out!",
+            "📈 Invest Now!",
+            "💰 Bonus Waiting!",
+            "🌟 Join Now!",
+            "💎 Special Offer!",
+            "🏆 Become VIP!",
+            "📊 Financial Freedom!"
+        ];
+        
+        for (const user of users) {
+            const randomIndex = Math.floor(Math.random() * messages.length);
+            
+            await sendNotification(
+                user.id,
+                titles[randomIndex],
+                `${messages[randomIndex]} Make your first deposit on NovaPay!`
+            );
+            
+            console.log(`📱 Reminder sent to ${user.username}`);
+            await new Promise(resolve => setTimeout(resolve, 200));
+        }
+        
+        console.log(`✅ Reminders sent to ${users.length} users`);
+        
+    } catch (err) {
+        console.error("Error sending reminders:", err);
+    }
+}
+
+// ========================
+// SCHEDULE DEPOSIT REMINDERS
+// ========================
+function scheduleDepositReminders() {
+    setTimeout(() => {
+        console.log("⏰ Starting scheduled deposit reminders...");
+        sendDepositReminders();
+    }, 5 * 60 * 1000);
+    
+    setInterval(() => {
+        console.log("⏰ Running scheduled deposit reminders...");
+        sendDepositReminders();
+    }, 3 * 60 * 60 * 1000);
+    
+    console.log("⏰ Deposit reminders scheduled every 3 hours");
+}
+
+// ========================
 // VIEWS SETUP
 // ========================
 app.set('view engine', 'ejs');
@@ -482,6 +592,73 @@ app.set('views', path.join(__dirname, 'views'));
 const dirs = ['./views', './views/admin', './public/uploads'];
 dirs.forEach(dir => {
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+});
+
+// ========================
+// API: LIVE UPDATES
+// ========================
+app.get('/api/live-updates', async (req, res) => {
+    try {
+        const fakeUsers = [
+            { name: 'Ahmed Khan', icon: '👨' },
+            { name: 'Sara Ali', icon: '👩' },
+            { name: 'Usman Malik', icon: '👨' },
+            { name: 'Fatima Noor', icon: '👩' },
+            { name: 'Hassan Raza', icon: '👨' },
+            { name: 'Zainab Ahmed', icon: '👩' },
+            { name: 'Bilal Shah', icon: '👨' },
+            { name: 'Ayesha Siddiqui', icon: '👩' },
+            { name: 'Omar Farooq', icon: '👨' },
+            { name: 'Mahnoor Sheikh', icon: '👩' },
+            { name: 'Rayan Abbas', icon: '👨' },
+            { name: 'Hira Batool', icon: '👩' },
+            { name: 'Saad Qureshi', icon: '👨' },
+            { name: 'Mehak Tariq', icon: '👩' },
+            { name: 'Zain ul Abideen', icon: '👨' },
+            { name: 'Malaika Rauf', icon: '👩' },
+            { name: 'Hamza Akhtar', icon: '👨' },
+            { name: 'Eman Ali', icon: '👩' },
+            { name: 'Rehan Siddiqui', icon: '👨' },
+            { name: 'Anum Fatima', icon: '👩' }
+        ];
+        const actions = ['deposited', 'withdrew', 'earned from mining'];
+        const amounts = [1300, 2500, 3000, 5000, 7500, 10000, 15000, 20000, 25000, 30000, 50000, 100000];
+        const transactions = [];
+        const now = new Date();
+        
+        for (let i = 0; i < 30; i++) {
+            const user = fakeUsers[Math.floor(Math.random() * fakeUsers.length)];
+            const action = actions[Math.floor(Math.random() * actions.length)];
+            const amount = amounts[Math.floor(Math.random() * amounts.length)];
+            const timeOffset = Math.floor(Math.random() * 24 * 60 * 60 * 1000);
+            const date = new Date(now - timeOffset);
+            
+            let type = 'deposit';
+            let icon = '💰';
+            if (action === 'withdrew') {
+                type = 'withdraw';
+                icon = '💸';
+            } else if (action === 'earned from mining') {
+                type = 'earning';
+                icon = '⛏️';
+            }
+            
+            transactions.push({
+                type: type,
+                username: user.name,
+                icon: user.icon,
+                amount: amount,
+                action: action,
+                created_at: date.toISOString()
+            });
+        }
+        
+        transactions.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        res.json(transactions.slice(0, 20));
+    } catch (err) {
+        console.error("Live updates error:", err);
+        res.json([]);
+    }
 });
 
 // ========================
@@ -502,7 +679,7 @@ app.get('/login', (req, res) => {
     }
     res.render('login', { error: null, success: req.query.success || null });
 });
-// FIXED: Login route with proper session handling
+
 app.post('/login', async (req, res) => {
     try {
         const { mobile, password } = req.body;
@@ -527,8 +704,6 @@ app.post('/login', async (req, res) => {
             return res.render('login', { error: 'Account suspended. Contact support.' });
         }
 
-        // ✅ FIX: regenerate() se ek naya, unique session ID milta hai
-        // isse purane/kisi doosre user ke session se koi mix-up nahi hota
         req.session.regenerate((err) => {
             if (err) {
                 console.error("❌ Session regenerate error:", err);
@@ -570,7 +745,6 @@ app.get('/register', (req, res) => {
     res.render('register', { error: null, referral: req.query.ref || '' });
 });
 
-// FIXED: Registration route
 app.post('/register', async (req, res) => {
     try {
         const { username, mobile, password, confirm_password, referral_code } = req.body;
@@ -631,7 +805,6 @@ app.post('/register', async (req, res) => {
         const userId = insertResult.rows[0].id;
         await logActivity(userId, "register", "User registered", req.ip);
         
-        // Destroy any existing session before redirecting to login
         req.session.destroy((err) => {
             if (err) console.error("Session destroy error:", err);
             res.redirect("/login?success=Registration successful! Please login.");
@@ -683,7 +856,6 @@ app.post('/forgot-password', async (req, res) => {
     }
 });
 
-// FIXED: Logout route
 app.get('/logout', async (req, res) => {
     if (req.session && req.session.user) {
         await logActivity(req.session.user.id, 'logout', 'User logged out', req.ip);
@@ -806,9 +978,10 @@ app.get('/deposit', isAuthenticated, validateSession, async (req, res) => {
     const userId = req.session.user.id;
 
     try {
-        const [userResult, accountsResult] = await Promise.all([
+        const [userResult, accountsResult, depositHistoryResult] = await Promise.all([
             pool.query(`SELECT * FROM users WHERE id = $1`, [userId]),
-            pool.query(`SELECT * FROM deposit_accounts WHERE status = 'active'`)
+            pool.query(`SELECT * FROM deposit_accounts WHERE status = 'active'`),
+            pool.query(`SELECT * FROM deposits WHERE user_id = $1 ORDER BY created_at DESC LIMIT 20`, [userId])
         ]);
 
         if (userResult.rows.length === 0) {
@@ -818,6 +991,7 @@ app.get('/deposit', isAuthenticated, validateSession, async (req, res) => {
         res.render('deposit', {
             user: userResult.rows[0],
             accounts: accountsResult.rows || [],
+            depositHistory: depositHistoryResult.rows || [],
             error: req.query.error || null,
             success: req.query.success || null
         });
@@ -867,13 +1041,18 @@ app.get('/withdraw', isAuthenticated, validateSession, async (req, res) => {
     const userId = req.session.user.id;
 
     try {
-        const userResult = await pool.query(`SELECT * FROM users WHERE id = $1`, [userId]);
+        const [userResult, withdrawHistoryResult] = await Promise.all([
+            pool.query(`SELECT * FROM users WHERE id = $1`, [userId]),
+            pool.query(`SELECT * FROM withdraws WHERE user_id = $1 ORDER BY created_at DESC LIMIT 20`, [userId])
+        ]);
+
         if (userResult.rows.length === 0) {
             return res.redirect('/login');
         }
 
         res.render('withdraw', {
             user: userResult.rows[0],
+            withdrawHistory: withdrawHistoryResult.rows || [],
             error: req.query.error || null,
             success: req.query.success || null
         });
@@ -977,7 +1156,6 @@ app.post('/mining/collect', isAuthenticated, async (req, res) => {
 
         const plan = planResult.rows[0];
 
-        // CHECK: Already collected today?
         const historyResult = await pool.query(
             `SELECT * FROM mining_history WHERE user_plan_id = $1 AND collected_date = $2`,
             [plan_id, today]
@@ -987,7 +1165,6 @@ app.post('/mining/collect', isAuthenticated, async (req, res) => {
             return res.json({ success: false, message: 'Already collected today' });
         }
 
-        // ✅ IMPORTANT: last_collected update karo
         await Promise.all([
             pool.query(
                 `INSERT INTO mining_history (user_id, user_plan_id, amount, collected_date)
@@ -998,7 +1175,6 @@ app.post('/mining/collect', isAuthenticated, async (req, res) => {
                 `UPDATE users SET balance = balance + $1, total_earnings = total_earnings + $1 WHERE id = $2`,
                 [plan.daily_income, userId]
             ),
-            // ✅ YEH LINE HONI CHAHIYE
             pool.query(
                 `UPDATE user_plans SET last_collected = $1 WHERE id = $2`,
                 [today, plan_id]
@@ -1024,84 +1200,6 @@ app.post('/mining/collect', isAuthenticated, async (req, res) => {
         res.json({ success: false, message: 'Collection failed: ' + err.message });
     }
 });
-
-
-
-
-///tempraryyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
-// Temporary route to check database - DELETE LATER
-// DEBUG: Check user_plans
-app.get('/check-plans', isAuthenticated, async (req, res) => {
-    try {
-        const userId = req.session.user.id;
-        const result = await pool.query(
-            `SELECT id, plan_id, user_id, last_collected, status FROM user_plans WHERE user_id = $1`,
-            [userId]
-        );
-        const today = new Date().toISOString().split('T')[0];
-        
-        let html = `<h2>📊 User Plans</h2>`;
-        html += `<p><strong>Today:</strong> ${today}</p>`;
-        html += `<table border="1" cellpadding="5">`;
-        html += `<tr><th>ID</th><th>Plan</th><th>last_collected</th><th>Status</th><th>Collected Today?</th></tr>`;
-        
-        result.rows.forEach(plan => {
-            const collected = plan.last_collected === today;
-            html += `<tr>
-                <td>${plan.id}</td>
-                <td>${plan.plan_id}</td>
-                <td>${plan.last_collected || 'NULL'}</td>
-                <td>${plan.status}</td>
-                <td>${collected ? '✅ YES' : '❌ NO'}</td>
-            </tr>`;
-        });
-        html += `</table>`;
-        html += `<br><a href="/reset-plans">🔄 Reset All Plans (set to yesterday)</a>`;
-        res.send(html);
-    } catch (err) {
-        res.send(`❌ Error: ${err.message}`);
-    }
-});
-// DEBUG - Check plans
-app.get('/check-plans', isAuthenticated, async (req, res) => {
-    try {
-        const userId = req.session.user.id;
-        const result = await pool.query(
-            `SELECT id, plan_id, user_id, last_collected, status FROM user_plans WHERE user_id = $1`,
-            [userId]
-        );
-        const today = new Date().toISOString().split('T')[0];
-        
-        let html = `<h2>📊 User Plans</h2>`;
-        html += `<p><strong>Today:</strong> ${today}</p>`;
-        html += `<table border="1" cellpadding="5">`;
-        html += `<tr><th>ID</th><th>Plan ID</th><th>last_collected</th><th>Status</th><th>Collected Today?</th></tr>`;
-        
-        result.rows.forEach(plan => {
-            // Date ko string mein convert karo
-var lastCollectedStr = plan.last_collected ? new Date(plan.last_collected).toISOString().split('T')[0] : null;
-var isCollected = lastCollectedStr === today;
-            html += `<tr>
-                <td>${plan.id}</td>
-                <td>${plan.plan_id}</td>
-                <td>${plan.last_collected || 'NULL'}</td>
-                <td>${plan.status}</td>
-                <td>${collected ? '✅ YES' : '❌ NO'}</td>
-            </tr>`;
-        });
-        html += `</table>`;
-        html += `<br><a href="/reset-plans">🔄 Reset All Plans</a>`;
-        res.send(html);
-    } catch (err) {
-        res.send(`❌ Error: ${err.message}`);
-    }
-});
-
-
-
-
-
-
 
 // ========================
 // BONUS
@@ -1546,6 +1644,12 @@ app.post('/admin/deposit/approve', isAdmin, async (req, res) => {
         await Promise.all(queries);
         await logActivity(deposit.user_id, 'deposit_approved', `Deposit of PKR ${deposit.amount} approved`, req.ip);
 
+        await sendNotification(
+            deposit.user_id,
+            '✅ Deposit Approved',
+            `Your deposit of PKR ${deposit.amount} has been approved!`
+        );
+
         res.json({ success: true, message: 'Deposit approved' });
 
     } catch (err) {
@@ -1575,6 +1679,12 @@ app.post('/admin/deposit/reject', isAdmin, async (req, res) => {
         await Promise.all(queries);
         if (depositResult.rows.length > 0) {
             await logActivity(depositResult.rows[0].user_id, 'deposit_rejected', `Deposit of PKR ${depositResult.rows[0].amount} rejected`, req.ip);
+            
+            await sendNotification(
+                depositResult.rows[0].user_id,
+                '❌ Deposit Rejected',
+                `Your deposit of PKR ${depositResult.rows[0].amount} has been rejected.`
+            );
         }
 
         res.json({ success: true, message: 'Deposit rejected' });
@@ -1611,6 +1721,13 @@ app.post('/admin/withdraw/approve', isAdmin, async (req, res) => {
         ]);
 
         await logActivity(withdraw.user_id, 'withdraw_approved', `Withdraw of PKR ${withdraw.amount} approved`, req.ip);
+
+        await sendNotification(
+            withdraw.user_id,
+            '✅ Withdraw Approved',
+            `Your withdraw of PKR ${withdraw.amount} has been approved!`
+        );
+
         res.json({ success: true, message: 'Withdraw approved' });
 
     } catch (err) {
@@ -1640,6 +1757,12 @@ app.post('/admin/withdraw/reject', isAdmin, async (req, res) => {
         await Promise.all(queries);
         if (withdrawResult.rows.length > 0) {
             await logActivity(withdrawResult.rows[0].user_id, 'withdraw_rejected', `Withdraw of PKR ${withdrawResult.rows[0].amount} rejected`, req.ip);
+            
+            await sendNotification(
+                withdrawResult.rows[0].user_id,
+                '❌ Withdraw Rejected',
+                `Your withdraw of PKR ${withdrawResult.rows[0].amount} has been rejected.`
+            );
         }
 
         res.json({ success: true, message: 'Withdraw rejected' });
@@ -2055,7 +2178,11 @@ app.listen(PORT, async () => {
     if (connected) {
         await createSessionTable();
         await createTables();
-        await cleanupOldSessions(); // Cleanup on startup
+        await cleanupOldSessions();
+        
+        // ✅ START DEPOSIT REMINDERS
+        scheduleDepositReminders();
+        
         console.log("✅ System ready!");
     } else {
         console.log("⚠️ Database not connected. Please check your DATABASE_URL");
