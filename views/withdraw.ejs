@@ -126,14 +126,14 @@
         <div class="flash-message flash-error"><%= error %></div>
     <% } %>
 
-    <!-- ✅ CHANGED: 130 PKR -->
     <div class="min-amount-warning">
-        <i class="fas fa-info-circle"></i> Minimum withdraw: PKR 130
+        <i class="fas fa-info-circle"></i> Minimum withdraw: PKR 130 (130 se ooper koi bhi amount)
     </div>
 
     <div class="info-box">
         <div class="title"><i class="fas fa-clock"></i> Withdraw Instructions</div>
         <div class="detail"><i class="fas fa-check-circle"></i> Minimum withdraw: PKR 130</div>
+        <div class="detail"><i class="fas fa-check-circle"></i> 130 se ooper koi bhi amount withdraw kar sakte hain</div>
         <div class="detail"><i class="fas fa-clock"></i> Processing time: 30 minutes</div>
         <div class="detail"><i class="fas fa-shield-alt"></i> Secure &amp; Instant processing</div>
     </div>
@@ -141,7 +141,7 @@
     <form action="/withdraw" method="POST" id="withdrawForm">
         <div class="form-group">
             <label><i class="fas fa-coins"></i> Amount (PKR)</label>
-            <input type="number" name="amount" id="withdrawAmount" min="130" step="10" required placeholder="Enter amount">
+            <input type="number" name="amount" id="withdrawAmount" min="130" step="1" required placeholder="Enter amount (min 130)">
             <div class="max-amount-hint">
                 Max: <span id="maxAmountDisplay">PKR <%= (typeof user.balance !== 'undefined' && user.balance !== null) ? Number(user.balance).toFixed(2) : '0.00' %></span>
             </div>
@@ -196,6 +196,7 @@
     withdrawForm.addEventListener('submit', function(e) {
         const amount = parseFloat(document.getElementById('withdrawAmount').value);
         
+        // Sirf 130 se kam check karega
         if (!amount || amount < MIN_WITHDRAW) {
             e.preventDefault();
             alert('Minimum withdraw amount is PKR ' + MIN_WITHDRAW.toLocaleString());
@@ -208,11 +209,7 @@
             return;
         }
         
-        if (amount % 10 !== 0) {
-            e.preventDefault();
-            alert('Amount must be in multiples of 10 PKR');
-            return;
-        }
+        // ✅ Multiples of 10 ka check COMPLETELY REMOVED - ab 131, 133, 140, 155 sab chalega
         
         if (!confirm(`Are you sure you want to withdraw PKR ${amount.toFixed(2)}?`)) {
             e.preventDefault();
